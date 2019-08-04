@@ -1,0 +1,4 @@
+<resources>
+    <declare-styleable name="PlaybackSpeedControl">
+    </declare-styleable>
+</resources>
