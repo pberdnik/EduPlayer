@@ -65,7 +65,7 @@ class PlaybackSpeedControl : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         val contentWidth = (width - paddingLeft - paddingRight).toFloat()
-        val contentHeight = (height - paddingTop  - paddingBottom).toFloat()
+        val contentHeight = (height - paddingTop - paddingBottom).toFloat()
         bar.setParams(w = contentWidth, h = contentHeight)
     }
 
