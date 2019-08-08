@@ -58,8 +58,8 @@ class PlaybackSpeedControl : View {
 
     private val bar = Bar().apply {
         mainColor = ContextCompat.getColor(context, R.color.colorPrimary)
-        lineStrokeWidth = resources.displayMetrics.density * 2f
         digitTypeface = ResourcesCompat.getFont(context, R.font.iceland)!!
+        density = resources.displayMetrics.density
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

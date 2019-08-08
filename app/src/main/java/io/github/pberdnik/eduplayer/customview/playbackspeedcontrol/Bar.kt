@@ -2,24 +2,36 @@ package io.github.pberdnik.eduplayer.customview.playbackspeedcontrol
 
 import android.graphics.*
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.withTranslation
+import kotlin.math.ln
+import kotlin.math.max
 
 data class Line(val x: Float, val height: Float, val strokeWidth: Float)
 
 class Bar {
-    var w = 1000f
-    var h = 100f
     var mainColor = Color.BLUE
+    var density = 1f
     var activeX = 500f
-    var lineStrokeWidth = 3f
+        set(value) {
+            field = max(1f, value - fakePaddingLeft)
+        }
+
+    private var w = 1000f
+    private var h = 100f
+
     lateinit var digitTypeface: Typeface
+
+    private lateinit var cacheBitmap: Bitmap
+    private lateinit var cacheCanvas: Canvas
 
     private val textBounds = Rect()
 
-    fun setParams(w: Float, h: Float) {
-        this.w = w
-        this.h = h
-        invalidate()
-    }
+    private var lineStrokeWidth = density * w * 0.001f
+
+    // room for digits and shadow
+    private var fakePaddingLeft = h
+    private var fakePaddingRight = h
+    private var fakePaddingBottom = lineStrokeWidth
 
     private val activePaint by lazy {
         Paint().apply {
@@ -47,23 +59,47 @@ class Bar {
             color = mainColor
             isAntiAlias = true
             typeface = digitTypeface
-            setShadowLayer(lineStrokeWidth, 0f, 0f, mainColor)
+            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, mainColor)
+        }
+    }
+
+    private val clearPaint by lazy {
+        Paint().apply {
+            color = Color.TRANSPARENT
+            style = Paint.Style.FILL
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         }
     }
 
     private val lines = mutableListOf<Line>()
 
-    fun invalidate() {
+    init {
+        invalidate()
+    }
+
+    fun setParams(w: Float, h: Float) {
+        lineStrokeWidth = density * w * 0.001f
+        fakePaddingLeft = h
+        fakePaddingRight = h * 1.5f
+        fakePaddingBottom = lineStrokeWidth
+        this.w = w - fakePaddingLeft - fakePaddingRight
+        this.h = h - fakePaddingBottom
+        cacheBitmap = Bitmap.createBitmap(w.toInt(), h.toInt(), Bitmap.Config.ARGB_8888)
+        cacheCanvas = Canvas(cacheBitmap)
+        invalidate()
+    }
+
+    private fun invalidate() {
         lines.clear()
         // lines form a logarithmic scale from 0.25 to 4
         // which transforms to linear log2(0.25) to log2(4), i.e. -2..2
         // hence 2-(-2)=4 for scale=w/4 and the following calculations
         val scale = w / 4
         for (i in 4..64) {
-            if (i == 16) continue // skip 1x
+            if (i == 16) continue // skip 1x special case
             lines.add(
                 Line(
-                    x = ((Math.log(i / 16.toDouble()) / Math.log(2.toDouble()) + 2) * scale).toFloat(),
+                    x = (ln(i / 16f) / ln(2f) + 2) * scale,
                     height = if (i % 16 == 0) h else if (i % 8 == 0) h * 0.66f else h * 0.33f,
                     strokeWidth = if (i % 16 == 0) lineStrokeWidth else lineStrokeWidth / 2
                 )
@@ -72,49 +108,77 @@ class Bar {
     }
 
     fun draw(canvas: Canvas) {
-        drawLines(canvas)
-        drawDigitsOnMainLines(canvas)
+        cacheBitmap.eraseColor(Color.TRANSPARENT)
+        cacheCanvas.withTranslation(fakePaddingLeft, 0f) { drawLines() }
+        canvas.drawBitmap(cacheBitmap, 0f, 0f, null)
+        canvas.withTranslation(fakePaddingLeft, 0f) {
+            drawDigitsOnMainLines()
+        }
     }
 
-    private fun drawLines(canvas: Canvas) {
+    private fun Canvas.drawLines() {
         for (line in lines) {
             val paint = if (line.x < activeX) activePaint else inactivePaint
             paint.strokeWidth = line.strokeWidth
-            canvas.drawLine(line.x, 0f, line.x, line.height, paint)
+            drawLine(line.x, 0f, line.x, line.height, paint)
         }
+        drawSpecialLineFor1x()
     }
 
-    private fun drawDigitsOnMainLines(canvas: Canvas) {
-        digitPaint.run {
+    private fun Canvas.drawSpecialLineFor1x() {
+        val paint = if (w * 0.49 < activeX) activePaint else inactivePaint
+        paint.strokeWidth = lineStrokeWidth
+        val r = h * 0.36f
+        val cx = w / 2
+        val cy = h / 2
+        drawCircle(cx, cy, r, clearPaint)
+        drawLine(cx, 0f, cx, cy - r, paint)
+        drawArc(cx - r, cy - r, cx + r, cy + r, -130f, 80f, false, paint)
+        drawArc(cx - r, cy - r, cx + r, cy + r, 60f, 60f, false, paint)
+        drawLine(cx, cy + r, cx, h, paint)
+    }
+
+    private fun Canvas.drawDigitsOnMainLines() {
+        draw025x()
+        draw1xWithLine()
+        draw4x()
+    }
+
+    private fun Canvas.draw025x() {
+        digitPaint.apply {
             textSize = h / 2
             textAlign = Paint.Align.CENTER
-            setShadowLayer(lineStrokeWidth, 0f, 0f, mainColor)
+            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, mainColor)
         }
-        var digits = "0.25x"
+        val digits = "0.25x"
         digitPaint.getTextBounds(digits, 0, digits.length, textBounds)
-        var textX = lines[0].x
-        var textY = h - textBounds.bottom
-        canvas.drawText(digits, textX, textY, digitPaint)
+        val textX = lines[0].x
+        val textY = h - textBounds.bottom
+        drawText(digits, textX, textY, digitPaint)
+    }
 
-        digitPaint.run {
-            textSize = h * 1.5f
+    private fun Canvas.draw1xWithLine() {
+        digitPaint.apply {
+            textSize = h * 0.7f
             textAlign = Paint.Align.CENTER
             if (activeX < w * 0.49) clearShadowLayer()
         }
-        digits = "1x"
-        textX = w / 2
-        textY = h
-        canvas.drawText(digits, textX, textY, digitPaint)
+        val digits = "1x"
+        val textX = w / 2
+        val textY = h * 0.66f
+        drawText(digits, textX, textY, digitPaint)
+    }
 
-        digitPaint.run {
+    private fun Canvas.draw4x() {
+        digitPaint.apply {
             textSize = h
             textAlign = Paint.Align.LEFT
             if (activeX < w) clearShadowLayer()
         }
-        digits = "4x"
+        val digits = "4x"
         digitPaint.getTextBounds(digits, 0, digits.length, textBounds)
-        textX = lines[lines.size - 1].x + textBounds.exactCenterX() / 2
-        textY = h * 0.8f + textBounds.bottom
-        canvas.drawText(digits, textX, textY, digitPaint)
+        val textX = lines[lines.size - 1].x + textBounds.exactCenterX() / 2
+        val textY = h * 0.8f + textBounds.bottom
+        drawText(digits, textX, textY, digitPaint)
     }
 }
