@@ -36,7 +36,12 @@ class PlaybackSpeedControl : View {
     private val optimalW = (200 * resources.displayMetrics.density).toInt()
     private val optimalH = (optimalW * optimalRatio).toInt()
 
-    private var color = ContextCompat.getColor(context, R.color.colorPrimary)
+    var color = ContextCompat.getColor(context, R.color.colorPrimary)
+        set(value) {
+            field = value
+            bar.mainColor = color
+            invalidate()
+        }
 
     private fun initView(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
