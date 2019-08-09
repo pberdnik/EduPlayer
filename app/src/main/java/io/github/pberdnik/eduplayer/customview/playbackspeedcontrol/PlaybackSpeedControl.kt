@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
+import io.github.pberdnik.eduplayer.R
 import kotlin.math.min
 
 
@@ -35,18 +36,21 @@ class PlaybackSpeedControl : View {
     private val optimalW = (200 * resources.displayMetrics.density).toInt()
     private val optimalH = (optimalW * optimalRatio).toInt()
 
+    private var color = ContextCompat.getColor(context, R.color.colorPrimary)
+
     private fun initView(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
             attrs,
-            io.github.pberdnik.eduplayer.R.styleable.PlaybackSpeedControl,
+            R.styleable.PlaybackSpeedControl,
             defStyle,
             0
         )
-        a.recycle()
-        invalidateTextPaintAndMeasurements()
+        try {
+            color = a.getColor(R.styleable.PlaybackSpeedControl_color, color)
+        } finally {
+            a.recycle()
+        }
     }
-
-    private fun invalidateTextPaintAndMeasurements() {}
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         Log.v("Chart onMeasure w", MeasureSpec.toString(widthMeasureSpec))
@@ -115,10 +119,12 @@ class PlaybackSpeedControl : View {
         return true
     }
 
-    private val bar = Bar().apply {
-        mainColor = ContextCompat.getColor(context, io.github.pberdnik.eduplayer.R.color.colorPrimary)
-        digitTypeface = ResourcesCompat.getFont(context, io.github.pberdnik.eduplayer.R.font.iceland)!!
-        density = resources.displayMetrics.density
+    private val bar by lazy {
+        Bar().apply {
+            mainColor = color
+            digitTypeface = ResourcesCompat.getFont(context, R.font.iceland)!!
+            density = resources.displayMetrics.density
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

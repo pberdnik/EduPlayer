@@ -1,4 +1,5 @@
 <resources>
     <declare-styleable name="PlaybackSpeedControl">
+        <attr name="color" format="color" />
     </declare-styleable>
 </resources>
