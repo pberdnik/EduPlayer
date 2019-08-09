@@ -84,7 +84,7 @@ class Bar {
         fakePaddingBottom = lineStrokeWidth
         this.w = w - fakePaddingLeft - fakePaddingRight
         this.h = h - fakePaddingBottom
-        cacheBitmap = Bitmap.createBitmap(w.toInt(), h.toInt(), Bitmap.Config.ARGB_8888)
+        cacheBitmap = Bitmap.createBitmap(max(1, w.toInt()), max(1, h.toInt()), Bitmap.Config.ARGB_8888)
         cacheCanvas = Canvas(cacheBitmap)
         invalidate()
     }
