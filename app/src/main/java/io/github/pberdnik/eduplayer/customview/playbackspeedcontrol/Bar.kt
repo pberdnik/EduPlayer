@@ -34,8 +34,7 @@ class Bar {
     private var fakePaddingBottom = lineStrokeWidth
 
     private val activePaint by lazy {
-        Paint().apply {
-            isAntiAlias = true
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = mainColor
             strokeWidth = lineStrokeWidth
             strokeCap = Paint.Cap.ROUND
@@ -45,8 +44,7 @@ class Bar {
     }
 
     private val inactivePaint by lazy {
-        Paint().apply {
-            isAntiAlias = true
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = ColorUtils.blendARGB(mainColor, Color.WHITE, 0.8f)
             strokeWidth = lineStrokeWidth
             strokeCap = Paint.Cap.ROUND
@@ -55,7 +53,7 @@ class Bar {
     }
 
     private val digitPaint by lazy {
-        Paint().apply {
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = mainColor
             isAntiAlias = true
             typeface = digitTypeface
@@ -64,7 +62,7 @@ class Bar {
     }
 
     private val clearPaint by lazy {
-        Paint().apply {
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.TRANSPARENT
             style = Paint.Style.FILL
             xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
