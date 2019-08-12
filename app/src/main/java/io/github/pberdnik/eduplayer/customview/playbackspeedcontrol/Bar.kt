@@ -3,18 +3,30 @@ package io.github.pberdnik.eduplayer.customview.playbackspeedcontrol
 import android.graphics.*
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withTranslation
+import androidx.core.math.MathUtils
 import kotlin.math.ln
 import kotlin.math.max
+import kotlin.math.pow
 
-data class Line(val x: Float, val height: Float, val strokeWidth: Float)
+private const val eps = 1f
+
+private data class Line(val x: Float, val height: Float, val strokeWidth: Float)
 
 class Bar {
     var mainColor = Color.BLUE
     var density = 1f
-    var activeX = 500f
         set(value) {
             field = max(1f, value - fakePaddingLeft)
         }
+    var speedValue: Float = 1f
+
+    private val activeX
+        get() = (ln(speedValue) / ln(2f) + 2) / 4 * w + eps
+
+    fun speedValueByCurrentX(currentX: Float): Float {
+        val percent = MathUtils.clamp(currentX - fakePaddingLeft, 0f, w) / w.toDouble()
+        return 2.toDouble().pow(percent * 4 - 2).toFloat()
+    }
 
     private var w = 1000f
     private var h = 100f
@@ -72,22 +84,30 @@ class Bar {
     private val lines = mutableListOf<Line>()
 
     init {
-        invalidate()
+        setParams(1000f, 100f)
     }
 
     fun setParams(w: Float, h: Float) {
+        invalidatePadding(w, h)
+        this.w = w - fakePaddingLeft - fakePaddingRight
+        this.h = h - fakePaddingBottom
+        invalidateCacheBitmap(w, h)
+        invalidateLines()
+    }
+
+    private fun invalidatePadding(w: Float, h: Float) {
         lineStrokeWidth = density * w * 0.001f
         fakePaddingLeft = h
         fakePaddingRight = h * 1.5f
         fakePaddingBottom = lineStrokeWidth
-        this.w = w - fakePaddingLeft - fakePaddingRight
-        this.h = h - fakePaddingBottom
-        cacheBitmap = Bitmap.createBitmap(max(1, w.toInt()), max(1, h.toInt()), Bitmap.Config.ARGB_8888)
-        cacheCanvas = Canvas(cacheBitmap)
-        invalidate()
     }
 
-    private fun invalidate() {
+    private fun invalidateCacheBitmap(w: Float, h: Float) {
+        cacheBitmap = Bitmap.createBitmap(max(1, w.toInt()), max(1, h.toInt()), Bitmap.Config.ARGB_8888)
+        cacheCanvas = Canvas(cacheBitmap)
+    }
+
+    private fun invalidateLines() {
         lines.clear()
         // lines form a logarithmic scale from 0.25 to 4
         // which transforms to linear log2(0.25) to log2(4), i.e. -2..2

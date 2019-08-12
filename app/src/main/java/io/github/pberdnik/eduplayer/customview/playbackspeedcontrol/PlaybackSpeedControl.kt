@@ -10,11 +10,16 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
+import androidx.core.math.MathUtils
 import io.github.pberdnik.eduplayer.R
 import kotlin.math.min
 
 
 class PlaybackSpeedControl : View {
+
+    interface OnChangeListener {
+        fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float)
+    }
 
     constructor(context: Context) : super(context) {
         initView(null, 0)
@@ -28,6 +33,8 @@ class PlaybackSpeedControl : View {
         initView(attrs, defStyle)
     }
 
+    var onChangeListener: OnChangeListener? = null
+
     var color = ContextCompat.getColor(context, R.color.colorPrimary)
         set(value) {
             field = value
@@ -35,7 +42,22 @@ class PlaybackSpeedControl : View {
             invalidate()
         }
 
+    // values dependencies: currentX => speedValue => bar.speedValue
+
+    var speedValue = 1f
+        set(value) {
+            val v = MathUtils.clamp(value, 0.25f, 4f)
+            field = v
+            bar.speedValue = v
+            onChangeListener?.onSpeedValueChanged(this, v)
+            invalidate()
+        }
+
     private var currentX = 0f
+        set(value) {
+            field = value
+            speedValue = bar.speedValueByCurrentX(currentX - paddingLeft)
+        }
 
     private val optimalRatio = 1 / 10f
     private val minRatio = 1 / 40f
@@ -52,14 +74,15 @@ class PlaybackSpeedControl : View {
         )
         try {
             color = a.getColor(R.styleable.PlaybackSpeedControl_color, color)
+            speedValue = a.getFloat(R.styleable.PlaybackSpeedControl_value, speedValue)
         } finally {
             a.recycle()
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        Log.v("Chart onMeasure w", MeasureSpec.toString(widthMeasureSpec))
-        Log.v("Chart onMeasure h", MeasureSpec.toString(heightMeasureSpec))
+        Log.v("onMeasure w", MeasureSpec.toString(widthMeasureSpec))
+        Log.v("onMeasure h", MeasureSpec.toString(heightMeasureSpec))
 
         val specModeW = MeasureSpec.getMode(widthMeasureSpec)
         val specW = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
@@ -134,6 +157,9 @@ class PlaybackSpeedControl : View {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+
+        Log.v("onSizeChanged", "$oldw $oldh -> $w $h")
+
         val contentW = (width - paddingLeft - paddingRight).toFloat()
         val contentH = (height - paddingTop - paddingBottom).toFloat()
         val minH = contentW * minRatio
@@ -148,7 +174,7 @@ class PlaybackSpeedControl : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        bar.activeX = currentX - paddingStart
+        bar.speedValue = speedValue
         canvas.withTranslation(paddingLeft.toFloat(), paddingTop.toFloat()) {
             bar.draw(canvas)
         }
