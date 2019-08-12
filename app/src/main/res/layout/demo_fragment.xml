@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:psc="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,11 +16,11 @@
         <io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
             android:id="@+id/playbackSpeedControl"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:paddingStart="64dp"
-            android:paddingEnd="64dp"
-            android:paddingBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:background="#1609"
+            android:padding="8dp"
+            app:color="#609"
+            app:layout_constraintEnd_toStartOf="@id/playbackSpeedControl2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,29 +28,85 @@
             android:id="@+id/playbackSpeedControl2"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_margin="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/playbackSpeedControl"/>
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/playbackSpeedControl3"
+            app:layout_constraintStart_toEndOf="@+id/playbackSpeedControl"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
             android:id="@+id/playbackSpeedControl3"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:layout_margin="40dp"
+            android:background="#1009"
+            android:paddingBottom="8dp"
+            app:color="#009"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/playbackSpeedControl2"/>
+            app:layout_constraintStart_toEndOf="@+id/playbackSpeedControl2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="playbackSpeedControl,playbackSpeedControl2,playbackSpeedControl3" />
 
         <io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
             android:id="@+id/playbackSpeedControl4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#1c39"
+            android:paddingBottom="8dp"
+            app:color="#c39"
+            app:layout_constraintEnd_toStartOf="@+id/playbackSpeedControl5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/barrier" />
+
+        <io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
+            android:id="@+id/playbackSpeedControl5"
             android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#1f60"
+            android:paddingBottom="8dp"
+            app:color="#f60"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playbackSpeedControl4"
+            app:layout_constraintTop_toTopOf="@+id/barrier" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="731dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="playbackSpeedControl4,playbackSpeedControl5" />
+
+        <io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
+            android:id="@+id/playbackSpeedControl6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#1c03"
+            android:paddingBottom="16dp"
+            app:color="#c03"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/playbackSpeedControl3"/>
+            app:layout_constraintTop_toTopOf="@+id/barrier2" />
+
+        <TextView
+            android:id="@+id/speedValueTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playbackSpeedControl6" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
