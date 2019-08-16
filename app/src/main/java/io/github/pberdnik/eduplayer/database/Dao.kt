@@ -11,12 +11,16 @@ import io.github.pberdnik.eduplayer.domain.Playlist
 
 @Dao
 interface PlaylistDao {
-    @Query("SELECT DatabasePlaylist.title, description, DatabaseChannel.title as channelTitle, publishedAt, videosCount FROM DatabasePlaylist INNER JOIN DatabaseChannel ON DatabaseChannel.id = DatabasePlaylist.channelId")
+    @Query(
+        """SELECT playlists.title, description, channels.title as channelTitle, publishedAt, videosCount 
+        FROM playlists INNER JOIN channels ON channels.id = playlists.channelId"""
+    )
     fun getPlaylists(): LiveData<List<Playlist>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg playlists: DatabasePlaylist)
 }
+
 @Dao
 interface ChannelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
