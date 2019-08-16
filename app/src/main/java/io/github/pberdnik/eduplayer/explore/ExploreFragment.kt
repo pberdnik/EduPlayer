@@ -13,9 +13,10 @@ class ExploreFragment : Fragment() {
     private val viewModel by viewModels<ExploreViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = ExploreFragmentBinding.inflate(inflater)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        val binding = ExploreFragmentBinding.inflate(inflater).also {
+            it.viewModel = viewModel
+            it.lifecycleOwner = viewLifecycleOwner
+        }
         return binding.root
     }
 
