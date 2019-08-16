@@ -12,7 +12,7 @@ class ExploreViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = YoutubeRepository(database)
 
     private val _videos = Transformations.map(repository.playlists) {
-        it.joinToString("\n")
+        it.joinToString("\n\n")
     }
     val videos: LiveData<String> = _videos
 

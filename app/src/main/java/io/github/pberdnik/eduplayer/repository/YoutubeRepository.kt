@@ -18,10 +18,9 @@
 package io.github.pberdnik.eduplayer.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
-import io.github.pberdnik.eduplayer.database.asDomainModel
 import io.github.pberdnik.eduplayer.domain.Playlist
+import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
 import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import kotlinx.coroutines.Dispatchers
@@ -29,15 +28,13 @@ import kotlinx.coroutines.withContext
 
 class YoutubeRepository(private val database: YoutubeDatabase) {
 
-    val playlists: LiveData<List<Playlist>> =
-        Transformations.map(database.playlistDao.getPlaylists()) {
-            it.asDomainModel()
-        }
+    val playlists: LiveData<List<Playlist>> = database.playlistDao.getPlaylists()
 
     suspend fun refreshPlaylists() {
         withContext(Dispatchers.IO) {
-            val playlist = youtubeDataApiService.getPlaylistsForChannel()
-            database.playlistDao.insertAll(*playlist.asDatabaseModel())
+            val playlists = youtubeDataApiService.getPlaylistsForChannel()
+            database.channelDao.insertAll(*playlists.asChannelDatabaseModel())
+            database.playlistDao.insertAll(*playlists.asDatabaseModel())
         }
     }
 }
