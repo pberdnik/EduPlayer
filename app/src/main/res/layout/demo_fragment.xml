@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="#1609"
             android:padding="8dp"
-            app:color="#609"
+            psc:color="#609"
             app:layout_constraintEnd_toStartOf="@id/playbackSpeedControl2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

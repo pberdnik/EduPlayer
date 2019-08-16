@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
 import io.github.pberdnik.eduplayer.databinding.DemoFragmentBinding
 
@@ -13,7 +13,7 @@ private const val eps = 0.005f
 
 class DemoFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(DemoViewModel::class.java) }
+    private val viewModel by viewModels<DemoViewModel>()
 
     lateinit var binding: DemoFragmentBinding
 
