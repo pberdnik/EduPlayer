@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/demoFragment"
-        android:name="io.github.pberdnik.eduplayer.demo.DemoFragment"
+        android:name="io.github.pberdnik.eduplayer.feat.demo.DemoFragment"
         android:label="Demo" />
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="io.github.pberdnik.eduplayer.explore.ExploreFragment"
+        android:name="io.github.pberdnik.eduplayer.feat.explore.ExploreFragment"
         android:label="Explore"
         tools:layout="@layout/explore_fragment"/>
 

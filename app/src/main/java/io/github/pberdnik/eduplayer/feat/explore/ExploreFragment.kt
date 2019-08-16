@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.explore
+package io.github.pberdnik.eduplayer.feat.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
