@@ -1,6 +1,6 @@
 package io.github.pberdnik.eduplayer.network
 
-import io.github.pberdnik.eduplayer.network.dto.Playlists
+import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,5 +14,5 @@ interface YoutubeDataApiService {
     suspend fun getPlaylistsForChannel(
         @Query("channelId") chanelId: String = "UCdxpofrI-dO6oYfsqHDHphw",
         @Query("maxResults") maxResults: Int = 50
-    ): Playlists
+    ): NetworkPlaylists
 }
