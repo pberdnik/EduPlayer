@@ -10,7 +10,10 @@ import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 
 class ExploreFragment : Fragment() {
 
-    private val viewModel by viewModels<ExploreViewModel>()
+    private val viewModel by viewModels<ExploreViewModel> {
+        val app = requireNotNull(this.activity).application
+        ExploreViewModel.Factory(app)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = ExploreFragmentBinding.inflate(inflater).also {

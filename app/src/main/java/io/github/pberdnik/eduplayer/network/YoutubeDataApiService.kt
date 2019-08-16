@@ -9,7 +9,7 @@ val youtubeDataApiService: YoutubeDataApiService = retrofit.create(YoutubeDataAp
 interface YoutubeDataApiService {
     @GET(
         "playlists?part=contentDetails,id,snippet&fields=etag,nextPageToken,pageInfo," +
-                "items(etag,id,snippet(publishedAt,title,description,thumbnails),contentDetails)"
+                "items(etag,id,snippet(channelId,publishedAt,title,description,thumbnails),contentDetails)"
     )
     suspend fun getPlaylistsForChannel(
         @Query("channelId") chanelId: String = "UCdxpofrI-dO6oYfsqHDHphw",
