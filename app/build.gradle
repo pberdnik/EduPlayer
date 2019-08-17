@@ -57,6 +57,8 @@ dependencies {
     // Room database
     implementation "androidx.room:room-runtime:2.2.0-alpha02"
     kapt "androidx.room:room-compiler:2.2.0-alpha02"
+    // Database debug
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
 
     // Network
