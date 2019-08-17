@@ -23,12 +23,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
+import io.github.pberdnik.eduplayer.database.entities.DatabaseThumbnail
 
 
-@Database(entities = [DatabasePlaylist::class, DatabaseChannel::class], version = 1, exportSchema = false)
+@Database(
+    entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabaseThumbnail::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class YoutubeDatabase : RoomDatabase() {
     abstract val playlistDao: PlaylistDao
     abstract val channelDao: ChannelDao
+    abstract val thumbnailDao: ThumbnailDao
 }
 
 private lateinit var INSTANCE: YoutubeDatabase
@@ -36,9 +42,11 @@ private lateinit var INSTANCE: YoutubeDatabase
 fun getDatabase(context: Context): YoutubeDatabase {
     synchronized(YoutubeDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                    YoutubeDatabase::class.java,
-                    "youtube.db").build()
+            INSTANCE = Room.databaseBuilder(
+                context.applicationContext,
+                YoutubeDatabase::class.java,
+                "youtube.db"
+            ).build()
         }
     }
     return INSTANCE

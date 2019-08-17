@@ -2,6 +2,7 @@ package io.github.pberdnik.eduplayer.network.dto
 
 import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
+import io.github.pberdnik.eduplayer.database.entities.DatabaseThumbnail
 
 
 data class NetworkPlaylists(
@@ -56,3 +57,21 @@ fun NetworkPlaylists.asChannelDatabaseModel(): Array<DatabaseChannel> = items.ma
         title = it.snippet.channelTitle
     )
 }.distinctBy { it.id }.toTypedArray()
+
+/**
+ * Extracts all thumbnails (default, medium, high, standard, maxres) from each playlist
+ * and returns flat array of them
+ */
+fun NetworkPlaylists.asThumbnailDatabaseModel(): Array<DatabaseThumbnail> = items.flatMap {playlist ->
+    playlist.snippet.thumbnails.run {
+        arrayOf(default, medium, high, standard, maxres).filterNotNull().map {thumbnail ->
+            DatabaseThumbnail(
+                id = 0,
+                playlistId = playlist.id,
+                url = thumbnail.url,
+                width = thumbnail.width,
+                height = thumbnail.height
+            )
+        }
+    }
+}.toTypedArray()

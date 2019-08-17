@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
+import io.github.pberdnik.eduplayer.database.entities.DatabaseThumbnail
 import io.github.pberdnik.eduplayer.domain.Playlist
 
 @Dao
@@ -25,4 +26,10 @@ interface PlaylistDao {
 interface ChannelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg databaseChannels: DatabaseChannel)
+}
+
+@Dao
+interface ThumbnailDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg databaseThumbnail: DatabaseThumbnail)
 }

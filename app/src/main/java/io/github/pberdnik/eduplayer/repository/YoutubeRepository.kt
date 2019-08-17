@@ -22,6 +22,7 @@ import io.github.pberdnik.eduplayer.database.YoutubeDatabase
 import io.github.pberdnik.eduplayer.domain.Playlist
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
+import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
 import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -35,6 +36,7 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
             val playlists = youtubeDataApiService.getPlaylistsForChannel()
             database.channelDao.insertAll(*playlists.asChannelDatabaseModel())
             database.playlistDao.insertAll(*playlists.asDatabaseModel())
+            database.thumbnailDao.insertAll(*playlists.asThumbnailDatabaseModel())
         }
     }
 }
