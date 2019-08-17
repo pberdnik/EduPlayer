@@ -1,12 +1,15 @@
 package io.github.pberdnik.eduplayer.domain
 
+import androidx.room.Embedded
+
 data class Playlist(
-//    val thumbnails: List<Thumbnail>,
     val title: String,
     val description: String,
     val channelTitle: String,
     val publishedAt: String,
-    val videosCount: Int
+    val videosCount: Int,
+    @Embedded
+    val thumbnails: Thumbnail
 )
 
 data class Thumbnail(

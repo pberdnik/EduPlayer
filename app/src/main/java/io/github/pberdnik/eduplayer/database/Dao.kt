@@ -13,8 +13,13 @@ import io.github.pberdnik.eduplayer.domain.Playlist
 @Dao
 interface PlaylistDao {
     @Query(
-        """SELECT playlists.title, description, channels.title as channelTitle, publishedAt, videosCount 
-        FROM playlists INNER JOIN channels ON channels.id = playlists.channelId"""
+        """
+        SELECT playlists.title, description, channels.title as channelTitle, 
+               publishedAt, videosCount, url, max(width) as width, height
+        FROM playlists 
+        INNER JOIN channels ON channels.id = playlists.channelId
+        INNER JOIN thumbnails ON thumbnails.playlistId = playlists.id
+        GROUP BY playlists.id"""
     )
     fun getPlaylists(): LiveData<List<Playlist>>
 
