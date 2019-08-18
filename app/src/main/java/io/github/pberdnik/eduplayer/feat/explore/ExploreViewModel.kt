@@ -3,6 +3,7 @@ package io.github.pberdnik.eduplayer.feat.explore
 import android.app.Application
 import androidx.lifecycle.*
 import io.github.pberdnik.eduplayer.database.getDatabase
+import io.github.pberdnik.eduplayer.domain.Playlist
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import kotlinx.coroutines.launch
 
@@ -11,10 +12,8 @@ class ExploreViewModel(app: Application) : AndroidViewModel(app) {
     private val database = getDatabase(app)
     private val repository = YoutubeRepository(database)
 
-    private val _videos = Transformations.map(repository.playlists) {
-        it.joinToString("\n\n")
-    }
-    val videos: LiveData<String> = _videos
+    private val _playlists = repository.playlists
+    val playlists: LiveData<List<Playlist>> = _playlists
 
     init {
         viewModelScope.launch {

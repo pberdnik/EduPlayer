@@ -19,6 +19,7 @@ class ExploreFragment : Fragment() {
         val binding = ExploreFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
+            it.playlistRv.adapter = PlaylistAdapter()
         }
         return binding.root
     }

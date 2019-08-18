@@ -3,6 +3,7 @@ package io.github.pberdnik.eduplayer.domain
 import androidx.room.Embedded
 
 data class Playlist(
+    val id: String,
     val title: String,
     val description: String,
     val channelTitle: String,

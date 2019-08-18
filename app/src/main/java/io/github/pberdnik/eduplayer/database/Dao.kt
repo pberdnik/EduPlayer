@@ -14,7 +14,7 @@ import io.github.pberdnik.eduplayer.domain.Playlist
 interface PlaylistDao {
     @Query(
         """
-        SELECT playlists.title, description, channels.title as channelTitle, 
+        SELECT playlists.id, playlists.title, description, channels.title as channelTitle, 
                publishedAt, videosCount, url, max(width) as width, height
         FROM playlists 
         INNER JOIN channels ON channels.id = playlists.channelId

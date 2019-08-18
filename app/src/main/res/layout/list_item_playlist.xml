@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="playlist"
+            type="io.github.pberdnik.eduplayer.domain.Playlist" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        tools:context=".feat.explore.ExploreFragment">
+
+        <ImageView
+            android:id="@+id/playlist_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{playlist.thumbnails.url}"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/maxresdefault" />
+
+        <TextView
+            android:id="@+id/playlist_videos_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#9000"
+            android:padding="4dp"
+            android:text="@{@string/videos_count(playlist.videosCount)}"
+            android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
+            app:layout_constraintEnd_toEndOf="@id/playlist_thumbnail"
+            tools:text="7 videos" />
+
+        <TextView
+            android:id="@+id/playlist_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{playlist.title}"
+            app:layout_constraintEnd_toStartOf="@id/expand_iv"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"
+            tools:text="Beneficial Bugs" />
+
+        <TextView
+            android:id="@+id/playlist_channel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{playlist.channelTitle}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_title"
+            tools:text="YouTube Learning" />
+
+        <TextView
+            android:id="@+id/delimiter_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="·"
+            app:layout_constraintBaseline_toBaselineOf="@id/playlist_channel_title"
+            app:layout_constraintStart_toEndOf="@id/playlist_channel_title" />
+
+        <TextView
+            android:id="@+id/playlist_published_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{playlist.publishedAt}"
+            app:layout_constraintBaseline_toBaselineOf="@id/playlist_channel_title"
+            app:layout_constraintStart_toEndOf="@id/delimiter_1"
+            tools:text="2 months ago" />
+
+        <ImageView
+            android:id="@+id/expand_iv"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_expand_more"
+            android:tint="#888"
+            app:layout_constraintBottom_toTopOf="@id/info_barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/info_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="playlist_channel_title,playlist_published_at" />
+
+        <TextView
+            android:id="@+id/playlist_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:maxHeight="64dp"
+            android:text="@{playlist.description}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_barrier"
+            tools:text="@string/long_playlist_description_sample" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
