@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 
 class ExploreFragment : Fragment() {
@@ -20,6 +21,7 @@ class ExploreFragment : Fragment() {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
             it.playlistRv.adapter = PlaylistAdapter()
+            (it.playlistRv.getItemAnimator() as DefaultItemAnimator).setSupportsChangeAnimations(false)
         }
         return binding.root
     }

@@ -1,6 +1,7 @@
 package io.github.pberdnik.eduplayer.domain
 
 import androidx.room.Embedded
+import androidx.room.Ignore
 
 data class Playlist(
     val id: String,
@@ -11,7 +12,10 @@ data class Playlist(
     val videosCount: Int,
     @Embedded
     val thumbnails: Thumbnail
-)
+) {
+    @Ignore
+    var expended: Boolean = true
+}
 
 data class Thumbnail(
     val url: String,

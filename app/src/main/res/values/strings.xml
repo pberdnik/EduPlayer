@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">EduPlayer</string>
     <string name="videos_count">%d videos</string>
+    <string name="playlist_info">%s  ·  %s</string>
     <string name="long_playlist_description_sample">A cosmic playlist celebrating all things space from your favorite PBS creators. Come for the quasars, black holes and moon rocks. Stay for STELLAR, an epic new miniseries collab featuring Dianna Cowern (Physics Girl), Matt O\'Dowd (Space Time), and Joe Hanson (It’s Okay to be Smart).</string>
 </resources>

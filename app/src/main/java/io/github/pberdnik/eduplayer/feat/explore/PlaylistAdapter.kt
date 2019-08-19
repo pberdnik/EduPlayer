@@ -18,6 +18,13 @@ class PlaylistAdapter : ListAdapter<Playlist, PlaylistViewHolder>(PlaylistDiffCa
 
 class PlaylistViewHolder(private val binding: ListItemPlaylistBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(playlist: Playlist) {
+        binding.motionLayout.run {
+            progress = if (playlist.expended) 0f else 1f
+            setOnClickListener {
+                if (playlist.expended) transitionToEnd() else transitionToStart()
+                playlist.expended = !playlist.expended
+            }
+        }
         binding.playlist = playlist
         binding.executePendingBindings()
     }
