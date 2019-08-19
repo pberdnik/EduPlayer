@@ -22,7 +22,7 @@ class ExploreViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     /**
-     * Factory for constructing DevByteViewModel with parameter
+     * Factory for constructing ExploreViewModel with parameter
      */
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -30,7 +30,7 @@ class ExploreViewModel(app: Application) : AndroidViewModel(app) {
                 @Suppress("UNCHECKED_CAST")
                 return ExploreViewModel(app) as T
             }
-            throw IllegalArgumentException("Unable to construct viewmodel")
+            throw IllegalArgumentException("Unable to construct viewModel")
         }
     }
 }
