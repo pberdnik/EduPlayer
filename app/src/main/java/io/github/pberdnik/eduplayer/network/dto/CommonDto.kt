@@ -16,3 +16,9 @@ data class Thumbnail(
     val width: Int,
     val height: Int
 )
+
+
+data class PageInfo(
+    val totalResults: Int,
+    val resultsPerPage: Int
+)

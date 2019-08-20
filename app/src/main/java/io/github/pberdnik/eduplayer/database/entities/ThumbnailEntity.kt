@@ -5,17 +5,35 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "thumbnails",
+    tableName = "playlist_thumbnails",
     foreignKeys = [ForeignKey(
         entity = DatabasePlaylist::class,
         parentColumns = ["id"],
         childColumns = ["playlistId"]
     )]
 )
-data class DatabaseThumbnail(
+data class DatabasePlaylistThumbnail(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val playlistId: String,
+    val url: String,
+    val width: Int,
+    val height: Int
+)
+
+
+@Entity(
+    tableName = "playlist_item_thumbnails",
+    foreignKeys = [ForeignKey(
+        entity = DatabasePlaylistItem::class,
+        parentColumns = ["id"],
+        childColumns = ["playlistItemId"]
+    )]
+)
+data class DatabasePlaylistItemThumbnail(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val playlistItemId: String,
     val url: String,
     val width: Int,
     val height: Int

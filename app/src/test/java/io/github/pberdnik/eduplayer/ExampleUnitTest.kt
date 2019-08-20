@@ -1,8 +1,8 @@
 package io.github.pberdnik.eduplayer
 
+import io.github.pberdnik.eduplayer.network.youtubeDataApiService
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +12,9 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        runBlocking {
+            println(youtubeDataApiService
+                .getPlaylistItemsForPlaylist("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk"))
+        }
     }
 }

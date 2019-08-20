@@ -31,12 +31,22 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
 
     val playlists: LiveData<List<Playlist>> = database.playlistDao.getPlaylists()
 
-    suspend fun refreshPlaylists() {
-        withContext(Dispatchers.IO) {
-            val playlists = youtubeDataApiService.getPlaylistsForChannel()
-            database.channelDao.insertAll(*playlists.asChannelDatabaseModel())
-            database.playlistDao.insertAll(*playlists.asDatabaseModel())
-            database.thumbnailDao.insertAll(*playlists.asThumbnailDatabaseModel())
-        }
+    fun getPlaylistItemForPlaylist(playlistItemId: String) =
+        database.playlistItemDao.getPlaylistItemsForPlaylist(playlistItemId)
+
+    suspend fun refreshPlaylists() = withContext(Dispatchers.IO) {
+        val playlists = youtubeDataApiService.getPlaylistsForChannel()
+        database.channelDao.insertAll(*playlists.asChannelDatabaseModel())
+        database.playlistDao.insertAll(*playlists.asDatabaseModel())
+        database.thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
+
+    suspend fun refreshPlaylistItem(playlistItemId: String) = withContext(Dispatchers.IO) {
+        val playlistItemsForPlaylist =
+            youtubeDataApiService.getPlaylistItemsForPlaylist(playlistItemId)
+        database.playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
+        database.thumbnailDao.insertAllPlaylistItemThumbnails(
+            *playlistItemsForPlaylist.asThumbnailDatabaseModel())
+    }
+
 }

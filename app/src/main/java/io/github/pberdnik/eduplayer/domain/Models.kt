@@ -22,3 +22,16 @@ data class Thumbnail(
     val width: Int,
     val height: Int
 )
+
+
+data class PlaylistItem(
+    val id: String,
+    val title: String,
+    val description: String,
+    val channelTitle: String,
+    val publishedAt: String,
+    val position: Int,
+    val videoId: String,
+    @Embedded
+    val thumbnails: Thumbnail
+)
