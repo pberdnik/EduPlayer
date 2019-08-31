@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DefaultItemAnimator
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
+import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistAdapter
+import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistClickListener
 
 class ExploreFragment : Fragment() {
 
@@ -16,12 +17,19 @@ class ExploreFragment : Fragment() {
         ExploreViewModel.Factory(app)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = ExploreFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
-            it.playlistRv.adapter = PlaylistAdapter()
-            (it.playlistRv.getItemAnimator() as DefaultItemAnimator).setSupportsChangeAnimations(false)
+            it.playlistRv.adapter =
+                PlaylistAdapter(PlaylistClickListener { playlistWithInfo ->
+                    viewModel.switchPlaylistExpansion(playlistWithInfo)
+                })
+//            it.playlistRv.itemAnimator = PlaylistAnimator()
         }
         return binding.root
     }

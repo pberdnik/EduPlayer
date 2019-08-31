@@ -19,7 +19,8 @@ package io.github.pberdnik.eduplayer.repository
 
 import androidx.lifecycle.LiveData
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
-import io.github.pberdnik.eduplayer.domain.Playlist
+import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
+import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
@@ -29,10 +30,11 @@ import kotlinx.coroutines.withContext
 
 class YoutubeRepository(private val database: YoutubeDatabase) {
 
-    val playlists: LiveData<List<Playlist>> = database.playlistDao.getPlaylists()
+    val playlists: LiveData<List<PlaylistWithInfo>> =
+        database.playlistDao.getPlaylists()
+    val playlistExpansions: LiveData<List<PlaylistExpansion>> =
+        database.playlistDao.getExpandedPlaylistsItems()
 
-    fun getPlaylistItemForPlaylist(playlistItemId: String) =
-        database.playlistItemDao.getPlaylistItemsForPlaylist(playlistItemId)
 
     suspend fun refreshPlaylists() = withContext(Dispatchers.IO) {
         val playlists = youtubeDataApiService.getPlaylistsForChannel()
@@ -41,9 +43,10 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
         database.thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
 
-    suspend fun refreshPlaylistItem(playlistItemId: String) = withContext(Dispatchers.IO) {
+    suspend fun switchPlaylistExpansion(playlistId: String) = withContext(Dispatchers.IO) {
+        database.playlistDao.switchExpansion(playlistId)
         val playlistItemsForPlaylist =
-            youtubeDataApiService.getPlaylistItemsForPlaylist(playlistItemId)
+            youtubeDataApiService.getPlaylistItemsForPlaylist(playlistId)
         database.playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
         database.thumbnailDao.insertAllPlaylistItemThumbnails(
             *playlistItemsForPlaylist.asThumbnailDatabaseModel())

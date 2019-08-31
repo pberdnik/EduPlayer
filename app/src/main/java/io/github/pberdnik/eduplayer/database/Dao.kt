@@ -1,29 +1,31 @@
 package io.github.pberdnik.eduplayer.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.github.pberdnik.eduplayer.database.entities.*
-import io.github.pberdnik.eduplayer.domain.Playlist
-import io.github.pberdnik.eduplayer.domain.PlaylistItem
+import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
+import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
+import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
 
 @Dao
 interface PlaylistDao {
-    @Query(
-        """
-        SELECT playlists.id, playlists.title, description, channels.title as channelTitle, 
-               publishedAt, videosCount, url, max(width) as width, height
-        FROM playlists 
-        INNER JOIN channels ON channels.id = playlists.channelId
-        INNER JOIN playlist_thumbnails ON playlist_thumbnails.playlistId = playlists.id
-        GROUP BY playlists.id"""
-    )
-    fun getPlaylists(): LiveData<List<Playlist>>
+    @Transaction
+    @Query("SELECT * FROM playlists")
+    fun getPlaylists(): LiveData<List<PlaylistWithInfo>>
+
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE expanded = 1")
+    fun getExpandedPlaylistsItems(): LiveData<List<PlaylistExpansion>>
+
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE expanded = 1")
+    fun getExpandedPlaylistsItemsNoLD(): List<PlaylistExpansion>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg playlists: DatabasePlaylist)
+    suspend fun insertAll(vararg playlists: DatabasePlaylist)
+
+    @Query("UPDATE playlists SET expanded = not expanded WHERE id = :playlistId")
+    suspend fun switchExpansion(playlistId: String)
 }
 
 @Dao
@@ -38,23 +40,23 @@ interface PlaylistItemDao {
         WHERE pi.id = :playlistId
     """
     )
-    fun getPlaylistItemsForPlaylist(playlistId: String): LiveData<List<PlaylistItem>>
+    fun getPlaylistItemsForPlaylist(playlistId: String): LiveData<List<PlaylistItemWithInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg playlistItems: DatabasePlaylistItem)
+    suspend fun insertAll(vararg playlistItems: DatabasePlaylistItem)
 }
 
 @Dao
 interface ChannelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg databaseChannels: DatabaseChannel)
+    suspend fun insertAll(vararg databaseChannels: DatabaseChannel)
 }
 
 @Dao
 interface ThumbnailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllPlaylistThumbnails(vararg databaseThumbnail: DatabasePlaylistThumbnail)
+    suspend fun insertAllPlaylistThumbnails(vararg databaseThumbnail: DatabasePlaylistThumbnail)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllPlaylistItemThumbnails(vararg databaseThumbnail: DatabasePlaylistItemThumbnail)
+    suspend fun insertAllPlaylistItemThumbnails(vararg databaseThumbnail: DatabasePlaylistItemThumbnail)
 }

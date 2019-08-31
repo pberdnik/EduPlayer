@@ -26,8 +26,8 @@ import io.github.pberdnik.eduplayer.database.entities.*
 
 @Database(
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
-    DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class],
-    version = 1,
+        DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class],
+    version = 2,
     exportSchema = false
 )
 abstract class YoutubeDatabase : RoomDatabase() {
@@ -46,7 +46,9 @@ fun getDatabase(context: Context): YoutubeDatabase {
                 context.applicationContext,
                 YoutubeDatabase::class.java,
                 "youtube.db"
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
     return INSTANCE

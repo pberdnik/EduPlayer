@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="playlistItem"
+            type="io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/playlist_item_thumbnail"
+            android:layout_width="128dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:scaleType="center"
+            app:imageUrl="@{playlistItem.thumbnails[0].url}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/maxresdefault" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{playlistItem.title}"
+            app:layout_constraintEnd_toEndOf="@+id/playlist_item_thumbnail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/playlist_item_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/playlist_item_thumbnail"
+            tools:text="Some title" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
