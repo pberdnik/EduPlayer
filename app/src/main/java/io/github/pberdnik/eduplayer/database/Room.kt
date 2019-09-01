@@ -21,15 +21,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import io.github.pberdnik.eduplayer.database.entities.*
 
 
 @Database(
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
+@TypeConverters(DateConverter::class)
 abstract class YoutubeDatabase : RoomDatabase() {
     abstract val playlistDao: PlaylistDao
     abstract val channelDao: ChannelDao

@@ -3,6 +3,7 @@ package io.github.pberdnik.eduplayer.network.dto
 import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
+import java.util.*
 
 
 data class NetworkPlaylists(
@@ -22,7 +23,7 @@ data class NetworkPlaylist(
 data class PlaylistSnippet(
     val channelId: String,
     val channelTitle: String,
-    val publishedAt: String,
+    val publishedAt: Date,
     val title: String,
     val description: String,
     val thumbnails: Thumbnails

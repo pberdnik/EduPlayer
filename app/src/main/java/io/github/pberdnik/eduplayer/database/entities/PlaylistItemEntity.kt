@@ -3,6 +3,7 @@ package io.github.pberdnik.eduplayer.database.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(
     tableName = "playlist_items",
@@ -25,7 +26,7 @@ data class DatabasePlaylistItem constructor(
     val playlistId: String,
     val title: String,
     val description: String,
-    val publishedAt: String,
+    val publishedAt: Date,
     val position: Int,
     val videoId: String
 )

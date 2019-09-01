@@ -42,7 +42,7 @@
                 android:id="@+id/playlist_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAt)}"
+                android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
                 tools:text="YouTube Learning  ·  12 months ago" />
 
             <TextView
