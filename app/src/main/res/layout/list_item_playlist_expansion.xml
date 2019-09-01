@@ -15,11 +15,16 @@
         android:id="@+id/playlist_items_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
+        android:background="#fff"
+        android:clipToPadding="false"
+        android:elevation="2dp"
         android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:listData="@{pi.items}"
         tools:listitem="@layout/list_item_playlist_item"
         tools:text="Some videos" />
+
 </layout>
 

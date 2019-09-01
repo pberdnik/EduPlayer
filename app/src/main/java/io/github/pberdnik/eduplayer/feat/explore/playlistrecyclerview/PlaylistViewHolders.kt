@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistBinding
 import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistExpansionBinding
-import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
+import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 
 abstract class PlaylistViewHolder(val binding: ListItemPlaylistBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -33,9 +33,7 @@ class PlaylistExpandedViewHolder(binding: ListItemPlaylistBinding) : PlaylistVie
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ListItemPlaylistBinding.inflate(layoutInflater, parent, false)
 
-            return PlaylistExpandedViewHolder(
-                binding
-            )
+            return PlaylistExpandedViewHolder(binding)
         }
     }
 }

@@ -16,12 +16,12 @@
 
         <ImageView
             android:id="@+id/playlist_item_thumbnail"
-            android:layout_width="128dp"
+            android:layout_width="148dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="16:9"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="center"
             app:imageUrl="@{playlistItem.thumbnails[0].url}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,9 +31,13 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="#000"
             android:text="@{playlistItem.title}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/playlist_item_thumbnail"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/playlist_item_thumbnail"

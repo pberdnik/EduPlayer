@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistAdapter
+import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistAnimator
 import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistClickListener
 
 class ExploreFragment : Fragment() {
@@ -29,7 +30,7 @@ class ExploreFragment : Fragment() {
                 PlaylistAdapter(PlaylistClickListener { playlistWithInfo ->
                     viewModel.switchPlaylistExpansion(playlistWithInfo)
                 })
-//            it.playlistRv.itemAnimator = PlaylistAnimator()
+            it.playlistRv.itemAnimator = PlaylistAnimator()
         }
         return binding.root
     }
