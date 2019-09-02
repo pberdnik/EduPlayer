@@ -3,75 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.card.MaterialCardView
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motion_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:background="#fff"
+        android:elevation="2dp"
+        app:layoutDescription="@xml/playlist_item_motion_scene"
+        tools:context=".feat.explore.ExploreFragment">
 
-        <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/motion_layout"
+        <ImageView
+            android:id="@+id/playlist_thumbnail"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="center"
+            app:imageUrl="@{pi.thumbnails[pi.thumbnails.size() - 1].url}"
+            tools:src="@drawable/maxresdefault" />
+
+        <ImageView
+            android:id="@+id/expand_iv"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_expand_more"
+            android:tint="#888" />
+
+        <TextView
+            android:id="@+id/playlist_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layoutDescription="@xml/playlist_item_motion_scene"
-            tools:context=".feat.explore.ExploreFragment">
+            android:text="@{pi.playlist.title}"
+            tools:text="Beneficial Bugs" />
 
-            <ImageView
-                android:id="@+id/playlist_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scaleType="center"
-                app:imageUrl="@{pi.thumbnails[pi.thumbnails.size() - 1].url}"
-                tools:src="@drawable/maxresdefault" />
+        <TextView
+            android:id="@+id/playlist_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
+            tools:text="YouTube Learning  ·  12 months ago" />
 
-            <ImageView
-                android:id="@+id/expand_iv"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_expand_more"
-                android:tint="#888" />
+        <TextView
+            android:id="@+id/playlist_videos_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#8000"
+            android:padding="4dp"
+            android:text="@{@string/videos_count(pi.playlist.videosCount)}"
+            android:textColor="#fff"
+            tools:text="7 videos" />
 
-            <TextView
-                android:id="@+id/playlist_title"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{pi.playlist.title}"
-                tools:text="Beneficial Bugs" />
+        <TextView
+            android:id="@+id/playlist_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{pi.playlist.description}"
+            tools:text="@string/long_playlist_description_sample" />
 
-            <TextView
-                android:id="@+id/playlist_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
-                tools:text="YouTube Learning  ·  12 months ago" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/info_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="playlist_info,expand_iv" />
 
-            <TextView
-                android:id="@+id/playlist_videos_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#8000"
-                android:padding="4dp"
-                android:text="@{@string/videos_count(pi.playlist.videosCount)}"
-                android:textColor="#fff"
-                tools:text="7 videos" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
-            <TextView
-                android:id="@+id/playlist_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{pi.playlist.description}"
-                tools:text="@string/long_playlist_description_sample" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/info_barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="playlist_info,expand_iv" />
-
-        </androidx.constraintlayout.motion.widget.MotionLayout>
-
-    </com.google.android.material.card.MaterialCardView>
 
     <data>
 

@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="io.github.pberdnik.eduplayer.feat.explore.ExploreViewModel" />
-    </data>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playlist_rv"
@@ -21,5 +15,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:listData="@{viewModel.playlistsData}"
         tools:listitem="@layout/list_item_playlist" />
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.github.pberdnik.eduplayer.feat.explore.ExploreViewModel" />
+    </data>
 
 </layout>
