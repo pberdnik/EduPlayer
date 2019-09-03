@@ -13,7 +13,6 @@
     <fragment
         android:id="@+id/exploreFragment"
         android:name="io.github.pberdnik.eduplayer.feat.explore.ExploreFragment"
-        android:label="Explore"
         tools:layout="@layout/explore_fragment"/>
 
 </navigation>
