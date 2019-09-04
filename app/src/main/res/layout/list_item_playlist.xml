@@ -8,7 +8,6 @@
         android:id="@+id/motion_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="#fff"
         android:elevation="2dp"
         app:layoutDescription="@xml/playlist_item_motion_scene"
@@ -35,6 +34,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{pi.playlist.title}"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="229dp"
             tools:text="Beneficial Bugs" />
 
         <TextView

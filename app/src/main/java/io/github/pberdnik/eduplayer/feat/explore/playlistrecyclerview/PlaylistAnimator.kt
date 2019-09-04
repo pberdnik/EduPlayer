@@ -1,8 +1,5 @@
 package io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 
@@ -49,13 +46,13 @@ class PlaylistAnimator : DefaultItemAnimator() {
         }
         // Run motion layout transition otherwise, i.e. in case of fold/expansion
         if (preInfo.expanded != postInfo.expanded) {
-            val anim = ObjectAnimator.ofFloat(newHolder.binding.motionLayout, "progress", 1f, 0f)
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchAnimationFinished(newHolder)
-                }
-            })
-            anim.start()
+//            val anim = ObjectAnimator.ofFloat(newHolder.binding.motionLayout, "progress", 1f, 0f)
+//            anim.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator) {
+//                    dispatchAnimationFinished(newHolder)
+//                }
+//            })
+//            anim.start()
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
         } else {
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)

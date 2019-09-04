@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(app_bar)
-        supportActionBar?.setIcon(R.drawable.ic_edu_logo)
+        supportActionBar?.setIcon(R.drawable.ic_edu_logo_with_padding)
 
         val navController = findNavController(R.id.mainNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
