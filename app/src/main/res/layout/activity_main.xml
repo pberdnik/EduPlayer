@@ -28,4 +28,13 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/navigation" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@color/bottom_navigation_colors"
+        app:itemTextColor="@color/bottom_navigation_colors"
+        app:menu="@menu/eduplayer_bottom_navigation" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

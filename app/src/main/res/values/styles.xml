@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="toolbarStyle">@style/Widget.EduPlayer.Toolbar</item>
+        <item name="bottomNavigationStyle">@style/ThemeOverlay.EduPlayer.BottomNavigation</item>
     </style>
 
     <style name="Widget.EduPlayer.Toolbar" parent="Widget.MaterialComponents.Toolbar">
@@ -21,8 +22,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ThemeOverlay.EduPlayer.BottomNavigation" parent="">
-        <item name="colorPrimary">?attr/colorAccent</item>
+    <style name="ThemeOverlay.EduPlayer.BottomNavigation"
+        parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:colorPrimary">@color/colorAccent</item>
     </style>
 
 </resources>
