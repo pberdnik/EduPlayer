@@ -3,53 +3,46 @@ package io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.github.pberdnik.eduplayer.R
-import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistBinding
+import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistExpandedBinding
 import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistExpansionBinding
+import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistFoldedBinding
 import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 
-abstract class PlaylistViewHolder(val binding: ListItemPlaylistBinding) :
-    RecyclerView.ViewHolder(binding.root) {
 
-    open fun bind(playlistWithInfo: PlaylistWithInfo) {
+class PlaylistExpandedViewHolder(val binding: ListItemPlaylistExpandedBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(playlistWithInfo: PlaylistWithInfo) {
         binding.run {
             pi = playlistWithInfo
             executePendingBindings()
         }
     }
-}
-
-class PlaylistExpandedViewHolder(binding: ListItemPlaylistBinding) : PlaylistViewHolder(binding) {
-
-    override fun bind(playlistWithInfo: PlaylistWithInfo) {
-        super.bind(playlistWithInfo)
-        binding.motionLayout
-            .setTransition(R.id.transition_playlist_end, R.id.transition_playlist_start)
-    }
 
     companion object {
         fun from(parent: ViewGroup): PlaylistExpandedViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ListItemPlaylistBinding.inflate(layoutInflater, parent, false)
+            val binding = ListItemPlaylistExpandedBinding.inflate(layoutInflater, parent, false)
 
             return PlaylistExpandedViewHolder(binding)
         }
     }
 }
 
-class PlaylistFoldedViewHolder(binding: ListItemPlaylistBinding) : PlaylistViewHolder(binding) {
 
-    override fun bind(playlistWithInfo: PlaylistWithInfo) {
-        super.bind(playlistWithInfo)
-        binding.motionLayout
-            .setTransition(R.id.transition_playlist_start, R.id.transition_playlist_end)
+class PlaylistFoldedViewHolder(val binding: ListItemPlaylistFoldedBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(playlistWithInfo: PlaylistWithInfo) {
+        binding.run {
+            pi = playlistWithInfo
+            executePendingBindings()
+        }
     }
 
     companion object {
         fun from(parent: ViewGroup): PlaylistFoldedViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ListItemPlaylistBinding.inflate(layoutInflater, parent, false)
+            val binding = ListItemPlaylistFoldedBinding.inflate(layoutInflater, parent, false)
 
             return PlaylistFoldedViewHolder(binding)
         }

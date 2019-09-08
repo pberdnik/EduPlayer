@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#fff"
+        android:elevation="2dp"
+        app:layoutDescription="@xml/playlist_item_motion_scene"
+        tools:context=".feat.explore.ExploreFragment">
+
+        <ImageView
+            android:id="@+id/playlist_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:tint="#b000"
+            app:imageUrl="@{pi.thumbnails[pi.thumbnails.size() - 1].url}"
+            app:layout_constraintBottom_toBottomOf="@id/playlist_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/maxresdefault" />
+
+        <ImageView
+            android:id="@+id/expand_iv"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:rotationX="180"
+            android:src="@drawable/ic_expand_more"
+            android:tint="#888"
+            app:layout_constraintBottom_toTopOf="@id/info_barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail" />
+
+        <TextView
+            android:id="@+id/playlist_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical|start"
+            android:minHeight="64dp"
+            android:text="@{pi.playlist.title}"
+            android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
+            app:layout_constraintEnd_toStartOf="@id/playlist_videos_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Beneficial Bugs" />
+
+        <TextView
+            android:id="@+id/playlist_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"
+            tools:text="YouTube Learning  ·  12 months ago" />
+
+        <TextView
+            android:id="@+id/playlist_videos_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="4dp"
+            android:text="@{@string/videos_count(pi.playlist.videosCount)}"
+            android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="7 videos" />
+
+        <TextView
+            android:id="@+id/playlist_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@{pi.playlist.description}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_barrier"
+            tools:text="@string/long_playlist_description_sample" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/info_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="playlist_info,expand_iv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <data>
+
+        <variable
+            name="pi"
+            type="io.github.pberdnik.eduplayer.domain.PlaylistWithInfo" />
+    </data>
+</layout>

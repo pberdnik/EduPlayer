@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/motion_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="#fff"
         android:elevation="2dp"
         app:layoutDescription="@xml/playlist_item_motion_scene"
@@ -18,7 +18,11 @@
             android:id="@+id/playlist_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:imageUrl="@{pi.thumbnails[pi.thumbnails.size() - 1].url}"
             tools:src="@drawable/maxresdefault" />
 
@@ -27,39 +31,67 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_expand_more"
-            android:tint="#888" />
+            android:tint="#888"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"/>
 
         <TextView
             android:id="@+id/playlist_title"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:text="@{pi.playlist.title}"
+            app:layout_constraintEnd_toStartOf="@id/playlist_videos_count"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"
             tools:text="Beneficial Bugs" />
 
         <TextView
             android:id="@+id/playlist_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
+            app:layout_constraintEnd_toStartOf="@+id/expand_iv"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_title"
             tools:text="YouTube Learning  ·  12 months ago" />
 
         <TextView
             android:id="@+id/playlist_videos_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="#8000"
             android:padding="4dp"
             android:text="@{@string/videos_count(pi.playlist.videosCount)}"
             android:textColor="#fff"
+            app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
+            app:layout_constraintEnd_toEndOf="@id/playlist_thumbnail"
             tools:text="7 videos" />
 
         <TextView
             android:id="@+id/playlist_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:text="@{pi.playlist.description}"
-            tools:text="@string/long_playlist_description_sample" />
+            tools:text="@string/long_playlist_description_sample"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_barrier"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/info_barrier"
@@ -68,7 +100,7 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="playlist_info,expand_iv" />
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <data>

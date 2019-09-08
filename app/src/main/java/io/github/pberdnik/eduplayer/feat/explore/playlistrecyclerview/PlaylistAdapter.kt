@@ -30,7 +30,13 @@ class PlaylistAdapter(val onClickListener: PlaylistClickListener) :
         if (playlistData is PlaylistWithInfo)
             holder.itemView.setOnClickListener { onClickListener.onClick(playlistData) }
         when (holder) {
-            is PlaylistViewHolder -> {
+            is PlaylistExpandedViewHolder -> {
+                holder.itemView.setOnClickListener {
+                    onClickListener.onClick(playlistData as PlaylistWithInfo)
+                }
+                holder.bind(playlistData as PlaylistWithInfo)
+            }
+            is PlaylistFoldedViewHolder -> {
                 holder.itemView.setOnClickListener {
                     onClickListener.onClick(playlistData as PlaylistWithInfo)
                 }

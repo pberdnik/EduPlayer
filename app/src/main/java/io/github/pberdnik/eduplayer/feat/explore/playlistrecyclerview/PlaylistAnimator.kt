@@ -1,10 +1,8 @@
 package io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 
 class PlaylistAnimator : DefaultItemAnimator() {
 
@@ -36,26 +34,21 @@ class PlaylistAnimator : DefaultItemAnimator() {
         preInfo: ItemHolderInfo,
         postInfo: ItemHolderInfo
     ): Boolean {
-        // Use default animation if this is not a simple fold/expansion
-        if (oldHolder !is PlaylistViewHolder || newHolder !is PlaylistViewHolder ||
-            preInfo !is PlaylistHolderInfo || postInfo !is PlaylistHolderInfo ||
-            preInfo.id != postInfo.id
+        // Use default animation if this is not a fold/expansion
+        if (!(oldHolder is PlaylistExpandedViewHolder && newHolder is PlaylistFoldedViewHolder ||
+                    oldHolder is PlaylistFoldedViewHolder && newHolder is PlaylistExpandedViewHolder)
         ) {
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
         }
-        // Ignore if expansion state is the same
-        if (preInfo.expanded == postInfo.expanded) {
+        if (preInfo !is PlaylistHolderInfo || postInfo !is PlaylistHolderInfo ||
+                preInfo.id != postInfo.id) {
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
         }
         // Run motion layout transition otherwise, i.e. in case of fold/expansion
-        if (preInfo.expanded != postInfo.expanded) {
-            val anim = ObjectAnimator.ofFloat(newHolder.binding.motionLayout, "progress", 1f, 0f)
-            anim.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchAnimationFinished(newHolder)
-                }
-            })
-            anim.start()
+        if (oldHolder is PlaylistExpandedViewHolder && newHolder is PlaylistFoldedViewHolder) {
+            return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
+        } else if (oldHolder is PlaylistFoldedViewHolder && newHolder is PlaylistExpandedViewHolder) {
+            TransitionManager.beginDelayedTransition(newHolder.binding.clContainer)
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
         } else {
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
@@ -68,7 +61,13 @@ class PlaylistAnimator : DefaultItemAnimator() {
         var expanded: Boolean = false
 
         override fun setFrom(holder: RecyclerView.ViewHolder): ItemHolderInfo {
-            if (holder is PlaylistViewHolder) {
+            if (holder is PlaylistExpandedViewHolder) {
+                holder.binding.pi?.let {
+                    id = it.playlist.id
+                    expanded = it.expanded
+                }
+            }
+            if (holder is PlaylistFoldedViewHolder) {
                 holder.binding.pi?.let {
                     id = it.playlist.id
                     expanded = it.expanded
