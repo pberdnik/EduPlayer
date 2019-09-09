@@ -3,7 +3,6 @@ package io.github.pberdnik.eduplayer.domain
 import android.text.format.DateUtils
 import androidx.room.Embedded
 import androidx.room.Relation
-import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import java.util.*
@@ -11,23 +10,12 @@ import java.util.*
 data class PlaylistWithInfo(
     @Embedded
     val playlist: Playlist,
-    val expanded: Boolean = true,
     @Relation(
         entity = DatabasePlaylistThumbnail::class,
         entityColumn = "playlistId",
         parentColumn = "id"
     )
     val thumbnails: List<Thumbnail>
-)
-
-data class PlaylistExpansion(
-    val id: String,
-    @Relation(
-        entity = DatabasePlaylistItem::class,
-        entityColumn = "playlistId",
-        parentColumn = "id"
-    )
-    val items: List<PlaylistItemWithInfo>
 )
 
 data class Playlist(

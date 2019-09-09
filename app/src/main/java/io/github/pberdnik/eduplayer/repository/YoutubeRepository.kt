@@ -19,7 +19,7 @@ package io.github.pberdnik.eduplayer.repository
 
 import androidx.lifecycle.LiveData
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
-import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
+import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
@@ -32,9 +32,12 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
 
     val playlists: LiveData<List<PlaylistWithInfo>> =
         database.playlistDao.getPlaylists()
-    val playlistExpansions: LiveData<List<PlaylistExpansion>> =
-        database.playlistDao.getExpandedPlaylistsItems()
 
+    fun getPlaylistItems(playlistId: String): LiveData<List<PlaylistItemWithInfo>> =
+        database.playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
+
+    fun getPlaylist(playlistId: String): LiveData<PlaylistWithInfo> =
+        database.playlistDao.getPlaylist(playlistId)
 
     suspend fun refreshPlaylists() = withContext(Dispatchers.IO) {
         val playlists = youtubeDataApiService.getPlaylistsForChannel()
@@ -43,13 +46,13 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
         database.thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
 
-    suspend fun switchPlaylistExpansion(playlistId: String) = withContext(Dispatchers.IO) {
-        database.playlistDao.switchExpansion(playlistId)
+    suspend fun refreshPlaylistItems(playlistId: String) = withContext(Dispatchers.IO) {
         val playlistItemsForPlaylist =
             youtubeDataApiService.getPlaylistItemsForPlaylist(playlistId)
         database.playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
         database.thumbnailDao.insertAllPlaylistItemThumbnails(
-            *playlistItemsForPlaylist.asThumbnailDatabaseModel())
+            *playlistItemsForPlaylist.asThumbnailDatabaseModel()
+        )
     }
 
 }

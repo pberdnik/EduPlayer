@@ -44,9 +44,9 @@ class ExampleInstrumentedTest {
     @Test
     fun test() = runBlocking {
         repository.refreshPlaylists()
-        repository.switchPlaylistExpansion("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
-        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
-        repository.switchPlaylistExpansion("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
-        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
+        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
+//        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
+        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
+//        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
     }
 }

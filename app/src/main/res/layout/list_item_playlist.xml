@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="pwi"
+            type="io.github.pberdnik.eduplayer.domain.PlaylistWithInfo" />
+    </data>
+    
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_container"
@@ -11,7 +18,6 @@
         android:layout_marginTop="8dp"
         android:background="#fff"
         android:elevation="2dp"
-        app:layoutDescription="@xml/playlist_item_motion_scene"
         tools:context=".feat.explore.ExploreFragment">
 
         <ImageView
@@ -19,11 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
+            app:imageUrl="@{pwi.thumbnails[pwi.thumbnails.size() - 1].url}"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl="@{pwi.thumbnails[pwi.thumbnails.size() - 1].url}"
             tools:src="@drawable/maxresdefault" />
 
         <ImageView
@@ -33,7 +39,7 @@
             android:src="@drawable/ic_expand_more"
             android:tint="#888"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"/>
+            app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail" />
 
         <TextView
             android:id="@+id/playlist_title"
@@ -83,15 +89,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@{pwi.playlist.description}"
-            tools:text="@string/long_playlist_description_sample"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/info_barrier"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            tools:text="@string/long_playlist_description_sample" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/info_barrier"
@@ -102,11 +108,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <data>
-
-        <variable
-            name="pwi"
-            type="io.github.pberdnik.eduplayer.domain.PlaylistWithInfo" />
-    </data>
 </layout>

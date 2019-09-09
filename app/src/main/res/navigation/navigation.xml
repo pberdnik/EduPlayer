@@ -13,6 +13,19 @@
     <fragment
         android:id="@+id/exploreFragment"
         android:name="io.github.pberdnik.eduplayer.feat.explore.ExploreFragment"
-        tools:layout="@layout/explore_fragment"/>
+        tools:layout="@layout/explore_fragment" >
+        <action
+            android:id="@+id/action_showDetails"
+            app:destination="@id/playlistDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistDetailsFragment"
+        android:name="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsFragment"
+        tools:layout="@layout/playlist_details_fragment" >
+        <argument
+            android:name="playlistId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

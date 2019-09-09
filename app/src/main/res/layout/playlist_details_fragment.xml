@@ -3,14 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#fff"
         android:elevation="2dp"
-        app:layoutDescription="@xml/playlist_item_motion_scene"
-        tools:context=".feat.explore.ExploreFragment">
+        tools:context=".feat.playlistdetails.PlaylistDetailsFragment">
 
         <ImageView
             android:id="@+id/playlist_thumbnail"
@@ -18,10 +25,7 @@
             android:layout_height="96dp"
             android:scaleType="centerCrop"
             android:tint="#b000"
-            app:imageUrl="@{pwi.thumbnails[pwi.thumbnails.size() - 1].url}"
-            app:layout_constraintBottom_toBottomOf="@id/playlist_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:imageUrl="@{viewModel.playlist.thumbnails[viewModel.playlist.thumbnails.size() - 1].url}"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/maxresdefault" />
 
@@ -36,12 +40,12 @@
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical|start"
             android:minHeight="64dp"
-            android:text="@{pwi.playlist.title}"
+            android:text="@{viewModel.playlist.playlist.title}"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
             app:layout_constraintEnd_toStartOf="@id/playlist_videos_count"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/playlist_thumbnail"
+            app:layout_constraintTop_toTopOf="@+id/playlist_thumbnail"
             tools:text="Beneficial Bugs" />
 
         <TextView
@@ -50,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{@string/playlist_info(`Youtube Learning`, pwi.playlist.publishedAtString)}"
+            android:text="@{@string/playlist_info(`Youtube Learning`, viewModel.playlist.playlist.publishedAtString)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playlist_thumbnail"
             tools:text="YouTube Learning  ·  12 months ago" />
@@ -63,51 +67,40 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:padding="4dp"
-            android:text="@{@string/videos_count(pwi.playlist.videosCount)}"
+            android:text="@{@string/videos_count(viewModel.playlist.playlist.videosCount)}"
             android:textColor="#fff"
+            app:layout_constraintTop_toTopOf="@id/playlist_thumbnail"
             app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/playlist_thumbnail"
             tools:text="7 videos" />
 
         <TextView
             android:id="@+id/playlist_description"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@{pwi.playlist.description}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@{viewModel.playlist.playlist.description}"
             app:layout_constraintTop_toBottomOf="@id/playlist_info"
             tools:text="@string/long_playlist_description_sample" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playlist_items_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:background="#fff"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            listData="@{viewModel.playlistItems}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/playlist_description"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/list_item_playlist_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <data>
-
-        <variable
-            name="pwi"
-            type="io.github.pberdnik.eduplayer.domain.PlaylistWithInfo" />
-
-        <variable
-            name="pe"
-            type="io.github.pberdnik.eduplayer.domain.PlaylistExpansion" />
-    </data>
 </layout>

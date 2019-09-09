@@ -21,6 +21,5 @@ data class DatabasePlaylist constructor(
     val title: String,
     val description: String,
     val publishedAt: Date,
-    val videosCount: Int,
-    val expanded: Boolean = false
+    val videosCount: Int
 )
