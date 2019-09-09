@@ -22,7 +22,6 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:listData="@{pi.items}"
         tools:listitem="@layout/list_item_playlist_item"
         tools:text="Some videos" />
 

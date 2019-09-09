@@ -1,75 +1,57 @@
 package io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.github.pberdnik.eduplayer.domain.PlaylistData
-import io.github.pberdnik.eduplayer.domain.PlaylistExpansion
+import io.github.pberdnik.eduplayer.databinding.ListItemPlaylistBinding
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 
-const val PLAYLIST_EXPANDED = 0
-const val PLAYLIST_FOLDED = 1
-const val EXPANSION = 2
 
-@Suppress("MemberVisibilityCanBePrivate")
-class PlaylistAdapter(val onClickListener: PlaylistClickListener) :
-    ListAdapter<PlaylistData, RecyclerView.ViewHolder>(PlaylistDiffCallback()) {
+class PlaylistAdapter(private val onClickListener: PlaylistClickListener) :
+    ListAdapter<PlaylistWithInfo, PlaylistViewHolder>(PlaylistDiffCallback()) {
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        PlaylistViewHolder.from(parent)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        when (viewType) {
-            PLAYLIST_EXPANDED -> PlaylistExpandedViewHolder.from(parent)
-            PLAYLIST_FOLDED -> PlaylistFoldedViewHolder.from(parent)
-            EXPANSION -> ExpansionViewHolder.from(parent)
-            else -> throw ClassCastException("Unknown viewType $viewType")
-        }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val playlistData = getItem(position)
-        if (playlistData is PlaylistWithInfo)
-            holder.itemView.setOnClickListener { onClickListener.onClick(playlistData) }
-        when (holder) {
-            is PlaylistExpandedViewHolder -> {
-                holder.itemView.setOnClickListener {
-                    onClickListener.onClick(playlistData as PlaylistWithInfo)
-                }
-                holder.bind(playlistData as PlaylistWithInfo)
-            }
-            is PlaylistFoldedViewHolder -> {
-                holder.itemView.setOnClickListener {
-                    onClickListener.onClick(playlistData as PlaylistWithInfo)
-                }
-                holder.bind(playlistData as PlaylistWithInfo)
-            }
-            is ExpansionViewHolder ->
-                holder.bind(playlistData as PlaylistExpansion)
-        }
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+        val playlistWithInfo = getItem(position)
+        holder.itemView.setOnClickListener { onClickListener.onClick(playlistWithInfo) }
+        holder.bind(playlistWithInfo)
     }
-
-    override fun getItemViewType(position: Int): Int =
-        when (val item = getItem(position)) {
-            is PlaylistWithInfo -> if (item.expanded) PLAYLIST_EXPANDED else PLAYLIST_FOLDED
-            is PlaylistExpansion -> EXPANSION
-        }
-
 }
 
 
-class PlaylistDiffCallback : DiffUtil.ItemCallback<PlaylistData>() {
-    override fun areItemsTheSame(oldItem: PlaylistData, newItem: PlaylistData) =
-        oldItem.playlistId == newItem.playlistId && (
-                oldItem is PlaylistWithInfo && newItem is PlaylistWithInfo ||
-                        oldItem is PlaylistExpansion && newItem is PlaylistExpansion)
+class PlaylistViewHolder(private val binding: ListItemPlaylistBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(pwi: PlaylistWithInfo) {
+        binding.pwi = pwi
+        binding.executePendingBindings()
+    }
+
+    companion object {
+        fun from(parent: ViewGroup): PlaylistViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = ListItemPlaylistBinding.inflate(layoutInflater, parent, false)
+
+            return PlaylistViewHolder(binding)
+        }
+    }
+}
 
 
-    override fun areContentsTheSame(oldItem: PlaylistData, newItem: PlaylistData) =
+class PlaylistDiffCallback : DiffUtil.ItemCallback<PlaylistWithInfo>() {
+
+    override fun areItemsTheSame(oldItem: PlaylistWithInfo, newItem: PlaylistWithInfo) =
+        oldItem.playlist.id == newItem.playlist.id
+
+    override fun areContentsTheSame(oldItem: PlaylistWithInfo, newItem: PlaylistWithInfo) =
         oldItem == newItem
 }
 
-class PlaylistClickListener(
-    val clickListener: (playlistWithInfo: PlaylistWithInfo) -> Unit
-) {
-    fun onClick(playlistWithInfo: PlaylistWithInfo) =
-        clickListener(playlistWithInfo)
+
+class PlaylistClickListener(val clickListener: (playlistWithInfo: PlaylistWithInfo) -> Unit) {
+    fun onClick(playlistWithInfo: PlaylistWithInfo) = clickListener(playlistWithInfo)
 }

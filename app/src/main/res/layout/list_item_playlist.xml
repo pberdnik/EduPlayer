@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl="@{pi.thumbnails[pi.thumbnails.size() - 1].url}"
+            app:imageUrl="@{pwi.thumbnails[pwi.thumbnails.size() - 1].url}"
             tools:src="@drawable/maxresdefault" />
 
         <ImageView
@@ -43,7 +43,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="@{pi.playlist.title}"
+            android:text="@{pwi.playlist.title}"
             app:layout_constraintEnd_toStartOf="@id/playlist_videos_count"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="@{@string/playlist_info(`Youtube Learning`, pi.playlist.publishedAtString)}"
+            android:text="@{@string/playlist_info(`Youtube Learning`, pwi.playlist.publishedAtString)}"
             app:layout_constraintEnd_toStartOf="@+id/expand_iv"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
             android:layout_marginBottom="8dp"
             android:background="#8000"
             android:padding="4dp"
-            android:text="@{@string/videos_count(pi.playlist.videosCount)}"
+            android:text="@{@string/videos_count(pwi.playlist.videosCount)}"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="@id/playlist_thumbnail"
             app:layout_constraintEnd_toEndOf="@id/playlist_thumbnail"
@@ -86,7 +86,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:text="@{pi.playlist.description}"
+            android:text="@{pwi.playlist.description}"
             tools:text="@string/long_playlist_description_sample"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +106,7 @@
     <data>
 
         <variable
-            name="pi"
+            name="pwi"
             type="io.github.pberdnik.eduplayer.domain.PlaylistWithInfo" />
     </data>
 </layout>

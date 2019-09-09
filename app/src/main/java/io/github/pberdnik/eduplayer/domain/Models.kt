@@ -8,27 +8,6 @@ import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbn
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import java.util.*
 
-sealed class PlaylistData {
-    val playlistId: String
-        get() = when (this) {
-            is PlaylistWithInfo -> this.playlist.id
-            is PlaylistExpansion -> this.id
-        }
-
-    override fun equals(other: Any?) =
-        this is PlaylistWithInfo
-                && other is PlaylistWithInfo
-                && (this as PlaylistWithInfo) == (other as PlaylistWithInfo)
-                ||
-                this is PlaylistExpansion
-                && other is PlaylistExpansion
-                && (this as PlaylistExpansion) == (other as PlaylistExpansion)
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-}
-
 data class PlaylistWithInfo(
     @Embedded
     val playlist: Playlist,
@@ -39,7 +18,7 @@ data class PlaylistWithInfo(
         parentColumn = "id"
     )
     val thumbnails: List<Thumbnail>
-) : PlaylistData()
+)
 
 data class PlaylistExpansion(
     val id: String,
@@ -49,7 +28,7 @@ data class PlaylistExpansion(
         parentColumn = "id"
     )
     val items: List<PlaylistItemWithInfo>
-) : PlaylistData()
+)
 
 data class Playlist(
     val id: String,
