@@ -6,6 +6,25 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="toolbarStyle">@style/Widget.EduPlayer.Toolbar</item>
+        <item name="bottomNavigationStyle">@style/ThemeOverlay.EduPlayer.BottomNavigation</item>
+    </style>
+
+    <style name="Widget.EduPlayer.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="contentInsetStart">12dp</item>
+        <item name="titleTextAppearance">@style/TextAppearance.EduPlayer.Logo</item>
+    </style>
+
+    <style name="TextAppearance.EduPlayer.Logo" parent="">
+        <item name="android:textColor">#e000</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ThemeOverlay.EduPlayer.BottomNavigation"
+        parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:colorPrimary">@color/colorAccent</item>
     </style>
 
 </resources>
