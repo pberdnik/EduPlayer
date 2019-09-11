@@ -22,7 +22,10 @@ interface PlaylistDao {
 
 @Dao
 interface PlaylistItemDao {
-    @Query("SELECT * FROM playlist_items as pi WHERE pi.playlistId = :playlistId")
+    @Query("""
+        SELECT * FROM playlist_items as pi 
+        WHERE pi.playlistId = :playlistId
+        ORDER BY pi.position""")
     fun getPlaylistItemsForPlaylist(playlistId: String): LiveData<List<PlaylistItemWithInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
