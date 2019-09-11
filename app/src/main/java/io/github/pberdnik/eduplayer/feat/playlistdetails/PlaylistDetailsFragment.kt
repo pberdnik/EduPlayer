@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -30,10 +31,14 @@ class PlaylistDetailsFragment : Fragment() {
             it.playlistItemsRv.adapter = PlaylistItemAdapter(PlaylistItemClickListener {})
         }
 
-        return binding.root
-    }
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setTitle("Playlist")
+        }
+        binding.toolbar.setNavigationOnClickListener { view ->
+            view.findNavController().navigateUp()
+        }
 
-    private fun navigateUp(view: View) {
-        view.findNavController().navigateUp()
+        return binding.root
     }
 }

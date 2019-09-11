@@ -22,6 +22,7 @@
     <fragment
         android:id="@+id/playlistDetailsFragment"
         android:name="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsFragment"
+        android:label="Playlist"
         tools:layout="@layout/playlist_details_fragment" >
         <argument
             android:name="playlistId"
