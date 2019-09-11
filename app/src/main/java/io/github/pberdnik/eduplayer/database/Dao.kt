@@ -6,6 +6,7 @@ import io.github.pberdnik.eduplayer.database.entities.*
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 
+
 @Dao
 interface PlaylistDao {
     @Transaction
@@ -20,23 +21,28 @@ interface PlaylistDao {
     suspend fun insertAll(vararg playlists: DatabasePlaylist)
 }
 
+
 @Dao
 interface PlaylistItemDao {
-    @Query("""
+    @Query(
+        """
         SELECT * FROM playlist_items as pi 
         WHERE pi.playlistId = :playlistId
-        ORDER BY pi.position""")
+        ORDER BY pi.position"""
+    )
     fun getPlaylistItemsForPlaylist(playlistId: String): LiveData<List<PlaylistItemWithInfo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg playlistItems: DatabasePlaylistItem)
 }
 
+
 @Dao
 interface ChannelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg databaseChannels: DatabaseChannel)
 }
+
 
 @Dao
 interface ThumbnailDao {
