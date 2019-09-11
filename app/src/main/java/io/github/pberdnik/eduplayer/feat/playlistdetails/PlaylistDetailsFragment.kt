@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import io.github.pberdnik.eduplayer.databinding.PlaylistDetailsFragmentBinding
 
 class PlaylistDetailsFragment : Fragment() {
@@ -28,6 +29,11 @@ class PlaylistDetailsFragment : Fragment() {
             it.lifecycleOwner = viewLifecycleOwner
             it.playlistItemsRv.adapter = PlaylistItemAdapter(PlaylistItemClickListener {})
         }
+
         return binding.root
+    }
+
+    private fun navigateUp(view: View) {
+        view.findNavController().navigateUp()
     }
 }

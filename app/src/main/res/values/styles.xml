@@ -22,6 +22,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextAppearance.EduPlayer.Toolbar.Text" parent="">
+        <item name="android:textColor">#e000</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="ThemeOverlay.EduPlayer.BottomNavigation"
         parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:colorPrimary">@color/colorAccent</item>
