@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview
+package io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

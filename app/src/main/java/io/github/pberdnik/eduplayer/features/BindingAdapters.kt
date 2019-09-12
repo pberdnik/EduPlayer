@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat
+package io.github.pberdnik.eduplayer.features
 
 import android.widget.ImageView
 import androidx.core.net.toUri

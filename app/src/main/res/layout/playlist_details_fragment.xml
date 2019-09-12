@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsViewModel" />
+            type="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel" />
 
     </data>
 

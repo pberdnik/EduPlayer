@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat.playlistdetails
+package io.github.pberdnik.eduplayer.features.playlistdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat.playlistdetails
+package io.github.pberdnik.eduplayer.features.playlistdetails
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView

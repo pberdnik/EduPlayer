@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsViewModel" />
+            type="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         app:layout_collapseMode="pin"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".feat.playlistdetails.PlaylistDetailsFragment"
+        tools:context=".features.playlistdetails.PlaylistDetailsFragment"
         tools:showIn="@layout/playlist_details_fragment">
 
         <View

@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat.explore
+package io.github.pberdnik.eduplayer.features.explore
 
 import android.app.Application
 import androidx.lifecycle.*

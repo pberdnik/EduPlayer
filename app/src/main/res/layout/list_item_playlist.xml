@@ -18,7 +18,7 @@
         android:layout_marginTop="8dp"
         android:background="#fff"
         android:elevation="2dp"
-        tools:context=".feat.explore.ExploreFragment">
+        tools:context=".features.explore.ExploreFragment">
 
         <ImageView
             android:id="@+id/playlist_thumbnail"

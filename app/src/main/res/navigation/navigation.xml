@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/demoFragment"
-        android:name="io.github.pberdnik.eduplayer.feat.demo.DemoFragment"
+        android:name="io.github.pberdnik.eduplayer.features.demo.DemoFragment"
         android:label="Demo" />
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="io.github.pberdnik.eduplayer.feat.explore.ExploreFragment"
+        android:name="io.github.pberdnik.eduplayer.features.explore.ExploreFragment"
         tools:layout="@layout/explore_fragment" >
         <action
             android:id="@+id/action_showDetails"
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/playlistDetailsFragment"
-        android:name="io.github.pberdnik.eduplayer.feat.playlistdetails.PlaylistDetailsFragment"
+        android:name="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsFragment"
         android:label="Playlist"
         tools:layout="@layout/playlist_details_fragment" >
         <argument

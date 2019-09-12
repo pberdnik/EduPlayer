@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.feat.explore
+package io.github.pberdnik.eduplayer.features.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
-import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistAdapter
-import io.github.pberdnik.eduplayer.feat.explore.playlistrecyclerview.PlaylistClickListener
+import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
+import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
 
 class ExploreFragment : Fragment() {
 
