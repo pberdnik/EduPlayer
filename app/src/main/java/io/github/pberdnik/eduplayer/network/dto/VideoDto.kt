@@ -35,8 +35,8 @@ data class VideoContentDetails(
 
 data class VideoStatistics(
     val viewCount: Long,
-    val likeCount: Long,
-    val dislikeCount: Long
+    val likeCount: Long = 0,
+    val dislikeCount: Long = 0
 )
 
 

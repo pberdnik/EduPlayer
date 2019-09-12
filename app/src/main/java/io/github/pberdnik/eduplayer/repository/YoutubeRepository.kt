@@ -18,6 +18,7 @@
 package io.github.pberdnik.eduplayer.repository
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.LiveData
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
@@ -49,16 +50,28 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
     }
 
     suspend fun refreshPlaylistItems(playlistId: String) = withContext(Dispatchers.IO) {
+        Log.e("REP", "1")
         val playlistItemsForPlaylist =
             youtubeDataApiService.getPlaylistItemsForPlaylist(playlistId)
-        val videosById = youtubeDataApiService
-            .getVideosById(TextUtils.join(",", playlistItemsForPlaylist.videoIds()))
+        Log.e("REP", "2")
+        val videosById = try {
+            youtubeDataApiService
+                .getVideosById(TextUtils.join(",", playlistItemsForPlaylist.videoIds()))
+        } catch (e: Exception) {
+            Log.e("REP", "ERROR", e)
+            throw e
+        }
+        Log.e("REP", "3")
         database.videoDao.insertAll(*videosById.asDatabaseModel())
+        Log.e("REP", "4")
         database.thumbnailDao.insertAllVideoThumbnails(*videosById.asThumbnailDatabaseModel())
+        Log.e("REP", "5")
         database.playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
+        Log.e("REP", "6")
         database.thumbnailDao.insertAllPlaylistItemThumbnails(
             *playlistItemsForPlaylist.asThumbnailDatabaseModel()
         )
+        Log.e("REP", "7")
     }
 
 }
