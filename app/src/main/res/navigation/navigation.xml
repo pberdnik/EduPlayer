@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/exploreFragment"
         android:name="io.github.pberdnik.eduplayer.features.explore.ExploreFragment"
-        tools:layout="@layout/explore_fragment" >
+        tools:layout="@layout/explore_fragment">
         <action
             android:id="@+id/action_showDetails"
             app:destination="@id/playlistDetailsFragment" />
@@ -23,10 +23,15 @@
         android:id="@+id/playlistDetailsFragment"
         android:name="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsFragment"
         android:label="Playlist"
-        tools:layout="@layout/playlist_details_fragment" >
+        tools:layout="@layout/playlist_details_fragment">
         <argument
             android:name="playlistId"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="io.github.pberdnik.eduplayer.features.account.AccountFragment"
+        android:label="@string/account" />
 
 </navigation>
