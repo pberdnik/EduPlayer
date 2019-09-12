@@ -27,8 +27,9 @@ import io.github.pberdnik.eduplayer.database.entities.*
 
 @Database(
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
-        DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class],
-    version = 6,
+        DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
+        DatabaseVideoThumbnail::class],
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -37,6 +38,7 @@ abstract class YoutubeDatabase : RoomDatabase() {
     abstract val channelDao: ChannelDao
     abstract val thumbnailDao: ThumbnailDao
     abstract val playlistItemDao: PlaylistItemDao
+    abstract val videoDao: VideoDao
 }
 
 private lateinit var INSTANCE: YoutubeDatabase

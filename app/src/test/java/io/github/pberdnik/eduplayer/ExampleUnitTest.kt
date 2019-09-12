@@ -14,7 +14,7 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         runBlocking {
             println(youtubeDataApiService
-                .getPlaylistItemsForPlaylist("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk"))
+                .getVideosById("Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI"))
         }
     }
 }

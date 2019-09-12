@@ -2,6 +2,7 @@ package io.github.pberdnik.eduplayer.network
 
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylistItems
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
+import io.github.pberdnik.eduplayer.network.dto.NetworkVideos
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -22,4 +23,9 @@ interface YoutubeDataApiService {
         @Query("playlistId") playlistId: String,
         @Query("maxResults") maxResults: Int = 50
     ): NetworkPlaylistItems
+
+    @GET("""videos?part=statistics,contentDetails,snippet,id""")
+    suspend fun getVideosById(
+        @Query("id") videoIds: String
+    ): NetworkVideos
 }

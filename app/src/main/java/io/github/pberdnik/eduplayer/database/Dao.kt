@@ -5,6 +5,7 @@ import androidx.room.*
 import io.github.pberdnik.eduplayer.database.entities.*
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
+import io.github.pberdnik.eduplayer.domain.VideoWithInfo
 
 
 @Dao
@@ -51,4 +52,22 @@ interface ThumbnailDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPlaylistItemThumbnails(vararg databaseThumbnail: DatabasePlaylistItemThumbnail)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllVideoThumbnails(vararg databaseThumbnail: DatabaseVideoThumbnail)
+}
+
+
+@Dao
+interface VideoDao {
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM videos as v 
+        WHERE v.id IN (:videoIds)"""
+    )
+    fun getVideosById(videoIds: List<String>): LiveData<List<VideoWithInfo>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(vararg videos: DatabaseVideo)
 }

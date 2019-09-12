@@ -38,7 +38,7 @@
             android:background="@drawable/rounded_corner"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:text="14:35"
+            android:text="@{playlistItem.duration}"
             android:textColor="#fff"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/playlist_item_thumbnail"

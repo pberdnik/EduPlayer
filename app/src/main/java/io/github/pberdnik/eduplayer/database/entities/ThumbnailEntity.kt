@@ -38,3 +38,21 @@ data class DatabasePlaylistItemThumbnail(
     val width: Int,
     val height: Int
 )
+
+
+@Entity(
+    tableName = "video_thumbnails",
+    foreignKeys = [ForeignKey(
+        entity = DatabaseVideo::class,
+        parentColumns = ["id"],
+        childColumns = ["videoId"]
+    )]
+)
+data class DatabaseVideoThumbnail(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val videoId: String,
+    val url: String,
+    val width: Int,
+    val height: Int
+)

@@ -72,3 +72,6 @@ fun NetworkPlaylistItems.asThumbnailDatabaseModel(): Array<DatabasePlaylistItemT
             }
         }
     }.toTypedArray()
+
+
+fun NetworkPlaylistItems.videoIds(): List<String> = items.map { it.contentDetails.videoId }

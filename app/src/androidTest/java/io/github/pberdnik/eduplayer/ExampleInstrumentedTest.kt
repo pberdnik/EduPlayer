@@ -5,6 +5,9 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import io.github.pberdnik.eduplayer.database.PlaylistDao
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
+import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
+import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
+import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -43,10 +46,23 @@ class ExampleInstrumentedTest {
 
     @Test
     fun test() = runBlocking {
-        repository.refreshPlaylists()
-        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
+        //        repository.refreshPlaylists()
+//        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
 //        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
-        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
+//        repository.refreshPlaylistItems("PLoFRvPlmME6E_nr_ulTL1-qO_-Y4I-hmk")
 //        println("EXPANSION:" + playlistDao.getExpandedPlaylistsItemsNoLD())
+        val videosById = youtubeDataApiService
+            .getVideosById("Ks-_Mh1QhMc,c0KYU2j0TM4,eIho2S0ZahI")
+        database.videoDao.insertAll(*videosById.asDatabaseModel())
+        database.thumbnailDao.insertAllVideoThumbnails(*videosById.asThumbnailDatabaseModel())
+        println(
+            database.videoDao.getVideosById(
+                listOf(
+                    "Ks-_Mh1QhMc",
+                    "c0KYU2j0TM4",
+                    "eIho2S0ZahI"
+                )
+            )
+        )
     }
 }
