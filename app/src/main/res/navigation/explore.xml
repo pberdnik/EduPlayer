@@ -2,34 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/learn_dest"
-    android:id="@+id/navigation">
-
-    <fragment
-        android:id="@+id/learn_dest"
-        android:name="io.github.pberdnik.eduplayer.features.learn.LearnFragment"
-        tools:layout="@layout/learn_fragment" />
+    android:id="@+id/explore"
+    app:startDestination="@id/explore_dest"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/explore_dest"
         android:name="io.github.pberdnik.eduplayer.features.explore.ExploreFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/explore_fragment">
         <action
             android:id="@+id/action_showDetails"
             app:destination="@id/playlistDetails_dest" />
     </fragment>
-
-    <fragment
-        android:id="@+id/library_dest"
-        android:name="io.github.pberdnik.eduplayer.features.library.LibraryFragment"
-        tools:layout="@layout/library_fragment" />
-
-
-    <fragment
-        android:id="@+id/account_dest"
-        android:name="io.github.pberdnik.eduplayer.features.account.AccountFragment"
-        android:label="@string/account"
-        tools:layout="@layout/account_fragment" />
 
     <fragment
         android:id="@+id/playlistDetails_dest"

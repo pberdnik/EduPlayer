@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2017 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +14,17 @@
   limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/learn_dest"
-        android:enabled="true"
-        android:title="@string/learn"
+        android:id="@+id/learn"
         android:icon="@drawable/ic_school_black_24dp"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/learn"/>
     <item
-        android:id="@+id/explore_dest"
-        android:enabled="true"
-        android:title="@string/explore"
+        android:id="@+id/explore"
         android:icon="@drawable/ic_explore_black_24dp"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/explore"/>
     <item
-        android:id="@+id/library_dest"
-        android:enabled="true"
-        android:title="@string/library"
+        android:id="@+id/library"
         android:icon="@drawable/ic_video_library_black_24dp"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/library"/>
 </menu>

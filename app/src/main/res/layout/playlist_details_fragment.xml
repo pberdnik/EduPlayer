@@ -31,7 +31,7 @@
                 android:fitsSystemWindows="true"
                 app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                app:toolbarId="@+id/toolbar">
+                app:toolbarId="@id/toolbar">
 
                 <include
                     layout="@layout/playlist_details_header"
