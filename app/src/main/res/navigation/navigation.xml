@@ -2,36 +2,43 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
-    app:startDestination="@id/exploreFragment">
+    app:startDestination="@id/learn_dest"
+    android:id="@+id/navigation">
 
     <fragment
-        android:id="@+id/demoFragment"
-        android:name="io.github.pberdnik.eduplayer.features.demo.DemoFragment"
-        android:label="Demo" />
+        android:id="@+id/learn_dest"
+        android:name="io.github.pberdnik.eduplayer.features.learn.LearnFragment"
+        tools:layout="@layout/learn_fragment" />
 
     <fragment
-        android:id="@+id/exploreFragment"
+        android:id="@+id/explore_dest"
         android:name="io.github.pberdnik.eduplayer.features.explore.ExploreFragment"
         tools:layout="@layout/explore_fragment">
         <action
             android:id="@+id/action_showDetails"
-            app:destination="@id/playlistDetailsFragment" />
+            app:destination="@id/playlistDetails_dest" />
     </fragment>
 
     <fragment
-        android:id="@+id/playlistDetailsFragment"
+        android:id="@+id/library_dest"
+        android:name="io.github.pberdnik.eduplayer.features.library.LibraryFragment"
+        tools:layout="@layout/library_fragment" />
+
+
+    <fragment
+        android:id="@+id/account_dest"
+        android:name="io.github.pberdnik.eduplayer.features.account.AccountFragment"
+        android:label="@string/account"
+        tools:layout="@layout/account_fragment" />
+
+    <fragment
+        android:id="@+id/playlistDetails_dest"
         android:name="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsFragment"
-        android:label="Playlist"
+        android:label="@string/playlist"
         tools:layout="@layout/playlist_details_fragment">
         <argument
             android:name="playlistId"
             app:argType="string" />
     </fragment>
-
-    <fragment
-        android:id="@+id/accountFragment"
-        android:name="io.github.pberdnik.eduplayer.features.account.AccountFragment"
-        android:label="@string/account" />
 
 </navigation>

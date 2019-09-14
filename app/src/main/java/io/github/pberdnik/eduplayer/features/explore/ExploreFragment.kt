@@ -8,7 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
@@ -62,8 +62,6 @@ class ExploreFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
-        NavigationUI.onNavDestinationSelected(
-            item,
-            view!!.findNavController()
-        ) || super.onOptionsItemSelected(item)
+        item.onNavDestinationSelected(view!!.findNavController())
+                || super.onOptionsItemSelected(item)
 }

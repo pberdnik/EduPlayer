@@ -1,4 +1,4 @@
-package io.github.pberdnik.eduplayer.features.account
+package io.github.pberdnik.eduplayer.features.learn
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,22 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import io.github.pberdnik.eduplayer.databinding.AccountFragmentBinding
+import io.github.pberdnik.eduplayer.databinding.LearnFragmentBinding
 
-class AccountFragment : Fragment() {
+class LearnFragment : Fragment() {
 
-    val viewModel by viewModels<AccountViewModel>()
+    val viewModel by viewModels<LearnViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = AccountFragmentBinding.inflate(inflater).also {
+        val binding = LearnFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
         }
 
         return binding.root
     }
+
 }

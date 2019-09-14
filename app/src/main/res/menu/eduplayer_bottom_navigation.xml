@@ -18,19 +18,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/category_learn"
+        android:id="@+id/learn_dest"
         android:enabled="true"
         android:title="@string/learn"
         android:icon="@drawable/ic_school_black_24dp"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/category_explore"
+        android:id="@+id/explore_dest"
         android:enabled="true"
         android:title="@string/explore"
         android:icon="@drawable/ic_explore_black_24dp"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/category_library"
+        android:id="@+id/library_dest"
         android:enabled="true"
         android:title="@string/library"
         android:icon="@drawable/ic_video_library_black_24dp"
