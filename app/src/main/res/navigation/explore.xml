@@ -26,4 +26,6 @@
             app:argType="string" />
     </fragment>
 
+    <include app:graph="@navigation/account"/>
+
 </navigation>

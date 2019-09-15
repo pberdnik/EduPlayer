@@ -1,14 +1,14 @@
 package io.github.pberdnik.eduplayer.features.explore
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
@@ -50,18 +50,18 @@ class ExploreFragment : Fragment() {
             supportActionBar?.setIcon(R.drawable.ic_edu_logo_with_padding)
         }
 
-//        setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
 
         return binding.root
     }
 
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
-//        inflater.inflate(R.menu.menu_main, menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem) =
-//        item.onNavDestinationSelected(view!!.findNavController())
-//                || super.onOptionsItemSelected(item)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+        item.onNavDestinationSelected(view!!.findNavController())
+                || super.onOptionsItemSelected(item)
 }

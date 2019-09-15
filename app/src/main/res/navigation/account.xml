@@ -2,15 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
+    android:id="@+id/account"
     app:startDestination="@id/account_dest"
     tools:ignore="UnusedNavigation">
 
-    <fragment
+    <activity
         android:id="@+id/account_dest"
-        android:name="io.github.pberdnik.eduplayer.features.account.AccountFragment"
+        android:name="io.github.pberdnik.eduplayer.features.account.AccountActivity"
         android:label="@string/account"
-        tools:layout="@layout/account_fragment" />
-
+        tools:layout="@layout/account_activity" />
 
 </navigation>
