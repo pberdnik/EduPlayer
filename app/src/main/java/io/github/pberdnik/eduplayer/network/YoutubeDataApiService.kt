@@ -4,9 +4,11 @@ import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylistItems
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import io.github.pberdnik.eduplayer.network.dto.NetworkVideos
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Query
 
-val youtubeDataApiService: YoutubeDataApiService = retrofit.create(YoutubeDataApiService::class.java)
+val youtubeDataApiService: YoutubeDataApiService =
+    retrofit.create(YoutubeDataApiService::class.java)
 
 interface YoutubeDataApiService {
     @GET(
@@ -28,4 +30,14 @@ interface YoutubeDataApiService {
     suspend fun getVideosById(
         @Query("id") videoIds: String
     ): NetworkVideos
+
+    @GET(
+        "playlists?part=contentDetails,id,snippet&mine=true&fields=etag,nextPageToken,pageInfo," +
+                "items(etag,id,snippet(channelId,channelTitle,publishedAt,title,description,thumbnails)" +
+                ",contentDetails)"
+    )
+    suspend fun getMyPlaylists(
+        @Query("maxResults") maxResults: Int = 50,
+        @Header("Authorization") bearerToken: String
+    ): NetworkPlaylists
 }

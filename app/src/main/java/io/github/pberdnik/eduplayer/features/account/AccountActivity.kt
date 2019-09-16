@@ -6,29 +6,23 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.os.AsyncTask
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.View
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
+import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import kotlinx.android.synthetic.main.account_activity.*
+import kotlinx.coroutines.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.IOException
-import java.util.*
 
 
 private val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
@@ -83,7 +77,21 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
         } else if (!isDeviceOnline()) {
             mOutputText.setText("No network connection available.")
         } else {
-            MakeRequestTask(mCredential).execute()
+            runBlocking {
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        val res = try {
+                            youtubeDataApiService.getMyPlaylists(bearerToken = "Bearer ${mCredential.token}")
+                        } catch (e: Exception) {
+                            Log.e(":((((((", ":((((((", e)
+                            e.message
+                        }
+                        withContext(Dispatchers.Main) {
+                            mOutputText.text = res.toString()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -258,102 +266,5 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
             REQUEST_GOOGLE_PLAY_SERVICES
         )
         dialog.show()
-    }
-
-    /**
-     * An asynchronous task that handles the YouTube Data API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
-    private inner class MakeRequestTask internal constructor(credential: GoogleAccountCredential) :
-        AsyncTask<Void, Void, MutableList<String>>() {
-        private var mService: com.google.api.services.youtube.YouTube
-        private var mLastError: Exception? = null
-
-        /**
-         * Fetch information about the "GoogleDevelopers" YouTube channel.
-         * @return List of Strings containing information about the channel.
-         * @throws IOException
-         */
-        private// Get a list of up to 10 files.
-        val dataFromApi: MutableList<String>
-            @Throws(IOException::class)
-            get() {
-                val channelInfo = ArrayList<String>()
-                val result = mService.channels().list("snippet,contentDetails,statistics")
-                    .setForUsername("GoogleDevelopers")
-                    .execute()
-                val channels = result.items
-                if (channels != null) {
-                    val channel = channels[0]
-                    channelInfo.add(
-                        "This channel's ID is " + channel.id + ". " +
-                                "Its title is '" + channel.snippet.title + ", " +
-                                "and it has " + channel.statistics.viewCount + " views."
-                    )
-                }
-                return channelInfo
-            }
-
-        init {
-            val transport = AndroidHttp.newCompatibleTransport()
-            val jsonFactory = JacksonFactory.getDefaultInstance()
-            mService = com.google.api.services.youtube.YouTube.Builder(
-                transport, jsonFactory, credential
-            )
-                .setApplicationName("YouTube Data API Android Quickstart")
-                .build()
-        }
-
-        /**
-         * Background task to call YouTube Data API.
-         * @param params no parameters needed for this task.
-         */
-        override fun doInBackground(vararg params: Void): MutableList<String>? {
-            try {
-                return dataFromApi
-            } catch (e: Exception) {
-                mLastError = e
-                cancel(true)
-                return null
-            }
-
-        }
-
-
-        override fun onPreExecute() {
-            mOutputText.text = ""
-            mProgress.visibility = View.VISIBLE
-        }
-
-        override fun onPostExecute(output: MutableList<String>?) {
-            mProgress.visibility = View.INVISIBLE
-            if (output == null || output!!.size == 0) {
-                mOutputText.text = "No results returned."
-            } else {
-                output.add(0, "Data retrieved using the YouTube Data API:")
-                mOutputText.text = TextUtils.join("\n", output!!)
-            }
-        }
-
-        override fun onCancelled() {
-            mProgress.visibility = View.INVISIBLE
-            if (mLastError != null) {
-                if (mLastError is GooglePlayServicesAvailabilityIOException) {
-                    showGooglePlayServicesAvailabilityErrorDialog(
-                        (mLastError as GooglePlayServicesAvailabilityIOException)
-                            .connectionStatusCode
-                    )
-                } else if (mLastError is UserRecoverableAuthIOException) {
-                    startActivityForResult(
-                        (mLastError as UserRecoverableAuthIOException).intent,
-                        REQUEST_AUTHORIZATION
-                    )
-                } else {
-                    mOutputText.text = ("The following error occurred:\n" + mLastError!!.message)
-                }
-            } else {
-                mOutputText.text = "Request cancelled."
-            }
-        }
     }
 }
