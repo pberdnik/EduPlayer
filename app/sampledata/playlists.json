@@ -1,0 +1,75 @@
+{
+  "comment": "Sample data for playlists",
+  "playlists": [
+    {
+      "info": "YouTube Learning  ·  4 minutes ago",
+      "videosCount": "7 videos",
+      "title": "The World of Data Visualization",
+      "description": "Data Visualization is a continually growing field in which data is represented graphically.  Visually displaying data through charts and graphs helps to identify patterns, find common links and better explain large amounts of information.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  8 minutes ago",
+      "videosCount": "2 videos",
+      "title": "All About Ice Cream",
+      "description": "Ice Cream is one of those iconic desserts that is a standard no matter where you go.  But how much do you really know about this creamy treat?  Dig in to this playlist to get the full scoop on ice cream!",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  15 minutes ago",
+      "videosCount": "1 video",
+      "title": "Richard Nixon and Watergate",
+      "description": "2019 marks the 45th anniversary of the Watergate scandal and President Nixon's resignation. Learn more here about Nixon's life and the impact of his Presidency before Watergate defined it.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  16 minutes ago",
+      "videosCount": "17 videos",
+      "title": "The Life of Anne Frank",
+      "description": "2019 marks the 75th Anniversary of the capture of Anne Frank and her family.  These videos will give you a deeper look into her life.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  23 minutes ago",
+      "videosCount": "5 videos",
+      "title": "How To Debate Effectively",
+      "description": "There is an art to debating a topic, one that few are able to accomplish.  This playlist offers ways to help make your point while keeping the peace.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  42 minutes ago",
+      "videosCount": "123 videos",
+      "title": "All About The Human Body",
+      "description": "Our bodies are amazing machines that few of us know much about.  This playlist will help teach about the incredible functions our bodies perform everyday.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  2 years ago",
+      "videosCount": "654 videos",
+      "title": "Beneficial Bugs",
+      "description": "Bugs get a bad rap in this world, but many of them are very helpful to our environment.  Without bugs, we would not have a lot of the food and agriculture we have today.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  15 May",
+      "videosCount": "3 videos",
+      "title": "The PBS Summer of Space Playlist",
+      "description": "A cosmic playlist celebrating all things space from your favorite PBS creators. Come for the quasars, black holes and moon rocks. Stay for STELLAR, an epic new miniseries collab featuring Dianna Cowern (Physics Girl), Matt O'Dowd (Space Time), and Joe Hanson (It’s Okay to be Smart).",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  8 months ago",
+      "videosCount": "4 videos",
+      "title": "Best Summer Dessert Recipes",
+      "description": "Nothing's better to cool yourself on a hot day than a delicious summer dessert.  This playlist brings you some of the yummiest treats from your freezer to your grill.",
+      "channelTitle": "YouTube Learning"
+    },
+    {
+      "info": "YouTube Learning  ·  in 20 years",
+      "videosCount": "75 videos",
+      "title": "Let's Learn About Sharks",
+      "description": "Sharks have been swimming in our oceans for centuries and are usually portrayed as dangerous predators. Explore another side to these amazing creatures with the videos in this playlist!",
+      "channelTitle": "YouTube Learning"
+    }
+  ]
+}

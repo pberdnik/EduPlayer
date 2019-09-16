@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:src="@drawable/maxresdefault" />
+            tools:src="@sample/video_thumbnails" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/playlist_item_thumbnail"
             app:layout_constraintEnd_toEndOf="@id/playlist_item_thumbnail"
-            tools:text="14:35" />
+            tools:text="@sample/videos.json/videos/duration" />
 
         <TextView
             android:layout_width="0dp"
@@ -56,6 +56,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/playlist_item_thumbnail"
             app:layout_constraintTop_toTopOf="@+id/playlist_item_thumbnail"
-            tools:text="Some title" />
+            tools:text="@sample/videos.json/videos/title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
