@@ -19,8 +19,12 @@ import com.google.api.services.youtube.YouTubeScopes
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
 import io.github.pberdnik.eduplayer.network.youtubeDataApiService
-import kotlinx.android.synthetic.main.account_activity.*
-import kotlinx.coroutines.*
+import kotlinx.android.synthetic.main.account_activity.mOutputText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -81,7 +85,7 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         val res = try {
-                            youtubeDataApiService.getMyPlaylists(bearerToken = "Bearer ${mCredential.token}")
+                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
                         } catch (e: Exception) {
                             Log.e(":((((((", ":((((((", e)
                             e.message

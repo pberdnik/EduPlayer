@@ -4,7 +4,6 @@ import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylistItems
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import io.github.pberdnik.eduplayer.network.dto.NetworkVideos
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 // API description see at https://developers.google.com/youtube/v3/docs/
@@ -42,6 +41,6 @@ interface YoutubeDataApiService {
     )
     suspend fun getMyPlaylists(
         @Query("maxResults") maxResults: Int = 50,
-        @Header("Authorization") bearerToken: String
+        @Query("access_token") accessToken: String
     ): NetworkPlaylists
 }
