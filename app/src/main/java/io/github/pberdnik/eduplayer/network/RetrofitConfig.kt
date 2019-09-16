@@ -31,7 +31,7 @@ private val loggingInterceptor = HttpLoggingInterceptor().apply {
 }
 
 private val okHttpClient = OkHttpClient().newBuilder()
-//    .addInterceptor(loggingInterceptor)
+    .addInterceptor(loggingInterceptor)
     .addInterceptor(apiKeyInterceptor)
     .build()
 
