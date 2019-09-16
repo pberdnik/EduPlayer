@@ -9,13 +9,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.*
+import java.util.Date
 
 
 private const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 
-// add apiKey query parameter to each request
+/** Adds apiKey query parameter to each request */
 private val apiKeyInterceptor = { chain: Interceptor.Chain ->
     val url = chain.request().url.newBuilder()
         .addQueryParameter("key", BuildConfig.YouTubeApiKey)
@@ -26,6 +26,7 @@ private val apiKeyInterceptor = { chain: Interceptor.Chain ->
     chain.proceed(request)
 }
 
+/** Shows full request data (headers and body) in logs */
 private val loggingInterceptor = HttpLoggingInterceptor().apply {
     level = HttpLoggingInterceptor.Level.BODY
 }

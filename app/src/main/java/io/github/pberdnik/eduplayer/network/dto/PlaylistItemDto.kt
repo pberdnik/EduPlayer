@@ -2,7 +2,8 @@ package io.github.pberdnik.eduplayer.network.dto
 
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
-import java.util.*
+import java.util.Date
+
 
 data class NetworkPlaylistItems(
     val etag: String,
@@ -10,6 +11,7 @@ data class NetworkPlaylistItems(
     val pageInfo: PageInfo,
     val items: List<NetworkPlaylistItem>
 )
+
 
 data class NetworkPlaylistItem(
     val id: String,
@@ -36,10 +38,6 @@ data class PlaylistItemContentDetails(
 )
 
 
-/*
- * Convert Network results to database and domain objects
- */
-
 fun NetworkPlaylistItems.asDatabaseModel(): Array<DatabasePlaylistItem> = items.map {
     DatabasePlaylistItem(
         id = it.id,
@@ -56,7 +54,7 @@ fun NetworkPlaylistItems.asDatabaseModel(): Array<DatabasePlaylistItem> = items.
 
 /**
  * Extracts all thumbnails (default, medium, high, standard, maxres) from each playlistItem
- * and returns flat array of them
+ * and returns flat array of database objects
  */
 fun NetworkPlaylistItems.asThumbnailDatabaseModel(): Array<DatabasePlaylistItemThumbnail> =
     items.flatMap { playlistItem ->

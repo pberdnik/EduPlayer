@@ -7,9 +7,13 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
+// API description see at https://developers.google.com/youtube/v3/docs/
+
 val youtubeDataApiService: YoutubeDataApiService =
     retrofit.create(YoutubeDataApiService::class.java)
 
+
+// "fields" query parameter is used to get only needed fields
 interface YoutubeDataApiService {
     @GET(
         "playlists?part=contentDetails,id,snippet&fields=etag,nextPageToken,pageInfo," +

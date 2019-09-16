@@ -2,7 +2,8 @@ package io.github.pberdnik.eduplayer.network.dto
 
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
-import java.util.*
+import java.util.Date
+
 
 data class NetworkVideos(
     val etag: String,
@@ -10,6 +11,7 @@ data class NetworkVideos(
     val pageInfo: PageInfo,
     val items: List<NetworkVideo>
 )
+
 
 data class NetworkVideo(
     val id: String,
@@ -40,10 +42,6 @@ data class VideoStatistics(
 )
 
 
-/*
- * Convert Network results to database and domain objects
- */
-
 fun NetworkVideos.asDatabaseModel(): Array<DatabaseVideo> = items.map {
     DatabaseVideo(
         id = it.id,
@@ -61,7 +59,7 @@ fun NetworkVideos.asDatabaseModel(): Array<DatabaseVideo> = items.map {
 
 /**
  * Extracts all thumbnails (default, medium, high, standard, maxres) from each video
- * and returns flat array of them
+ * and returns flat array of database objects
  */
 fun NetworkVideos.asThumbnailDatabaseModel(): Array<DatabaseVideoThumbnail> =
     items.flatMap { video ->
