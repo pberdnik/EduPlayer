@@ -6,7 +6,8 @@ import dagger.Component
 
 @Component(
     modules = [
-        AppModule::class
+        AppModule::class,
+        SharedPreferencesModule::class
     ]
 )
 interface AppComponent {
