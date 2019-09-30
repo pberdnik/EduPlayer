@@ -6,6 +6,7 @@ import dagger.Component
 
 @Component(
     modules = [
+        AssistedInjectModule::class,
         AppModule::class,
         SharedPreferencesModule::class,
         DatabaseModule::class,
