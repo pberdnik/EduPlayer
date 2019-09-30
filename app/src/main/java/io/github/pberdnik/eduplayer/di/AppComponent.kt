@@ -8,7 +8,8 @@ import dagger.Component
     modules = [
         AppModule::class,
         SharedPreferencesModule::class,
-        DatabaseModule::class
+        DatabaseModule::class,
+        NetworkModule::class
     ]
 )
 interface AppComponent {
