@@ -5,7 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import io.github.pberdnik.eduplayer.database.entities.*
+import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
+import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DateConverter
 
 
 @Database(
