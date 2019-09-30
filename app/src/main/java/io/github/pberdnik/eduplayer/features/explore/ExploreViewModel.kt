@@ -1,16 +1,15 @@
 package io.github.pberdnik.eduplayer.features.explore
 
-import android.app.Application
-import androidx.lifecycle.*
-import io.github.pberdnik.eduplayer.database.getDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ExploreViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val database = getDatabase(app)
-    private val repository = YoutubeRepository(database)
+class ExploreViewModel @Inject constructor(private val repository: YoutubeRepository) : ViewModel() {
 
     val playlistsData: LiveData<List<PlaylistWithInfo>> = repository.playlists
 
@@ -35,16 +34,5 @@ class ExploreViewModel(app: Application) : AndroidViewModel(app) {
 
     fun displayPlaylistDetailsComplete() {
         _navigateToSelectedPlaylistItem.value = null
-    }
-
-
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(ExploreViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return ExploreViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
-        }
     }
 }

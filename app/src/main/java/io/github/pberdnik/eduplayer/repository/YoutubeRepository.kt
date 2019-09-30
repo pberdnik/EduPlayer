@@ -19,33 +19,47 @@ package io.github.pberdnik.eduplayer.repository
 
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
-import io.github.pberdnik.eduplayer.database.YoutubeDatabase
+import dagger.Reusable
+import io.github.pberdnik.eduplayer.database.ChannelDao
+import io.github.pberdnik.eduplayer.database.PlaylistDao
+import io.github.pberdnik.eduplayer.database.PlaylistItemDao
+import io.github.pberdnik.eduplayer.database.ThumbnailDao
+import io.github.pberdnik.eduplayer.database.VideoDao
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
+import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.videoIds
-import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class YoutubeRepository(private val database: YoutubeDatabase) {
+@Reusable
+class YoutubeRepository @Inject constructor(
+    private val youtubeDataApiService: YoutubeDataApiService,
+    private val playlistDao: PlaylistDao,
+    private val channelDao: ChannelDao,
+    private val thumbnailDao: ThumbnailDao,
+    private val playlistItemDao: PlaylistItemDao,
+    private val videoDao: VideoDao
+) {
 
     val playlists: LiveData<List<PlaylistWithInfo>> =
-        database.playlistDao.getPlaylists()
+        playlistDao.getPlaylists()
 
     fun getPlaylistItems(playlistId: String): LiveData<List<PlaylistItemWithInfo>> =
-        database.playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
+        playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
 
     fun getPlaylist(playlistId: String): LiveData<PlaylistWithInfo> =
-        database.playlistDao.getPlaylist(playlistId)
+        playlistDao.getPlaylist(playlistId)
 
     suspend fun refreshPlaylists() = withContext(Dispatchers.IO) {
         val playlists = youtubeDataApiService.getPlaylistsForChannel()
-        database.channelDao.insertAll(*playlists.asChannelDatabaseModel())
-        database.playlistDao.insertAll(*playlists.asDatabaseModel())
-        database.thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
+        channelDao.insertAll(*playlists.asChannelDatabaseModel())
+        playlistDao.insertAll(*playlists.asDatabaseModel())
+        thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
 
     suspend fun refreshPlaylistItems(playlistId: String) = withContext(Dispatchers.IO) {
@@ -53,10 +67,10 @@ class YoutubeRepository(private val database: YoutubeDatabase) {
             youtubeDataApiService.getPlaylistItemsForPlaylist(playlistId)
         val videosById = youtubeDataApiService
                 .getVideosById(TextUtils.join(",", playlistItemsForPlaylist.videoIds()))
-        database.videoDao.insertAll(*videosById.asDatabaseModel())
-        database.thumbnailDao.insertAllVideoThumbnails(*videosById.asThumbnailDatabaseModel())
-        database.playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
-        database.thumbnailDao.insertAllPlaylistItemThumbnails(
+        videoDao.insertAll(*videosById.asDatabaseModel())
+        thumbnailDao.insertAllVideoThumbnails(*videosById.asThumbnailDatabaseModel())
+        playlistItemDao.insertAll(*playlistItemsForPlaylist.asDatabaseModel())
+        thumbnailDao.insertAllPlaylistItemThumbnails(
             *playlistItemsForPlaylist.asThumbnailDatabaseModel()
         )
     }

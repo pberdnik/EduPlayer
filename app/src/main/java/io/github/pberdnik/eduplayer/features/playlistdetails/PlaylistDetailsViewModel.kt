@@ -1,19 +1,16 @@
 package io.github.pberdnik.eduplayer.features.playlistdetails
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.github.pberdnik.eduplayer.database.getDatabase
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import kotlinx.coroutines.launch
 
-class PlaylistDetailsViewModel(val playlistId: String, app: Application)
-    : AndroidViewModel(app) {
-
-    private val database = getDatabase(app)
-    private val repository = YoutubeRepository(database)
+class PlaylistDetailsViewModel @AssistedInject constructor(
+    private val repository: YoutubeRepository,
+    @Assisted val playlistId: String
+) : ViewModel() {
 
     val playlist = repository.getPlaylist(playlistId)
     val playlistItems = repository.getPlaylistItems(playlistId)
@@ -24,13 +21,8 @@ class PlaylistDetailsViewModel(val playlistId: String, app: Application)
         }
     }
 
-    class Factory(val playlistId: String, val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PlaylistDetailsViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return PlaylistDetailsViewModel(playlistId, app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
-        }
+    @AssistedInject.Factory
+    interface Factory {
+        fun create(playlistId: String): PlaylistDetailsViewModel
     }
 }
