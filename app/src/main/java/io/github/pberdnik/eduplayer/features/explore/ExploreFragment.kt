@@ -1,24 +1,29 @@
 package io.github.pberdnik.eduplayer.features.explore
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
+import io.github.pberdnik.eduplayer.di.injector
+import io.github.pberdnik.eduplayer.di.viewModel
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
 
 class ExploreFragment : Fragment() {
 
-    private val viewModel by viewModels<ExploreViewModel> {
-        val app = requireNotNull(this.activity).application
-        ExploreViewModel.Factory(app)
+    private val viewModel by viewModel {
+        injector.exploreViewModel
     }
 
     override fun onCreateView(

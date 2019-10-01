@@ -6,25 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import io.github.pberdnik.eduplayer.databinding.PlaylistDetailsFragmentBinding
+import io.github.pberdnik.eduplayer.di.injector
+import io.github.pberdnik.eduplayer.di.viewModel
 
 class PlaylistDetailsFragment : Fragment() {
 
-    private lateinit var viewModel: PlaylistDetailsViewModel
+    private val args: PlaylistDetailsFragmentArgs by navArgs()
+
+    private val viewModel by viewModel {
+        injector.playlistDetailsViewModelFactory.create(args.playlistId)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val app = requireNotNull(this.activity).application
-        val playlistId = PlaylistDetailsFragmentArgs.fromBundle(arguments!!).playlistId
-        val factory = PlaylistDetailsViewModel.Factory(playlistId, app)
-        viewModel = ViewModelProviders.of(this, factory)
-            .get(PlaylistDetailsViewModel::class.java)
-
         val binding = PlaylistDetailsFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner

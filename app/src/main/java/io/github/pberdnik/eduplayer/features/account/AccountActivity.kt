@@ -18,7 +18,6 @@ import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
-import io.github.pberdnik.eduplayer.network.youtubeDataApiService
 import kotlinx.android.synthetic.main.account_activity.mOutputText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -85,7 +84,7 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         val res = try {
-                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
+//                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
                         } catch (e: Exception) {
                             Log.e(":((((((", ":((((((", e)
                             e.message

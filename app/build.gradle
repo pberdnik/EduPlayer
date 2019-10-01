@@ -66,6 +66,14 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
     // Permissions
     implementation 'pub.devrel:easypermissions:3.0.0'
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.24'
+    kapt 'com.google.dagger:dagger-compiler:2.24'
+    // AssistedInject
+    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.0'
+    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.0'
+    // Logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
 
     // ==Network==
