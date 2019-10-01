@@ -20,5 +20,4 @@ class EduPlayerApplication : Application(), InjectorProvider {
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
 
-
 }
