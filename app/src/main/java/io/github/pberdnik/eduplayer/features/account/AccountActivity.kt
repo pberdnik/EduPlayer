@@ -7,17 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
+import io.github.pberdnik.eduplayer.di.injector
+import io.github.pberdnik.eduplayer.di.viewModel
 import kotlinx.android.synthetic.main.account_activity.mOutputText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +25,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
 
 
 private val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
@@ -37,33 +37,46 @@ private const val PREF_ACCOUNT_NAME = "youtubeAccountName"
 
 class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
-    lateinit var mCredential: GoogleAccountCredential
+    private val viewModel by viewModel {
+        injector.accountViewModel
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: AccountActivityBinding =
-            DataBindingUtil.setContentView(this, R.layout.account_activity)
 
-        binding.mCallApiButton.setOnClickListener {
-            binding.mCallApiButton.isEnabled = false
-            binding.mOutputText.text = ""
-            getResultsFromApi()
-            binding.mCallApiButton.isEnabled = true
+        DataBindingUtil.setContentView<AccountActivityBinding>(
+            this, R.layout.account_activity
+        ).also {
+            it.viewModel = viewModel
+            it.lifecycleOwner = this
         }
 
-        mCredential = GoogleAccountCredential
-            .usingOAuth2(applicationContext, SCOPES)
-            .setBackOff(ExponentialBackOff())
+        viewModel.signIn.observe(this, Observer {
+            if (it) {
+                viewModel.displaySignInDialogComplete()
+                signIn()
+            }
+        })
     }
 
-
-    fun requestApi() {
-        Toast.makeText(
-            applicationContext, "REQUESTED: ${mCredential.selectedAccountName}",
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun callApi() {
+        runBlocking {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    val res = try {
+                        "hehehe"
+                        //                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
+                    } catch (e: Exception) {
+                        Timber.e(e, ":((((((")
+                        e.message
+                    }
+                    withContext(Dispatchers.Main) {
+                        mOutputText.text = res.toString()
+                    }
+                }
+            }
+        }
     }
-
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -72,29 +85,10 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
      */
-    private fun getResultsFromApi() {
-        if (!isGooglePlayServicesAvailable()) {
-            acquireGooglePlayServices()
-        } else if (mCredential.selectedAccountName == null) {
-            chooseAccount()
-        } else if (!isDeviceOnline()) {
-            mOutputText.setText("No network connection available.")
-        } else {
-            runBlocking {
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val res = try {
-//                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
-                        } catch (e: Exception) {
-                            Log.e(":((((((", ":((((((", e)
-                            e.message
-                        }
-                        withContext(Dispatchers.Main) {
-                            mOutputText.text = res.toString()
-                        }
-                    }
-                }
-            }
+    private fun signIn() {
+        when {
+            !isGooglePlayServicesAvailable() -> acquireGooglePlayServices()
+            viewModel.hasSelectedAccount() -> chooseAccount()
         }
     }
 
@@ -110,31 +104,27 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                this, Manifest.permission.GET_ACCOUNTS
-            )
-        ) {
-            val accountName = getPreferences(Context.MODE_PRIVATE)
-                .getString(PREF_ACCOUNT_NAME, null)
-            if (accountName != null) {
-                mCredential.selectedAccountName = accountName
-                getResultsFromApi()
-            } else {
-                // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                    mCredential.newChooseAccountIntent(),
-                    REQUEST_ACCOUNT_PICKER
-                )
-            }
-        } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
-            EasyPermissions.requestPermissions(
-                this,
-                "This app needs to access your Google account (via Contacts).",
-                REQUEST_PERMISSION_GET_ACCOUNTS,
-                Manifest.permission.GET_ACCOUNTS
-            )
-        }
+        if (!hasGetAccountsPermission()) requestGetAccountsPermission()
+        else startChooseAccountDialog()
+    }
+
+    private fun hasGetAccountsPermission() =
+        EasyPermissions.hasPermissions(this, Manifest.permission.GET_ACCOUNTS)
+
+    private fun requestGetAccountsPermission() {
+        EasyPermissions.requestPermissions(
+            this,
+            getString(R.string.needs_google_account_access),
+            REQUEST_PERMISSION_GET_ACCOUNTS,
+            Manifest.permission.GET_ACCOUNTS
+        )
+    }
+
+    private fun startChooseAccountDialog() {
+        startActivityForResult(
+            viewModel.newChooseAccountIntent(),
+            REQUEST_ACCOUNT_PICKER
+        )
     }
 
     /**
@@ -147,32 +137,19 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
      * @param data Intent (containing result data) returned by incoming
      * activity result.
      */
-    override fun onActivityResult(
-        requestCode: Int, resultCode: Int, data: Intent?
-    ) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != Activity.RESULT_OK) {
-                mOutputText.text =
-                    "This app requires Google Play Services. Please install " + "Google Play Services on your device and relaunch this app."
-            } else {
-                getResultsFromApi()
-            }
-            REQUEST_ACCOUNT_PICKER -> if (resultCode == Activity.RESULT_OK && data != null &&
-                data.extras != null
-            ) {
-                val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                if (accountName != null) {
-                    val settings = getPreferences(Context.MODE_PRIVATE)
-                    val editor = settings.edit()
-                    editor.putString(PREF_ACCOUNT_NAME, accountName)
-                    editor.apply()
-                    mCredential.selectedAccountName = accountName
-                    getResultsFromApi()
-                }
-            }
-            REQUEST_AUTHORIZATION -> if (resultCode == Activity.RESULT_OK) {
-                getResultsFromApi()
+        if (resultCode != Activity.RESULT_OK) when (requestCode) {
+            REQUEST_GOOGLE_PLAY_SERVICES ->
+                mOutputText.text = getString(R.string.google_play_services_required)
+            REQUEST_AUTHORIZATION, REQUEST_ACCOUNT_PICKER ->
+                mOutputText.text = "Something went wrong"
+        } else when (requestCode) {
+            REQUEST_ACCOUNT_PICKER -> if (data != null && data.extras != null) {
+                viewModel.selectAccount(
+                    accountName =
+                    data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                )
             }
         }
     }

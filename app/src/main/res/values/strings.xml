@@ -10,4 +10,9 @@
     <string name="account">Account</string>
     <string name="playlist">Playlist</string>
     <string name="shared_preferences_name">io.github.pberdnik.eduplayer.SHARED_PREFERENCES</string>
+    <string name="sign_in">Sign in</string>
+    <string name="needs_google_account_access">This app needs to access your Google account (via Contacts).</string>
+    <string name="google_play_services_required">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
+    <string name="no_network_msg">No network connection available.</string>
+    <string name="sign_out">Sign out</string>
 </resources>

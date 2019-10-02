@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="viewModel"
+            type="io.github.pberdnik.eduplayer.features.account.AccountViewModel" />
     </data>
 
     <LinearLayout
@@ -12,17 +15,34 @@
         android:padding="16dp">
 
         <Button
-            android:id="@+id/mCallApiButton"
-            android:layout_width="match_parent"
+            android:id="@+id/button_sign_in"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#e000"
-            android:text="Call YouTube Data API"/>
+            android:text="@string/sign_in"
+            android:onClick="@{() -> viewModel.displaySignInDialog()}"/>
+
+        <Button
+            android:id="@+id/button_sign_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#e000"
+            android:text="@string/sign_out"
+            android:onClick="@{() -> viewModel.signOut()}"/>
+
+        <Button
+            android:id="@+id/button_call_api"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#e000"
+            android:text="Call api"
+            android:onClick="@{() -> viewModel.callApi()}"/>
 
         <TextView
             android:id="@+id/mOutputText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Click the \'Call YouTube Data API\' button to test the API."/>
+            android:text="@{viewModel.token}"/>
 
         <ProgressBar
             android:id="@+id/mProgress"

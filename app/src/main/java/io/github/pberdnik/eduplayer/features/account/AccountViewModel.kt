@@ -1,24 +1,60 @@
 package io.github.pberdnik.eduplayer.features.account
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Intent
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.google.api.services.youtube.YouTubeScopes
+import androidx.lifecycle.viewModelScope
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
+class AccountViewModel @Inject constructor(
+    private val credential: GoogleAccountCredential,
+    private val youtubeDataApiService: YoutubeDataApiService
+) : ViewModel() {
 
+    private val _signIn = MutableLiveData<Boolean>(false)
+    val signIn: LiveData<Boolean> = _signIn
 
-class AccountViewModel(val app: Application) : AndroidViewModel(app) {
+    val token = MutableLiveData<String>(null)
 
+    fun displaySignInDialog() {
+        _signIn.value = true
+    }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(AccountViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return AccountViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
+    fun displaySignInDialogComplete() {
+        _signIn.value = false
+    }
+
+    fun signOut() {
+        credential.selectedAccount = null
+        token.value = null
+    }
+
+    fun newChooseAccountIntent(): Intent = credential.newChooseAccountIntent()
+
+    fun hasSelectedAccount() = credential.selectedAccountName == null
+
+    fun selectAccount(accountName: String) {
+        credential.selectedAccountName = accountName
+        viewModelScope.launch(Dispatchers.IO) {
+            token.postValue(credential.token)
         }
     }
+
+    fun callApi() {
+        viewModelScope.launch {
+            val myPlaylists = try {
+                youtubeDataApiService.getMyPlaylists().toString()
+            } catch (e: Exception) {
+                e.message
+            }
+            token.postValue(myPlaylists)
+        }
+    }
+
 }

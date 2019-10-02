@@ -36,8 +36,5 @@ interface YoutubeDataApiService {
                 "items(etag,id,snippet(channelId,channelTitle,publishedAt,title,description,thumbnails)" +
                 ",contentDetails)"
     )
-    suspend fun getMyPlaylists(
-        @Query("maxResults") maxResults: Int = 50,
-        @Query("access_token") accessToken: String
-    ): NetworkPlaylists
+    suspend fun getMyPlaylists(@Query("maxResults") maxResults: Int = 50): NetworkPlaylists
 }

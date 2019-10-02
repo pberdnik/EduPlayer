@@ -1,5 +1,6 @@
 package io.github.pberdnik.eduplayer.di
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -12,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.util.Date
 import javax.inject.Singleton
 
@@ -23,12 +25,19 @@ object NetworkModule {
     @Singleton
     @JvmStatic
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        /** Adds apiKey query parameter to each request */
-        val apiKeyInterceptor = { chain: Interceptor.Chain ->
-            val url = chain.request().url.newBuilder()
+    fun provideOkHttpClient(credential: GoogleAccountCredential): OkHttpClient {
+        /** Adds apiKey and auth query parameter to each request */
+        val apiKeyAndAuthInterceptor = { chain: Interceptor.Chain ->
+            val urlBuilder = chain.request().url.newBuilder()
                 .addQueryParameter("key", BuildConfig.YouTubeApiKey)
-                .build()
+
+            if (credential.selectedAccountName != null) try {
+                urlBuilder.addQueryParameter("access_token", credential.token)
+            } catch (e: Exception) {
+                Timber.e("Selected account name is ${credential.selectedAccountName} but no accessToken")
+            }
+
+            val url = urlBuilder.build()
             val request = chain.request().newBuilder()
                 .url(url)
                 .build()
@@ -42,7 +51,7 @@ object NetworkModule {
 
         return OkHttpClient().newBuilder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(apiKeyAndAuthInterceptor)
             .build()
     }
 
