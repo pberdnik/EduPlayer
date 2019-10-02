@@ -15,4 +15,6 @@
     <string name="google_play_services_required">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
     <string name="no_network_msg">No network connection available.</string>
     <string name="sign_out">Sign out</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="sign_in_description">Sign in to access your youtube playlists</string>
 </resources>

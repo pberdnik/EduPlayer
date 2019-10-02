@@ -10,6 +10,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.ActivityNavigator
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.services.youtube.YouTubeScopes
@@ -17,15 +18,9 @@ import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
-import kotlinx.android.synthetic.main.account_activity.mOutputText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.android.synthetic.main.account_activity.tv_sign_in_description
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import timber.log.Timber
 
 
 private val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
@@ -44,11 +39,16 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DataBindingUtil.setContentView<AccountActivityBinding>(
+        val binding = DataBindingUtil.setContentView<AccountActivityBinding>(
             this, R.layout.account_activity
         ).also {
             it.viewModel = viewModel
             it.lifecycleOwner = this
+        }
+
+        setSupportActionBar(binding.accountToolbar)
+        binding.accountToolbar.setNavigationOnClickListener {
+            finish()
         }
 
         viewModel.signIn.observe(this, Observer {
@@ -57,25 +57,6 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
                 signIn()
             }
         })
-    }
-
-    private fun callApi() {
-        runBlocking {
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    val res = try {
-                        "hehehe"
-                        //                            youtubeDataApiService.getMyPlaylists(accessToken = mCredential.token)
-                    } catch (e: Exception) {
-                        Timber.e(e, ":((((((")
-                        e.message
-                    }
-                    withContext(Dispatchers.Main) {
-                        mOutputText.text = res.toString()
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -141,9 +122,9 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) when (requestCode) {
             REQUEST_GOOGLE_PLAY_SERVICES ->
-                mOutputText.text = getString(R.string.google_play_services_required)
+                tv_sign_in_description.text = getString(R.string.google_play_services_required)
             REQUEST_AUTHORIZATION, REQUEST_ACCOUNT_PICKER ->
-                mOutputText.text = "Something went wrong"
+                tv_sign_in_description.text = "Something went wrong"
         } else when (requestCode) {
             REQUEST_ACCOUNT_PICKER -> if (data != null && data.extras != null) {
                 viewModel.selectAccount(
@@ -246,5 +227,10 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
             REQUEST_GOOGLE_PLAY_SERVICES
         )
         dialog.show()
+    }
+
+    override fun finish() {
+        super.finish()
+        ActivityNavigator.applyPopAnimationsToPendingTransition(this)
     }
 }
