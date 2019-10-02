@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 import io.github.pberdnik.eduplayer.di.injector
@@ -66,7 +68,36 @@ class ExploreFragment : Fragment() {
         inflater.inflate(R.menu.menu_main, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) =
-        item.onNavDestinationSelected(view!!.findNavController())
-                || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // should be:
+        // item.onNavDestinationSelected(view!!.findNavController()) || super.onOptionsItemSelected(item)
+        // but there is no way to provide custom animation. So here is the copy of
+        // onNavDestinationSelected() with custom animations
+        val navController = view!!.findNavController()
+        val builder = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(R.anim.slide_in_top)
+            .setExitAnim(R.anim.no_animation)
+            .setPopEnterAnim(R.anim.no_animation)
+            .setPopExitAnim(R.anim.slide_out_bottom)
+        if (item.order and Menu.CATEGORY_SECONDARY == 0) {
+            builder.setPopUpTo(findStartDestination(navController.graph).id, false)
+        }
+        val options = builder.build()
+        try {
+            navController.navigate(item.itemId, null, options)
+            return true
+        } catch (e: IllegalArgumentException) {
+            return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun findStartDestination(graph: NavGraph): NavDestination {
+        var startDestination: NavDestination = graph
+        while (startDestination is NavGraph) {
+            val parent = startDestination as NavGraph?
+            startDestination = parent!!.findNode(parent.startDestination)!!
+        }
+        return startDestination
+    }
 }

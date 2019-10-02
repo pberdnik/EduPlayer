@@ -24,7 +24,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.account.AccountActivity"/>
+        <activity
+            android:name=".features.account.AccountActivity"
+            android:label="@string/account"/>
     </application>
 
 </manifest>
