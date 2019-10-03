@@ -1,5 +1,6 @@
 package io.github.pberdnik.eduplayer.network
 
+import io.github.pberdnik.eduplayer.network.dto.NetworkChannels
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylistItems
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import io.github.pberdnik.eduplayer.network.dto.NetworkVideos
@@ -37,4 +38,7 @@ interface YoutubeDataApiService {
                 ",contentDetails)"
     )
     suspend fun getMyPlaylists(@Query("maxResults") maxResults: Int = 50): NetworkPlaylists
+
+    @GET("channels?part=snippet&mine=true&fields=etag,items(etag,snippet(title,thumbnails))")
+    suspend fun getUserInfo(): NetworkChannels
 }

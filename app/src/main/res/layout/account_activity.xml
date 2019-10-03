@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="viewModel"
+            name="vm"
             type="io.github.pberdnik.eduplayer.features.account.AccountViewModel" />
     </data>
 
@@ -33,6 +33,7 @@
             android:layout_height="144dp"
             android:contentDescription="@string/user_avatar"
             android:src="@drawable/ic_account_24dp"
+            avatarUrl="@{vm.avatarUrl}"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toTopOf="@id/tv_sign_in_description"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,19 +45,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/sign_in_description"
+            android:text="@{vm.isSignedIn ? vm.accountDescription : @string/sign_in_description}"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@id/button_sign_in"
+            app:layout_constraintBottom_toTopOf="@id/button_sign_in_out"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_user_avatar" />
 
         <Button
-            android:id="@+id/button_sign_in"
+            android:id="@+id/button_sign_in_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.displaySignInDialog()}"
-            android:text="@string/sign_in"
+            android:onClick="@{() -> vm.isSignedIn ? vm.signOut() : vm.displaySignInDialog()}"
+            android:text="@{vm.isSignedIn ? @string/sign_out : @string/sign_in}"
             android:textColor="#e000"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.ActivityNavigator
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.api.services.youtube.YouTubeScopes
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.AccountActivityBinding
 import io.github.pberdnik.eduplayer.di.injector
@@ -23,12 +22,10 @@ import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
 
-private val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
 private const val REQUEST_ACCOUNT_PICKER = 1000
 private const val REQUEST_AUTHORIZATION = 1001
 private const val REQUEST_GOOGLE_PLAY_SERVICES = 1002
 private const val REQUEST_PERMISSION_GET_ACCOUNTS = 1003
-private const val PREF_ACCOUNT_NAME = "youtubeAccountName"
 
 class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
@@ -42,14 +39,12 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
         val binding = DataBindingUtil.setContentView<AccountActivityBinding>(
             this, R.layout.account_activity
         ).also {
-            it.viewModel = viewModel
+            it.vm = viewModel
             it.lifecycleOwner = this
         }
 
         setSupportActionBar(binding.accountToolbar)
-        binding.accountToolbar.setNavigationOnClickListener {
-            finish()
-        }
+        binding.accountToolbar.setNavigationOnClickListener { finish() }
 
         viewModel.signIn.observe(this, Observer {
             if (it) {
@@ -69,7 +64,7 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
     private fun signIn() {
         when {
             !isGooglePlayServicesAvailable() -> acquireGooglePlayServices()
-            viewModel.hasSelectedAccount() -> chooseAccount()
+            !viewModel.hasSelectedAccount() -> chooseAccount()
         }
     }
 
