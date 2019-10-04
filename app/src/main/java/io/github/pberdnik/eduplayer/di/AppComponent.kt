@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import io.github.pberdnik.eduplayer.features.account.AccountViewModel
 import io.github.pberdnik.eduplayer.features.explore.ExploreViewModel
+import io.github.pberdnik.eduplayer.features.library.LibraryViewModel
 import io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel
 import javax.inject.Singleton
 
@@ -26,6 +27,7 @@ interface AppComponent {
     }
 
     val exploreViewModel: ExploreViewModel
+    val libraryViewModel: LibraryViewModel
     val accountViewModel: AccountViewModel
     val playlistDetailsViewModelFactory: PlaylistDetailsViewModel.Factory
 }

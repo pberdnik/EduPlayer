@@ -11,6 +11,22 @@
         android:id="@+id/library_dest"
         android:name="io.github.pberdnik.eduplayer.features.library.LibraryFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/library_fragment" />
+        tools:layout="@layout/library_fragment">
+        <action
+            android:id="@+id/action_showDetails"
+            app:destination="@id/playlistDetails_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistDetails_dest"
+        android:name="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsFragment"
+        android:label="@string/playlist"
+        tools:layout="@layout/playlist_details_fragment">
+        <argument
+            android:name="playlistId"
+            app:argType="string" />
+    </fragment>
+
+    <include app:graph="@navigation/account"/>
 
 </navigation>

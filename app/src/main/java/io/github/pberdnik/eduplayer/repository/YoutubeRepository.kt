@@ -11,6 +11,7 @@ import io.github.pberdnik.eduplayer.database.VideoDao
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
+import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
@@ -30,7 +31,10 @@ class YoutubeRepository @Inject constructor(
 ) {
 
     val playlists: LiveData<List<PlaylistWithInfo>> =
-        playlistDao.getPlaylists()
+        playlistDao.getPlaylistsForChannel()
+
+    val myPlaylists: LiveData<List<PlaylistWithInfo>> =
+        playlistDao.getMyPlaylists()
 
     fun getPlaylistItems(playlistId: String): LiveData<List<PlaylistItemWithInfo>> =
         playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
@@ -38,10 +42,21 @@ class YoutubeRepository @Inject constructor(
     fun getPlaylist(playlistId: String): LiveData<PlaylistWithInfo> =
         playlistDao.getPlaylist(playlistId)
 
-    suspend fun refreshPlaylists() = withContext(Dispatchers.IO) {
+    suspend fun refreshPlaylistsForChannel() = withContext(Dispatchers.IO) {
         val playlists = youtubeDataApiService.getPlaylistsForChannel()
+        insertPlaylists(playlists)
+    }
+
+    suspend fun refreshMyPlaylists() = withContext(Dispatchers.IO) {
+        val playlists = youtubeDataApiService.getMyPlaylists()
+        insertPlaylists(playlists, mine = true)
+    }
+
+    private suspend fun insertPlaylists(playlists: NetworkPlaylists, mine: Boolean = false) {
         channelDao.insertAll(*playlists.asChannelDatabaseModel())
-        playlistDao.insertAll(*playlists.asDatabaseModel())
+        val playlistsDM = playlists.asDatabaseModel()
+        if (mine) playlistsDM.forEach { it.mine = true }
+        playlistDao.insertAll(*playlistsDM)
         thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
 

@@ -1,8 +1,18 @@
 package io.github.pberdnik.eduplayer.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
-import io.github.pberdnik.eduplayer.database.entities.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
+import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.domain.VideoWithInfo
@@ -13,6 +23,14 @@ interface PlaylistDao {
     @Transaction
     @Query("SELECT * FROM playlists")
     fun getPlaylists(): LiveData<List<PlaylistWithInfo>>
+
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE channelId = :channelId")
+    fun getPlaylistsForChannel(channelId: String = "UCdxpofrI-dO6oYfsqHDHphw"): LiveData<List<PlaylistWithInfo>>
+
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE mine = 1")
+    fun getMyPlaylists(): LiveData<List<PlaylistWithInfo>>
 
     @Transaction
     @Query("SELECT * FROM playlists WHERE id = :playlistId")

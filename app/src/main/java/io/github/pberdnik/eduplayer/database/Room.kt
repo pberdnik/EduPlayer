@@ -17,7 +17,7 @@ import io.github.pberdnik.eduplayer.database.entities.DateConverter
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
         DatabaseVideoThumbnail::class],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)

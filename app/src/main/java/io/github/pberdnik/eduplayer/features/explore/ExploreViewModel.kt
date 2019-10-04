@@ -18,13 +18,7 @@ class ExploreViewModel @Inject constructor(private val repository: YoutubeReposi
 
     init {
         viewModelScope.launch {
-            repository.refreshPlaylists()
-        }
-    }
-
-    fun switchPlaylistExpansion(playlistWithInfo: PlaylistWithInfo) {
-        viewModelScope.launch {
-            repository.refreshPlaylistItems(playlistWithInfo.playlist.id)
+            repository.refreshPlaylistsForChannel()
         }
     }
 
