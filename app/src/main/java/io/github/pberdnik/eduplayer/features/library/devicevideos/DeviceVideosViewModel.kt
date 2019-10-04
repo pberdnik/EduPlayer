@@ -1,6 +1,7 @@
 package io.github.pberdnik.eduplayer.features.library.devicevideos
 
 import androidx.lifecycle.ViewModel
+import javax.inject.Inject
 
-class DeviceVideosViewModel : ViewModel() {
+class DeviceVideosViewModel @Inject constructor(): ViewModel() {
 }

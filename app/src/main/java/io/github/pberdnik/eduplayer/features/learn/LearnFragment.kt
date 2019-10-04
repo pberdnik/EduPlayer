@@ -20,7 +20,7 @@ class LearnFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = LearnFragmentBinding.inflate(inflater).also {
-            it.viewModel = viewModel
+            it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
         }
 

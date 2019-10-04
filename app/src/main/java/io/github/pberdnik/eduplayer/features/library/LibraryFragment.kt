@@ -9,18 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.LibraryFragmentBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
-import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
-import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
 
 class LibraryFragment : Fragment() {
 
@@ -35,21 +32,17 @@ class LibraryFragment : Fragment() {
         val binding = LibraryFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
-            it.playlistRv.adapter =
-                PlaylistAdapter(PlaylistClickListener { playlistWithInfo ->
-                    viewModel.displayPlaylistDetails(playlistWithInfo.playlist.id)
-                })
+            it.viewPager.adapter =
+                LibraryViewPagerAdapter(this)
+            TabLayoutMediator(it.libraryTab, it.viewPager) {tab, position ->
+                tab.text = when (position) {
+                    0 -> "EduPlayer"
+                    1 -> "Device"
+                    2 -> "YouTube"
+                    else -> throw IllegalArgumentException("Wrong position: $position")
+                }
+            }.attach()
         }
-
-        viewModel.navigateToSelectedPlaylistItem.observe(this, Observer { playlistId ->
-            if (null != playlistId) {
-                findNavController().navigate(
-                    LibraryFragmentDirections.actionShowDetails(playlistId)
-                )
-                // Tell the ViewModel we've made the navigate call to prevent multiple account
-                viewModel.displayPlaylistDetailsComplete()
-            }
-        })
 
         (activity as AppCompatActivity).apply {
             setSupportActionBar(binding.appBar)
