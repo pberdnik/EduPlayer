@@ -2,41 +2,37 @@ package io.github.pberdnik.eduplayer.features.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.ExploreFragmentBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
+import io.github.pberdnik.eduplayer.features.NavigationRootFragment
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
 
-class ExploreFragment : Fragment() {
+class ExploreFragment : NavigationRootFragment() {
+
+    lateinit var binding: ExploreFragmentBinding
 
     private val viewModel by viewModel {
         injector.exploreViewModel
     }
+
+    override fun getToolbar(): Toolbar = binding.mainToolbar as Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = ExploreFragmentBinding.inflate(inflater).also {
-            it.viewModel = viewModel
+        binding = ExploreFragmentBinding.inflate(inflater).also {
+            it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
-            it.playlistRv.adapter =
+            it.playlistRvLayout.playlistRv.adapter =
                 PlaylistAdapter(PlaylistClickListener { playlistWithInfo ->
                     viewModel.displayPlaylistDetails(playlistWithInfo.playlist.id)
                 })
@@ -52,52 +48,6 @@ class ExploreFragment : Fragment() {
             }
         })
 
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.appBar)
-            supportActionBar?.setIcon(R.drawable.ic_edu_logo_with_padding)
-        }
-
-        setHasOptionsMenu(true)
-
         return binding.root
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // should be:
-        // item.onNavDestinationSelected(view!!.findNavController()) || super.onOptionsItemSelected(item)
-        // but there is no way to provide custom animation. So here is the copy of
-        // onNavDestinationSelected() with custom animations
-        val navController = view!!.findNavController()
-        val builder = NavOptions.Builder()
-            .setLaunchSingleTop(true)
-            .setEnterAnim(R.anim.slide_in_top)
-            .setExitAnim(R.anim.no_animation)
-            .setPopEnterAnim(R.anim.no_animation)
-            .setPopExitAnim(R.anim.slide_out_bottom)
-        if (item.order and Menu.CATEGORY_SECONDARY == 0) {
-            builder.setPopUpTo(findStartDestination(navController.graph).id, false)
-        }
-        val options = builder.build()
-        try {
-            navController.navigate(item.itemId, null, options)
-            return true
-        } catch (e: IllegalArgumentException) {
-            return super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun findStartDestination(graph: NavGraph): NavDestination {
-        var startDestination: NavDestination = graph
-        while (startDestination is NavGraph) {
-            val parent = startDestination as NavGraph?
-            startDestination = parent!!.findNode(parent.startDestination)!!
-        }
-        return startDestination
     }
 }

@@ -27,7 +27,7 @@ class EduPlayerPlaylistsFragment : Fragment() {
         val binding = EduplayerPlaylistFragmentBinding.inflate(inflater).also {
             it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
-            it.playlistRv.adapter =
+            it.playlistRvLayout.playlistRv.adapter =
                 PlaylistAdapter(PlaylistClickListener { playlistWithInfo ->
                     viewModel.displayPlaylistDetails(playlistWithInfo.playlist.id)
                 })
