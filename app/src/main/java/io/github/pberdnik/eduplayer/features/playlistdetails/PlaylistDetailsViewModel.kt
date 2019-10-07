@@ -21,6 +21,12 @@ class PlaylistDetailsViewModel @AssistedInject constructor(
         }
     }
 
+    fun changeSavedState() {
+        viewModelScope.launch {
+            repository.changePlaylistSavedState(playlistId)
+        }
+    }
+
     @AssistedInject.Factory
     interface Factory {
         fun create(playlistId: String): PlaylistDetailsViewModel

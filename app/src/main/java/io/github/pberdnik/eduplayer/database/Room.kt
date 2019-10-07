@@ -7,6 +7,7 @@ import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistSaveInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
@@ -16,8 +17,8 @@ import io.github.pberdnik.eduplayer.database.entities.DateConverter
 @Database(
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
-        DatabaseVideoThumbnail::class],
-    version = 9,
+        DatabaseVideoThumbnail::class, DatabasePlaylistSaveInfo::class],
+    version = 14,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)

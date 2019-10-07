@@ -5,9 +5,10 @@ import androidx.room.Embedded
 import androidx.room.Ignore
 import androidx.room.Relation
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistSaveInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
-import java.util.*
+import java.util.Date
 
 data class PlaylistWithInfo(
     @Embedded
@@ -17,7 +18,18 @@ data class PlaylistWithInfo(
         entityColumn = "playlistId",
         parentColumn = "id"
     )
-    val thumbnails: List<Thumbnail>
+    val thumbnails: List<Thumbnail>,
+    @Relation(
+        entity = DatabasePlaylistSaveInfo::class,
+        entityColumn = "playlistId",
+        parentColumn = "id"
+    )
+    val saveInfo: SaveInfo
+)
+
+data class SaveInfo(
+    val saved: Boolean,
+    val learn: Boolean
 )
 
 data class Playlist(

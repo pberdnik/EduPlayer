@@ -56,7 +56,7 @@ class YoutubeRepository @Inject constructor(
         channelDao.insertAll(*playlists.asChannelDatabaseModel())
         val playlistsDM = playlists.asDatabaseModel()
         if (mine) playlistsDM.forEach { it.mine = true }
-        playlistDao.insertAll(*playlistsDM)
+        playlistDao.insertPlaylistsWithSaveInfo(playlistsDM)
         thumbnailDao.insertAllPlaylistThumbnails(*playlists.asThumbnailDatabaseModel())
     }
 
@@ -73,4 +73,7 @@ class YoutubeRepository @Inject constructor(
         )
     }
 
+    suspend fun changePlaylistSavedState(playlistId: String) {
+        playlistDao.changeSavedState(playlistId)
+    }
 }

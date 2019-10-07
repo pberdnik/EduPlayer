@@ -10,9 +10,11 @@ import io.github.pberdnik.eduplayer.database.entities.DatabaseChannel
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylist
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistSaveInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
+import io.github.pberdnik.eduplayer.database.entities.createSaveInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.domain.VideoWithInfo
@@ -38,6 +40,18 @@ interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg playlists: DatabasePlaylist)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSaveInfoIfNot(vararg saveInfo: DatabasePlaylistSaveInfo)
+
+    @Transaction
+    suspend fun insertPlaylistsWithSaveInfo(playlistsDM: Array<DatabasePlaylist>) {
+        insertAll(*playlistsDM)
+        insertSaveInfoIfNot(*playlistsDM.createSaveInfo())
+    }
+
+    @Query("UPDATE playlist_save_info SET saved = not saved WHERE playlistId = :playlistId")
+    suspend fun changeSavedState(playlistId: String)
 }
 
 
