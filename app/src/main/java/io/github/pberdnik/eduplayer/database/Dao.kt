@@ -35,6 +35,14 @@ interface PlaylistDao {
     fun getMyPlaylists(): LiveData<List<PlaylistWithInfo>>
 
     @Transaction
+    @Query(
+        """SELECT * FROM playlists as p 
+        LEFT JOIN playlist_save_info as psi ON p.id = psi.playlistId 
+        WHERE saved = 1"""
+    )
+    fun getEduPlayerPlaylists(): LiveData<List<PlaylistWithInfo>>
+
+    @Transaction
     @Query("SELECT * FROM playlists WHERE id = :playlistId")
     fun getPlaylist(playlistId: String): LiveData<PlaylistWithInfo>
 

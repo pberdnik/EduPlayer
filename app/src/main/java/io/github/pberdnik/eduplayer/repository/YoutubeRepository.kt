@@ -36,6 +36,9 @@ class YoutubeRepository @Inject constructor(
     val myPlaylists: LiveData<List<PlaylistWithInfo>> =
         playlistDao.getMyPlaylists()
 
+    val eduPlayerPlaylists: LiveData<List<PlaylistWithInfo>> =
+        playlistDao.getEduPlayerPlaylists()
+
     fun getPlaylistItems(playlistId: String): LiveData<List<PlaylistItemWithInfo>> =
         playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
 
