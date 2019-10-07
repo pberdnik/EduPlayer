@@ -2,14 +2,30 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/learn_dest"
     android:id="@+id/learn"
+    app:startDestination="@id/learn_dest"
     tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/learn_dest"
         android:name="io.github.pberdnik.eduplayer.features.learn.LearnFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/learn_fragment" />
+        tools:layout="@layout/learn_fragment">
+        <action
+            android:id="@+id/action_showDetails"
+            app:destination="@id/playlistDetails_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistDetails_dest"
+        android:name="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsFragment"
+        android:label="@string/playlist"
+        tools:layout="@layout/playlist_details_fragment">
+        <argument
+            android:name="playlistId"
+            app:argType="string" />
+    </fragment>
+
+    <include app:graph="@navigation/account" />
 
 </navigation>

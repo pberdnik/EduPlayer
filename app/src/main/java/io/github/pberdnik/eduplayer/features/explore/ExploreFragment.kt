@@ -47,7 +47,7 @@ class ExploreFragment : Fragment() {
                 findNavController().navigate(
                     ExploreFragmentDirections.actionShowDetails(playlistId)
                 )
-                // Tell the ViewModel we've made the navigate call to prevent multiple account
+                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayPlaylistDetailsComplete()
             }
         })

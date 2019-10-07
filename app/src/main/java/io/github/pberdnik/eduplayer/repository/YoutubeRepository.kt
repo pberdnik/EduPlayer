@@ -39,6 +39,9 @@ class YoutubeRepository @Inject constructor(
     val eduPlayerPlaylists: LiveData<List<PlaylistWithInfo>> =
         playlistDao.getEduPlayerPlaylists()
 
+    val learnPlaylists: LiveData<List<PlaylistWithInfo>> =
+        playlistDao.getLearnPlaylists()
+
     fun getPlaylistItems(playlistId: String): LiveData<List<PlaylistItemWithInfo>> =
         playlistItemDao.getPlaylistItemsForPlaylist(playlistId)
 
@@ -78,5 +81,9 @@ class YoutubeRepository @Inject constructor(
 
     suspend fun changePlaylistSavedState(playlistId: String) {
         playlistDao.changeSavedState(playlistId)
+    }
+
+    suspend fun changePlaylistLearnState(playlistId: String) {
+        playlistDao.changeLearnState(playlistId)
     }
 }

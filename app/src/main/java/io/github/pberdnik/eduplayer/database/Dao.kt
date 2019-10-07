@@ -43,6 +43,14 @@ interface PlaylistDao {
     fun getEduPlayerPlaylists(): LiveData<List<PlaylistWithInfo>>
 
     @Transaction
+    @Query(
+        """SELECT * FROM playlists as p 
+        LEFT JOIN playlist_save_info as psi ON p.id = psi.playlistId 
+        WHERE learn = 1"""
+    )
+    fun getLearnPlaylists(): LiveData<List<PlaylistWithInfo>>
+
+    @Transaction
     @Query("SELECT * FROM playlists WHERE id = :playlistId")
     fun getPlaylist(playlistId: String): LiveData<PlaylistWithInfo>
 
@@ -60,6 +68,9 @@ interface PlaylistDao {
 
     @Query("UPDATE playlist_save_info SET saved = not saved WHERE playlistId = :playlistId")
     suspend fun changeSavedState(playlistId: String)
+
+    @Query("UPDATE playlist_save_info SET learn = not learn WHERE playlistId = :playlistId")
+    suspend fun changeLearnState(playlistId: String)
 }
 
 
