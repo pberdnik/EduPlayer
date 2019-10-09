@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.pberdnik.eduplayer.databinding.LibraryFragmentBinding
 import io.github.pberdnik.eduplayer.di.injector
@@ -38,6 +39,14 @@ class LibraryFragment : NavigationRootFragment() {
                     else -> throw IllegalArgumentException("Wrong position: $position")
                 }
             }.attach()
+            it.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    when (position) {
+                        1 -> binding.addFab.show()
+                        else -> binding.addFab.hide()
+                    }
+                }
+            })
         }
 
         return binding.root
