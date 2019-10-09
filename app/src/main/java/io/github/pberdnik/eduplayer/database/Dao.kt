@@ -17,6 +17,7 @@ import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
 import io.github.pberdnik.eduplayer.database.entities.createSaveInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
+import io.github.pberdnik.eduplayer.domain.SaveInfo
 import io.github.pberdnik.eduplayer.domain.VideoWithInfo
 
 
@@ -59,6 +60,9 @@ interface PlaylistDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSaveInfoIfNot(vararg saveInfo: DatabasePlaylistSaveInfo)
+
+    @Query("SELECT * FROM playlist_save_info WHERE playlistId = :playlistId")
+    suspend fun getSaveInfo(playlistId: String): SaveInfo
 
     @Transaction
     suspend fun insertPlaylistsWithSaveInfo(playlistsDM: Array<DatabasePlaylist>) {

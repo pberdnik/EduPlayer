@@ -5,11 +5,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
+import io.github.pberdnik.eduplayer.util.Event
+import io.github.pberdnik.eduplayer.util.Operation
+import io.github.pberdnik.eduplayer.util.SnackbarMessages
+import io.github.pberdnik.eduplayer.util.performIOOperation
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -32,6 +35,9 @@ class AccountViewModel @Inject constructor(
 
     private val _signIn = MutableLiveData<Boolean>(false)
     val signIn: LiveData<Boolean> = _signIn
+
+    private val _refreshStatus = MutableLiveData<Event<Operation>>()
+    val refreshStatus: LiveData<Event<Operation>> = _refreshStatus
 
     init {
         if (hasSelectedAccount()) loadAccountInfo()
@@ -63,7 +69,10 @@ class AccountViewModel @Inject constructor(
 
     private fun loadAccountInfo() {
         _isSignedIn.value = true
-        viewModelScope.launch {
+        performIOOperation(
+            _refreshStatus,
+            SnackbarMessages(errorMessageId = R.string.couldnt_load_account_info)
+        ) {
             val userInfo = withContext(Dispatchers.IO) { youtubeDataApiService.getUserInfo() }
             if (userInfo.items.isNotEmpty()) {
                 _avatarUrl.value = userInfo.items[0].snippet.thumbnails.best

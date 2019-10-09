@@ -86,4 +86,7 @@ class YoutubeRepository @Inject constructor(
     suspend fun changePlaylistLearnState(playlistId: String) {
         playlistDao.changeLearnState(playlistId)
     }
+
+    suspend fun getSaveInfo(playlistId: String) = playlistDao.getSaveInfo(playlistId)
+
 }

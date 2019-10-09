@@ -13,6 +13,7 @@ import io.github.pberdnik.eduplayer.di.viewModel
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
 import io.github.pberdnik.eduplayer.features.library.LibraryFragmentDirections
+import io.github.pberdnik.eduplayer.util.observeSnackbar
 
 class YoutubePlaylistsFragment : Fragment() {
 
@@ -33,15 +34,15 @@ class YoutubePlaylistsFragment : Fragment() {
                 })
         }
 
-        viewModel.navigateToSelectedPlaylistItem.observe(this, Observer { playlistId ->
-            if (null != playlistId) {
+        viewModel.navigateToSelectedPlaylistItem.observe(this, Observer { event ->
+            event.getIfNotHandled()?.let { playlistId ->
                 findNavController().navigate(
                     LibraryFragmentDirections.actionShowDetails(playlistId)
                 )
-                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
-                viewModel.displayPlaylistDetailsComplete()
             }
         })
+
+        observeSnackbar(binding.rootCl, viewModel.refreshStatus)
 
         return binding.root
     }

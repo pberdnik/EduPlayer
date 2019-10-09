@@ -11,10 +11,13 @@ import androidx.navigation.fragment.navArgs
 import io.github.pberdnik.eduplayer.databinding.PlaylistDetailsFragmentBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
+import io.github.pberdnik.eduplayer.util.observeSnackbars
 
 class PlaylistDetailsFragment : Fragment() {
 
     private val args: PlaylistDetailsFragmentArgs by navArgs()
+
+    lateinit var binding: PlaylistDetailsFragmentBinding
 
     private val viewModel by viewModel {
         injector.playlistDetailsViewModelFactory.create(args.playlistId)
@@ -25,20 +28,33 @@ class PlaylistDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = PlaylistDetailsFragmentBinding.inflate(inflater).also {
+        binding = PlaylistDetailsFragmentBinding.inflate(inflater).also {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
             it.playlistItemsRv.adapter = PlaylistItemAdapter(PlaylistItemClickListener {})
         }
 
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.setTitle("Playlist")
-        }
+        observeSnackbars(
+            binding.rootCl,
+            viewModel.refreshStatus,
+            viewModel.libraryAddStatus,
+            viewModel.learnAddStatus
+        )
+
         binding.toolbar.setNavigationOnClickListener { view ->
             view.findNavController().navigateUp()
         }
 
         return binding.root
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.title = "Playlist"
+        }
+    }
+
 }

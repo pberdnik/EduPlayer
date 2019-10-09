@@ -13,6 +13,7 @@ import io.github.pberdnik.eduplayer.di.viewModel
 import io.github.pberdnik.eduplayer.features.NavigationRootFragment
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistAdapter
 import io.github.pberdnik.eduplayer.features.explore.playlistrecyclerview.PlaylistClickListener
+import io.github.pberdnik.eduplayer.util.observeSnackbar
 
 class ExploreFragment : NavigationRootFragment() {
 
@@ -47,6 +48,8 @@ class ExploreFragment : NavigationRootFragment() {
                 viewModel.displayPlaylistDetailsComplete()
             }
         })
+
+        observeSnackbar(binding.rootCl, viewModel.refreshStatus)
 
         return binding.root
     }
