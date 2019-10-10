@@ -11,5 +11,7 @@ import androidx.room.PrimaryKey
 data class DatabaseDeviceVideo(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val uri: String
+    val uri: String,
+    val title: String? = null,
+    val duration: String? = null
 )

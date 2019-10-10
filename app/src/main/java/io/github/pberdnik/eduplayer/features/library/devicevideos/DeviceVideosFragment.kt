@@ -22,6 +22,7 @@ class DeviceVideosFragment : Fragment() {
         val binding = DeviceVideosFragmentBinding.inflate(inflater).also {
             it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
+            it.deviceVideosRv.adapter = DeviceVideoAdapter(DeviceVideoClickListener { })
         }
 
         return binding.root
