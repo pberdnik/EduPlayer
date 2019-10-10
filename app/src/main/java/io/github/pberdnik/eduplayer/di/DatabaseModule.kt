@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.github.pberdnik.eduplayer.database.ChannelDao
+import io.github.pberdnik.eduplayer.database.LocalDao
 import io.github.pberdnik.eduplayer.database.PlaylistDao
 import io.github.pberdnik.eduplayer.database.PlaylistItemDao
 import io.github.pberdnik.eduplayer.database.ThumbnailDao
@@ -50,4 +51,9 @@ object DatabaseModule {
     @JvmStatic
     @Provides
     fun provideVideoDao(db: YoutubeDatabase): VideoDao = db.videoDao
+
+    @Reusable
+    @JvmStatic
+    @Provides
+    fun provideLocalDao(db: YoutubeDatabase): LocalDao = db.localDao
 }
