@@ -1,5 +1,7 @@
 package io.github.pberdnik.eduplayer.features.library.devicevideos
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -18,6 +20,7 @@ fun ImageView.bindImage(videoUri: String?) {
         Glide.with(context)
             .asBitmap()
             .load(Uri.parse(videoUri))
+            .placeholder(ColorDrawable(Color.LTGRAY))
             .into(this)
     }
 }

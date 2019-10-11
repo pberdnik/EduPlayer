@@ -1,5 +1,7 @@
 package io.github.pberdnik.eduplayer.features
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -11,6 +13,7 @@ fun ImageView.bindImage(imgUrl: String?) {
         val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
         Glide.with(context)
             .load(imgUri)
+            .placeholder(ColorDrawable(Color.LTGRAY))
             .into(this)
     }
 }
