@@ -29,7 +29,7 @@ class PlaylistDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = PlaylistDetailsFragmentBinding.inflate(inflater).also {
-            it.viewModel = viewModel
+            it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
             it.playlistItemsRv.adapter = PlaylistItemAdapter(PlaylistItemClickListener {})
         }

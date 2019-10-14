@@ -2,6 +2,7 @@ package io.github.pberdnik.eduplayer.features.playlistdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -9,6 +10,7 @@ import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import io.github.pberdnik.eduplayer.util.Event
 import io.github.pberdnik.eduplayer.util.Operation
+import io.github.pberdnik.eduplayer.util.OperationStatus
 import io.github.pberdnik.eduplayer.util.SnackbarMessages
 import io.github.pberdnik.eduplayer.util.performIOOperation
 
@@ -39,6 +41,12 @@ class PlaylistDetailsViewModel @AssistedInject constructor(
 
     private val _refreshStatus = MutableLiveData<Event<Operation>>()
     val refreshStatus: LiveData<Event<Operation>> = _refreshStatus
+
+    val showProgress: LiveData<Boolean> = Transformations.switchMap(refreshStatus) {event ->
+        Transformations.map(playlistItems) {list ->
+            list.isEmpty() && event.peekContent().status == OperationStatus.LOADING
+        }
+    }
 
     private var isAddedToLearn = false
     private val _learnAddStatus = MutableLiveData<Event<Operation>>()

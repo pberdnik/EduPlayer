@@ -2,12 +2,14 @@ package io.github.pberdnik.eduplayer.features.explore
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import io.github.pberdnik.eduplayer.util.Event
 import io.github.pberdnik.eduplayer.util.Operation
+import io.github.pberdnik.eduplayer.util.OperationStatus
 import io.github.pberdnik.eduplayer.util.SnackbarMessages
 import io.github.pberdnik.eduplayer.util.performIOOperation
 import javax.inject.Inject
@@ -21,6 +23,12 @@ class ExploreViewModel @Inject constructor(private val repository: YoutubeReposi
 
     private val _refreshStatus = MutableLiveData<Event<Operation>>()
     val refreshStatus: LiveData<Event<Operation>> = _refreshStatus
+
+    val showProgress: LiveData<Boolean> = Transformations.switchMap(refreshStatus) { event ->
+        Transformations.map(playlistsData) { list ->
+            list.isEmpty() && event.peekContent().status == OperationStatus.LOADING
+        }
+    }
 
     init {
         performIOOperation(

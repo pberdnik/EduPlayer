@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="viewModel"
+            name="vm"
             type="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel" />
 
     </data>
@@ -30,13 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:titleEnabled="false"
                 app:toolbarId="@id/toolbar">
 
                 <include
                     layout="@layout/playlist_details_header"
-                    bind:viewModel="@{viewModel}"/>
+                    bind:vm="@{vm}" />
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
@@ -60,18 +62,24 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playlist_items_rv"
-            listData="@{viewModel.playlistItems}"
+            listData="@{vm.playlistItems}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingTop="20dp"
             android:paddingStart="4dp"
+            android:paddingTop="20dp"
             android:paddingEnd="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/list_item_playlist_item" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{vm.showProgress ? View.VISIBLE : View.GONE}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

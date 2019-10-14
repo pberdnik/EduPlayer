@@ -8,7 +8,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="vm"
             type="io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel" />
     </data>
 
@@ -45,7 +45,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@{viewModel.playlist.playlist.title}"
+            android:text="@{vm.playlist.playlist.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_background"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{@string/playlist_info(`Youtube Learning`, viewModel.playlist.playlist.publishedAtString)}"
+            android:text="@{@string/playlist_info(`Youtube Learning`, vm.playlist.playlist.publishedAtString)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/playlist_title"
             tools:text="YouTube Learning  ·  12 months ago" />
@@ -70,7 +70,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:paddingBottom="16dp"
-            android:text="@{viewModel.playlist.playlist.description}"
+            android:text="@{vm.playlist.playlist.description}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playlist_info"
@@ -84,8 +84,8 @@
             android:layout_marginBottom="8dp"
             android:padding="8dp"
             android:src="@drawable/ic_school_black_24dp"
-            android:onClick="@{() -> viewModel.changeLearnState()}"
-            android:tint="@{viewModel.playlist.saveInfo.learn ? @color/colorAccent : @color/dark_gray}"
+            android:onClick="@{() -> vm.changeLearnState()}"
+            android:tint="@{vm.playlist.saveInfo.learn ? @color/colorAccent : @color/dark_gray}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playlist_description" />
@@ -98,8 +98,8 @@
             android:layout_marginBottom="8dp"
             android:padding="8dp"
             android:src="@drawable/ic_library_add_24dp"
-            android:onClick="@{() -> viewModel.changeSavedState()}"
-            android:tint="@{viewModel.playlist.saveInfo.saved ? @color/colorAccent : @color/dark_gray}"
+            android:onClick="@{() -> vm.changeSavedState()}"
+            android:tint="@{vm.playlist.saveInfo.saved ? @color/colorAccent : @color/dark_gray}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/learn_add_b"
             app:layout_constraintTop_toBottomOf="@id/playlist_description" />
