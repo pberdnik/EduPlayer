@@ -12,6 +12,7 @@ import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DateConverter
+import io.github.pberdnik.eduplayer.database.entities.UriConverter
 import io.github.pberdnik.eduplayer.database.localentities.DatabaseDeviceVideo
 
 
@@ -19,10 +20,10 @@ import io.github.pberdnik.eduplayer.database.localentities.DatabaseDeviceVideo
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
         DatabaseVideoThumbnail::class, DatabasePlaylistSaveInfo::class, DatabaseDeviceVideo::class],
-    version = 16,
+    version = 17,
     exportSchema = false
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, UriConverter::class)
 abstract class YoutubeDatabase : RoomDatabase() {
     abstract val playlistDao: PlaylistDao
     abstract val channelDao: ChannelDao

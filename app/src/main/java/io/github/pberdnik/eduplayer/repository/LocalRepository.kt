@@ -20,8 +20,8 @@ class LocalRepository @Inject constructor(
 ) {
     val deviceVideos = localDao.getVideos()
 
-    suspend fun insertVideos(uris: List<String>, intentFlags: Int) {
-        val dbUris = uris.map { uri -> getDeviceVideoWithMetaData(Uri.parse(uri), intentFlags) }
+    suspend fun insertVideos(uris: List<Uri>, intentFlags: Int) {
+        val dbUris = uris.map { uri -> getDeviceVideoWithMetaData(uri, intentFlags) }
         localDao.insertVideos(*dbUris.toTypedArray())
     }
 
@@ -45,7 +45,7 @@ class LocalRepository @Inject constructor(
             }
         }
 
-        return DatabaseDeviceVideo(uri = uri.toString(), title = displayName, duration = duration)
+        return DatabaseDeviceVideo(uri = uri, title = displayName, duration = duration)
     }
 
     private fun convertToHumanDuration(durationMillis: Long): String {

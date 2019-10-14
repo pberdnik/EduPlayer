@@ -11,7 +11,7 @@ class LibraryViewModel @Inject constructor(
 ) : ViewModel() {
     fun insertURIs(uris: List<Uri>, intentFlags: Int) {
         performIOOperation {
-            localRepository.insertVideos(uris.map { it.toString() }, intentFlags)
+            localRepository.insertVideos(uris, intentFlags)
         }
     }
 }
