@@ -2,6 +2,7 @@ package io.github.pberdnik.eduplayer.repository
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.media.MediaMetadataRetriever
 import android.net.Uri
@@ -19,14 +20,18 @@ class LocalRepository @Inject constructor(
 ) {
     val deviceVideos = localDao.getVideos()
 
-    suspend fun insertVideos(uris: List<String>) {
-        val dbUris = uris.map { uri -> getDeviceVideoWithMetaData(Uri.parse(uri)) }
+    suspend fun insertVideos(uris: List<String>, intentFlags: Int) {
+        val dbUris = uris.map { uri -> getDeviceVideoWithMetaData(Uri.parse(uri), intentFlags) }
         localDao.insertVideos(*dbUris.toTypedArray())
     }
 
-    private fun getDeviceVideoWithMetaData(uri: Uri): DatabaseDeviceVideo {
+    private fun getDeviceVideoWithMetaData(uri: Uri, intentFlags: Int): DatabaseDeviceVideo {
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, uri)
+        // persist the permissions for uri access
+        val takeFlags = intentFlags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        contentResolver.takePersistableUriPermission(uri, takeFlags)
         val duration = convertToHumanDuration(
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
         )

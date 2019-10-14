@@ -9,9 +9,9 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     val localRepository: LocalRepository
 ) : ViewModel() {
-    fun insertURIs(uris: List<Uri>) {
+    fun insertURIs(uris: List<Uri>, intentFlags: Int) {
         performIOOperation {
-            localRepository.insertVideos(uris = uris.map { it.toString() })
+            localRepository.insertVideos(uris.map { it.toString() }, intentFlags)
         }
     }
 }

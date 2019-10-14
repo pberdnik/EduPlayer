@@ -90,11 +90,11 @@ class LibraryFragment : NavigationRootFragment() {
                     str += videoUri.toString() + "\n"
                     uris += videoUri
                 }
-                viewModel.insertURIs(uris)
+                viewModel.insertURIs(uris, data.flags)
                 Toast.makeText(context, str, Toast.LENGTH_LONG).show()
             } else if (data.data != null) {
                 val uris = mutableListOf<Uri>(data.data!!)
-                viewModel.insertURIs(uris)
+                viewModel.insertURIs(uris, data.flags)
             }
         }
     }
