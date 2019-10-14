@@ -57,6 +57,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_add_24dp"
+            android:tint="#eee"
             android:visibility="gone"
             android:layout_margin="16dp" />
 

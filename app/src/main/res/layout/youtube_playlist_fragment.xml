@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="io.github.pberdnik.eduplayer.features.library.youtubeplaylists.YoutubePlaylistsViewModel" />
@@ -17,7 +19,13 @@
         <include
             android:id="@+id/playlist_rv_layout"
             layout="@layout/playlist_rv"
+            android:visibility="@{vm.playlistsData.empty ? View.GONE : View.VISIBLE}"
             bind:playlistData="@{vm.playlistsData}" />
+
+        <include
+            layout="@layout/instruction_in_case_of_empty_list"
+            android:visibility="@{vm.playlistsData.empty ? View.VISIBLE : View.GONE}"
+            bind:description="@{@string/youtube_videos_description}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

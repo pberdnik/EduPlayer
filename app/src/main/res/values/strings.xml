@@ -26,4 +26,9 @@
     <string name="removed_from_learn">Removed from Learn</string>
     <string name="couldnt_load_account_info">Couldn\'t load account info</string>
     <string name="couldnt_refresh">Couldn\'t refresh</string>
+    <string name="press">Press </string>
+    <string name="learn_button_description">in playlists or videos to add them to your learning list</string>
+    <string name="add_library_button_description">in YouTube playlists or YouTube videos to add them to the local EduPlayer library</string>
+    <string name="add_device_video_button_description">to add videos from this device</string>
+    <string name="youtube_videos_description">You have no owned YouTube playlists. You can create them on YouTube itself. Please, note that YouTube doesn`t allow to use \"Watch later\" and \"Saved\" playlists, so here you will see only playlists created by you</string>
 </resources>
