@@ -116,3 +116,10 @@ data class VideoWithInfo(
     )
     val thumbnails: List<Thumbnail>
 )
+
+
+data class UserInfo(
+    val accountName: String? = null,
+    val avatarUrl: String? = null,
+    val accountDescription: String? = null
+)

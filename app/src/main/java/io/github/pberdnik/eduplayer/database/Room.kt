@@ -9,6 +9,7 @@ import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistSaveInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabaseUserInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DateConverter
@@ -19,8 +20,9 @@ import io.github.pberdnik.eduplayer.database.localentities.DatabaseDeviceVideo
 @Database(
     entities = [DatabasePlaylist::class, DatabaseChannel::class, DatabasePlaylistThumbnail::class,
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
-        DatabaseVideoThumbnail::class, DatabasePlaylistSaveInfo::class, DatabaseDeviceVideo::class],
-    version = 17,
+        DatabaseVideoThumbnail::class, DatabasePlaylistSaveInfo::class, DatabaseDeviceVideo::class,
+        DatabaseUserInfo::class],
+    version = 18,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class, UriConverter::class)
@@ -30,5 +32,6 @@ abstract class YoutubeDatabase : RoomDatabase() {
     abstract val thumbnailDao: ThumbnailDao
     abstract val playlistItemDao: PlaylistItemDao
     abstract val videoDao: VideoDao
+    abstract val userInfoDao: UserInfoDao
     abstract val localDao: LocalDao
 }

@@ -10,6 +10,7 @@ import io.github.pberdnik.eduplayer.database.LocalDao
 import io.github.pberdnik.eduplayer.database.PlaylistDao
 import io.github.pberdnik.eduplayer.database.PlaylistItemDao
 import io.github.pberdnik.eduplayer.database.ThumbnailDao
+import io.github.pberdnik.eduplayer.database.UserInfoDao
 import io.github.pberdnik.eduplayer.database.VideoDao
 import io.github.pberdnik.eduplayer.database.YoutubeDatabase
 import javax.inject.Singleton
@@ -56,4 +57,9 @@ object DatabaseModule {
     @JvmStatic
     @Provides
     fun provideLocalDao(db: YoutubeDatabase): LocalDao = db.localDao
+
+    @Reusable
+    @JvmStatic
+    @Provides
+    fun provideUserInfoDao(db: YoutubeDatabase): UserInfoDao = db.userInfoDao
 }

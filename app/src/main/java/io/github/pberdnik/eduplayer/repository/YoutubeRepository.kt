@@ -7,13 +7,16 @@ import io.github.pberdnik.eduplayer.database.ChannelDao
 import io.github.pberdnik.eduplayer.database.PlaylistDao
 import io.github.pberdnik.eduplayer.database.PlaylistItemDao
 import io.github.pberdnik.eduplayer.database.ThumbnailDao
+import io.github.pberdnik.eduplayer.database.UserInfoDao
 import io.github.pberdnik.eduplayer.database.VideoDao
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
+import io.github.pberdnik.eduplayer.domain.UserInfo
 import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
 import io.github.pberdnik.eduplayer.network.dto.NetworkPlaylists
 import io.github.pberdnik.eduplayer.network.dto.asChannelDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.asDatabaseModel
+import io.github.pberdnik.eduplayer.network.dto.asDatabaseUserInfo
 import io.github.pberdnik.eduplayer.network.dto.asThumbnailDatabaseModel
 import io.github.pberdnik.eduplayer.network.dto.videoIds
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +30,8 @@ class YoutubeRepository @Inject constructor(
     private val channelDao: ChannelDao,
     private val thumbnailDao: ThumbnailDao,
     private val playlistItemDao: PlaylistItemDao,
-    private val videoDao: VideoDao
+    private val videoDao: VideoDao,
+    private val infoDao: UserInfoDao
 ) {
 
     val playlists: LiveData<List<PlaylistWithInfo>> =
@@ -89,4 +93,11 @@ class YoutubeRepository @Inject constructor(
 
     suspend fun getSaveInfo(playlistId: String) = playlistDao.getSaveInfo(playlistId)
 
+    suspend fun updateUserInfo(selectedAccountName: String) {
+        val userInfo = youtubeDataApiService.getUserInfo()
+        infoDao.insertUserInfo(userInfo.asDatabaseUserInfo(selectedAccountName))
+    }
+
+    fun getUserInfo(selectedAccountName: String): LiveData<UserInfo> =
+        infoDao.getUserInfo(selectedAccountName)
 }

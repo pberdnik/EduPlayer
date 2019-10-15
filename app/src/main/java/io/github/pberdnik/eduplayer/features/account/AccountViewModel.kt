@@ -8,22 +8,21 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import io.github.pberdnik.eduplayer.R
-import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
+import io.github.pberdnik.eduplayer.domain.UserInfo
 import io.github.pberdnik.eduplayer.network.networkstate.NetworkState
 import io.github.pberdnik.eduplayer.network.networkstate.NetworkStateLiveData
+import io.github.pberdnik.eduplayer.repository.YoutubeRepository
 import io.github.pberdnik.eduplayer.util.Event
 import io.github.pberdnik.eduplayer.util.Operation
 import io.github.pberdnik.eduplayer.util.SnackbarMessages
 import io.github.pberdnik.eduplayer.util.performMainThreadOperation
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 const val PREF_ACCOUNT_NAME = "youtubeAccountName"
 
 class AccountViewModel @Inject constructor(
     private val credential: GoogleAccountCredential,
-    private val youtubeDataApiService: YoutubeDataApiService,
+    private val youtubeRepository: YoutubeRepository,
     private val sharedPreferences: SharedPreferences,
     private val networkStateLiveData: NetworkStateLiveData
 ) : ViewModel() {
@@ -31,11 +30,13 @@ class AccountViewModel @Inject constructor(
     private val _isSignedIn = MutableLiveData<Boolean>(false)
     val isSignedIn: LiveData<Boolean> = _isSignedIn
 
-    private val _avatarUrl = MutableLiveData<String>(null)
-    val avatarUrl: LiveData<String> = _avatarUrl
-
-    private val _accountDescription = MutableLiveData<String>(null)
-    val accountDescription: LiveData<String> = _accountDescription
+    val userInfo: LiveData<UserInfo> = Transformations.switchMap(isSignedIn) {isSignedIn ->
+        if (!isSignedIn) {
+            MutableLiveData(UserInfo())
+        } else {
+            youtubeRepository.getUserInfo(credential.selectedAccountName)
+        }
+    }
 
     private val _signIn = MutableLiveData<Boolean>(false)
     val signIn: LiveData<Boolean> = _signIn
@@ -64,7 +65,7 @@ class AccountViewModel @Inject constructor(
     fun signOut() {
         credential.selectedAccount = null
         _isSignedIn.value = false
-        _avatarUrl.value = null
+        sharedPreferences.edit().putString(PREF_ACCOUNT_NAME, null).apply()
     }
 
     fun newChooseAccountIntent(): Intent = credential.newChooseAccountIntent()
@@ -83,13 +84,7 @@ class AccountViewModel @Inject constructor(
             _refreshStatus,
             SnackbarMessages(errorMessageId = R.string.couldnt_load_account_info)
         ) {
-            val userInfo = withContext(Dispatchers.IO) { youtubeDataApiService.getUserInfo() }
-            if (userInfo.items.isNotEmpty()) {
-                _avatarUrl.value = userInfo.items[0].snippet.thumbnails.best
-                _accountDescription.value = userInfo.items[0].snippet.title
-            } else {
-                _accountDescription.value = credential.selectedAccountName
-            }
+            youtubeRepository.updateUserInfo(credential.selectedAccountName)
         }
     }
 

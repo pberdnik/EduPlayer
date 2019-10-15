@@ -12,12 +12,14 @@ import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItem
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistItemThumbnail
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistSaveInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabasePlaylistThumbnail
+import io.github.pberdnik.eduplayer.database.entities.DatabaseUserInfo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideo
 import io.github.pberdnik.eduplayer.database.entities.DatabaseVideoThumbnail
 import io.github.pberdnik.eduplayer.database.entities.createSaveInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistItemWithInfo
 import io.github.pberdnik.eduplayer.domain.PlaylistWithInfo
 import io.github.pberdnik.eduplayer.domain.SaveInfo
+import io.github.pberdnik.eduplayer.domain.UserInfo
 import io.github.pberdnik.eduplayer.domain.VideoWithInfo
 
 
@@ -125,4 +127,14 @@ interface VideoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg videos: DatabaseVideo)
+}
+
+
+@Dao
+interface UserInfoDao {
+    @Query("SELECT * FROM user_info WHERE accountName = :accountName")
+    fun getUserInfo(accountName: String): LiveData<UserInfo>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUserInfo(userInfo: DatabaseUserInfo)
 }
