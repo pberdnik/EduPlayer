@@ -11,7 +11,7 @@ import io.github.pberdnik.eduplayer.network.YoutubeDataApiService
 import io.github.pberdnik.eduplayer.util.Event
 import io.github.pberdnik.eduplayer.util.Operation
 import io.github.pberdnik.eduplayer.util.SnackbarMessages
-import io.github.pberdnik.eduplayer.util.performIOOperation
+import io.github.pberdnik.eduplayer.util.performMainThreadOperation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -69,7 +69,7 @@ class AccountViewModel @Inject constructor(
 
     private fun loadAccountInfo() {
         _isSignedIn.value = true
-        performIOOperation(
+        performMainThreadOperation(
             _refreshStatus,
             SnackbarMessages(errorMessageId = R.string.couldnt_load_account_info)
         ) {

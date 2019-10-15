@@ -27,6 +27,13 @@ fun ViewModel.performIOOperation(
 ) =
     performLongOperation(Dispatchers.IO, status, snackbarMessages, block)
 
+fun ViewModel.performMainThreadOperation(
+    status: MutableLiveData<Event<Operation>>? = null,
+    snackbarMessages: SnackbarMessages? = null,
+    block: suspend () -> Unit
+) =
+    performLongOperation(Dispatchers.Main, status, snackbarMessages, block)
+
 
 private fun ViewModel.performLongOperation(
     coroutineDispatcher: CoroutineDispatcher,
