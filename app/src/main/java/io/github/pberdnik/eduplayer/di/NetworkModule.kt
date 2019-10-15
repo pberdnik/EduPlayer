@@ -50,7 +50,7 @@ object NetworkModule {
         }
 
         return OkHttpClient().newBuilder()
-//            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
             .addInterceptor(apiKeyAndAuthInterceptor)
             .build()
     }

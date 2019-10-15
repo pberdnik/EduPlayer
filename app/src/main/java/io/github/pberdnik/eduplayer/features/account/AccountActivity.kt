@@ -9,7 +9,7 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.ActivityNavigator
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -46,12 +46,12 @@ class AccountActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks
         setSupportActionBar(binding.accountToolbar)
         binding.accountToolbar.setNavigationOnClickListener { finish() }
 
-        viewModel.signIn.observe(this, Observer {
-            if (it) {
+        viewModel.signIn.observe(this) { isNotSignedIn ->
+            if (isNotSignedIn) {
                 viewModel.displaySignInDialogComplete()
                 signIn()
             }
-        })
+        }
     }
 
     /**
