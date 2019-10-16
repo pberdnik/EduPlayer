@@ -27,6 +27,8 @@
         <activity
             android:name=".features.account.AccountActivity"
             android:label="@string/account"/>
+
+        <activity android:name=".features.videoplayer.VideoPlayerActivity"/>
     </application>
 
 </manifest>

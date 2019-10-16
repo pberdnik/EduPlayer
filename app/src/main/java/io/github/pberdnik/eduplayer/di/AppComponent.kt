@@ -11,6 +11,7 @@ import io.github.pberdnik.eduplayer.features.library.devicevideos.DeviceVideosVi
 import io.github.pberdnik.eduplayer.features.library.eduplayerplaylists.EduPlayerPlaylistsViewModel
 import io.github.pberdnik.eduplayer.features.library.youtubeplaylists.YoutubePlaylistsViewModel
 import io.github.pberdnik.eduplayer.features.playlistdetails.PlaylistDetailsViewModel
+import io.github.pberdnik.eduplayer.features.videoplayer.VideoPlayerViewModel
 import io.github.pberdnik.eduplayer.network.networkstate.NetworkStateBroadcastReceiver
 import javax.inject.Singleton
 
@@ -46,4 +47,6 @@ interface AppComponent {
     val playlistDetailsViewModelFactory: PlaylistDetailsViewModel.Factory
 
     val networkStateBroadcastReceiver: NetworkStateBroadcastReceiver
+
+    val videoPlayerViewModel: VideoPlayerViewModel
 }

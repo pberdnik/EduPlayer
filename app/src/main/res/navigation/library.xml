@@ -15,6 +15,10 @@
         <action
             android:id="@+id/action_showDetails"
             app:destination="@id/playlistDetails_dest" />
+        <action
+            android:id="@+id/action_showVideoPlayer"
+            app:destination="@id/videoPlayerActivity">
+        </action>
     </fragment>
 
     <fragment
@@ -27,6 +31,16 @@
             app:argType="string" />
     </fragment>
 
-    <include app:graph="@navigation/account"/>
+    <include app:graph="@navigation/account" />
+
+    <activity
+        android:id="@+id/videoPlayerActivity"
+        android:name="io.github.pberdnik.eduplayer.features.videoplayer.VideoPlayerActivity"
+        android:label="Player"
+        tools:layout="@layout/video_player_activity">
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </activity>
 
 </navigation>
