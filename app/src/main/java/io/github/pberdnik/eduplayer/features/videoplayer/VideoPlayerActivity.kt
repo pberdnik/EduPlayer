@@ -1,15 +1,14 @@
 package io.github.pberdnik.eduplayer.features.videoplayer
 
-import android.net.Uri
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navArgs
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.VideoPlayerActivityBinding
@@ -26,7 +25,16 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     lateinit var binding: VideoPlayerActivityBinding
 
-    var player: SimpleExoPlayer? = null
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MediaPlaybackService.LocalBinder
+            binding.playerView.player = binder.player
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            binding.playerView.player = null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,26 +45,24 @@ class VideoPlayerActivity : AppCompatActivity() {
             it.vm = viewModel
             it.lifecycleOwner = this
         }
+
+        val intent = Intent(this, MediaPlaybackService::class.java).apply {
+            putExtra(MediaPlaybackService.EXTRA_URI, args.uri)
+        }
+        Util.startForegroundService(this, intent)
     }
 
     override fun onStart() {
         super.onStart()
-        player = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
-        binding.playerView.player = player
-        val dataSourceFactory = DefaultDataSourceFactory(
-            this,
-            Util.getUserAgent(this, getString(R.string.app_name))
+        bindService(
+            Intent(this, MediaPlaybackService::class.java),
+            connection,
+            Context.BIND_AUTO_CREATE
         )
-        val mediaSource = ExtractorMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(Uri.parse(args.uri))
-        player?.prepare(mediaSource)
-        player?.playWhenReady = true
     }
 
     override fun onStop() {
-        binding.playerView.player = null
-        player?.release()
-        player = null
         super.onStop()
+        unbindService(connection)
     }
 }

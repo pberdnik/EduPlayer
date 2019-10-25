@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="io.github.pberdnik.eduplayer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".EduPlayerApplication"
@@ -13,7 +15,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -26,9 +29,17 @@
 
         <activity
             android:name=".features.account.AccountActivity"
-            android:label="@string/account"/>
+            android:label="@string/account" />
 
-        <activity android:name=".features.videoplayer.VideoPlayerActivity"/>
+        <activity android:name=".features.videoplayer.VideoPlayerActivity" />
+
+        <service
+            android:name=".features.videoplayer.MediaPlaybackService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

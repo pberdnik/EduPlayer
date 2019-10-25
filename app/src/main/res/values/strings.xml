@@ -31,4 +31,6 @@
     <string name="add_library_button_description">in YouTube playlists or YouTube videos to add them to the local EduPlayer library</string>
     <string name="add_device_video_button_description">to add videos from this device</string>
     <string name="youtube_videos_description">You have no owned YouTube playlists. You can create them on YouTube itself. Please, note that YouTube doesn`t allow to use \"Watch later\" and \"Saved\" playlists, so here you will see only playlists created by you</string>
+    <string name="playback_channel_name">Playback</string>
+    <string name="playback_channel_description">Playback channel description</string>
 </resources>
