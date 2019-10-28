@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -26,14 +25,18 @@ class DeviceVideosFragment : Fragment() {
         val binding = DeviceVideosFragmentBinding.inflate(inflater).also {
             it.vm = viewModel
             it.lifecycleOwner = viewLifecycleOwner
-            it.deviceVideosRv.adapter = DeviceVideoAdapter(DeviceVideoClickListener {dv ->
-                viewModel.openVideoPlayer(dv.uri)
+            it.deviceVideosRv.adapter = DeviceVideoAdapter(DeviceVideoClickListener { dv ->
+                viewModel.openVideoPlayer(dv)
             })
         }
 
-        viewModel.navigateToVideoPlayer.observe(viewLifecycleOwner) {event ->
-            event.getIfNotHandled()?.let { uri ->
-                findNavController().navigate(LibraryFragmentDirections.actionShowVideoPlayer(uri))
+        viewModel.navigateToVideoPlayer.observe(viewLifecycleOwner) { event ->
+            event.getIfNotHandled()?.let { deviceVideo ->
+                findNavController().navigate(
+                    LibraryFragmentDirections.actionShowVideoPlayer(
+                        deviceVideo
+                    )
+                )
             }
         }
 

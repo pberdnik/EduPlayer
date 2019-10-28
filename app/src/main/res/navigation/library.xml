@@ -6,7 +6,6 @@
     app:startDestination="@id/library_dest"
     tools:ignore="UnusedNavigation">
 
-
     <fragment
         android:id="@+id/library_dest"
         android:name="io.github.pberdnik.eduplayer.features.library.LibraryFragment"
@@ -39,8 +38,8 @@
         android:label="Player"
         tools:layout="@layout/video_player_activity">
         <argument
-            android:name="uri"
-            app:argType="string" />
+            android:name="deviceVideo"
+            app:argType="io.github.pberdnik.eduplayer.domain.DeviceVideo" />
     </activity>
 
 </navigation>

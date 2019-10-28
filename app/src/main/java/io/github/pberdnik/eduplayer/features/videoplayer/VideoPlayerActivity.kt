@@ -47,7 +47,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
 
         val intent = Intent(this, MediaPlaybackService::class.java).apply {
-            putExtra(MediaPlaybackService.EXTRA_URI, args.uri)
+            putExtra(MediaPlaybackService.EXTRA_DEVICE_VIDEO, args.deviceVideo)
         }
         Util.startForegroundService(this, intent)
     }
