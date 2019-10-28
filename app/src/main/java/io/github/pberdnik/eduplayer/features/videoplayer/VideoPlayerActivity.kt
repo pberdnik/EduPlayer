@@ -25,11 +25,10 @@ class VideoPlayerActivity : AppCompatActivity() {
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MediaPlaybackService.LocalBinder
-            binding.playerView.player = binder.player
+            binder.service.init(viewModel.deviceVideo, viewModel.player)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            binding.playerView.player = null
         }
     }
 
