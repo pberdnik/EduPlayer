@@ -1,15 +1,12 @@
 package io.github.pberdnik.eduplayer.features.videoplayer
 
 import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navArgs
-import com.google.android.exoplayer2.util.Util
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.VideoPlayerActivityBinding
 import io.github.pberdnik.eduplayer.di.injector
@@ -17,11 +14,11 @@ import io.github.pberdnik.eduplayer.di.viewModel
 
 class VideoPlayerActivity : AppCompatActivity() {
 
-    val viewModel by viewModel {
-        injector.videoPlayerViewModel
-    }
-
     private val args by navArgs<VideoPlayerActivityArgs>()
+
+    val viewModel by viewModel {
+        injector.videoPlayerViewModelFactory.create(args.deviceVideo)
+    }
 
     lateinit var binding: VideoPlayerActivityBinding
 
@@ -44,25 +41,21 @@ class VideoPlayerActivity : AppCompatActivity() {
         ).also {
             it.vm = viewModel
             it.lifecycleOwner = this
+            it.playerView.player = viewModel.player
         }
-
-        val intent = Intent(this, MediaPlaybackService::class.java).apply {
-            putExtra(MediaPlaybackService.EXTRA_DEVICE_VIDEO, args.deviceVideo)
-        }
-        Util.startForegroundService(this, intent)
     }
 
     override fun onStart() {
         super.onStart()
-        bindService(
-            Intent(this, MediaPlaybackService::class.java),
-            connection,
-            Context.BIND_AUTO_CREATE
-        )
+//        bindService(
+//            Intent(this, MediaPlaybackService::class.java),
+//            connection,
+//            Context.BIND_AUTO_CREATE
+//        )
     }
 
     override fun onStop() {
         super.onStop()
-        unbindService(connection)
+//        unbindService(connection)
     }
 }

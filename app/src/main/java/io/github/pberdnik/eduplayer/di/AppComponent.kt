@@ -22,7 +22,8 @@ import javax.inject.Singleton
         SharedPreferencesModule::class,
         DatabaseModule::class,
         NetworkModule::class,
-        NetworkStateModule::class
+        NetworkStateModule::class,
+        MediaPlayerModule::class
     ]
 )
 @Singleton
@@ -48,5 +49,5 @@ interface AppComponent {
 
     val networkStateBroadcastReceiver: NetworkStateBroadcastReceiver
 
-    val videoPlayerViewModel: VideoPlayerViewModel
+    val videoPlayerViewModelFactory: VideoPlayerViewModel.Factory
 }
