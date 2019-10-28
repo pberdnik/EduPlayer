@@ -10,7 +10,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
 
-fun MediaPlaybackService.createMediaSessionConnector(
+fun createMediaSessionConnector(
     mediaSession: MediaSessionCompat,
     deviceVideo: DeviceVideo,
     bitmap: Bitmap

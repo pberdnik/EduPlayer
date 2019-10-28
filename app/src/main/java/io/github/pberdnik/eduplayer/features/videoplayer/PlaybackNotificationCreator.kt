@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import timber.log.Timber
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
@@ -38,8 +39,10 @@ fun MediaPlaybackService.createNotification(
 
 private fun MediaPlaybackService.createNotificationListener() =
     object : PlayerNotificationManager.NotificationListener {
-        override fun onNotificationStarted(notificationId: Int, notification: Notification?) =
+        override fun onNotificationStarted(notificationId: Int, notification: Notification?) {
+            Timber.d("CALLED onNotificationStarted")
             startForeground(notificationId, notification)
+        }
 
         override fun onNotificationCancelled(notificationId: Int) = stopSelf()
     }

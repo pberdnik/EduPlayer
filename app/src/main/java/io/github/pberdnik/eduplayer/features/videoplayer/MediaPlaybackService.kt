@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import timber.log.Timber
 
 class MediaPlaybackService : Service() {
 
@@ -25,27 +26,23 @@ class MediaPlaybackService : Service() {
     private lateinit var playerNotificationManager: PlayerNotificationManager
     private val playbackStateBuilder = PlaybackStateCompat.Builder()
     private var bitmap: Bitmap? = null
+    private lateinit var deviceVideo: DeviceVideo
 
-
-    private val binder = LocalBinder()
 
     inner class LocalBinder : Binder() {
         val service get() = this@MediaPlaybackService
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return binder
-    }
+    private val binder = LocalBinder()
 
-    fun init(deviceVideo: DeviceVideo, player: SimpleExoPlayer) {
-        mediaSession = createMediaSession(player).apply {
-            isActive = true
-        }
+    override fun onBind(intent: Intent?): IBinder? = binder
 
-        playerNotificationManager = createNotification(this, deviceVideo).apply {
-            setPlayer(player)
-            setMediaSessionToken(mediaSession.sessionToken)
-        }
+    fun init(deviceVideo: DeviceVideo, player: SimpleExoPlayer, mediaSession: MediaSessionCompat) {
+        this.deviceVideo = deviceVideo
+        this.player = player
+        this.mediaSession = mediaSession
+
+        bitmap = getDrawable(R.drawable.ic_school_black_24dp)?.toBitmap()
 
         val mediaSessionConnector =
             createMediaSessionConnector(mediaSession, deviceVideo, bitmap!!).apply {
@@ -54,8 +51,12 @@ class MediaPlaybackService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent == null) throw RuntimeException("Can't start service due to null intent")
-        bitmap = getDrawable(R.drawable.ic_school_black_24dp)?.toBitmap()
+//        if (intent == null) throw RuntimeException("Can't start service due to null intent")
+        Timber.d("CALLED ON_START_COMMAND")
+        playerNotificationManager = createNotification(this, deviceVideo).apply {
+            setPlayer(player)
+            setMediaSessionToken(mediaSession.sessionToken)
+        }
         return START_STICKY
     }
 

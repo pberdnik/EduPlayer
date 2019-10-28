@@ -2,6 +2,7 @@ package io.github.pberdnik.eduplayer.features.videoplayer
 
 import android.content.Context
 import android.net.Uri
+import android.support.v4.media.session.MediaSessionCompat
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -18,11 +19,15 @@ class VideoPlayerViewModel @AssistedInject constructor(
 ) : ViewModel() {
 
     val player: SimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(context, DefaultTrackSelector())
+    val mediaSession: MediaSessionCompat
 
     init {
         val mediaSource = mediaSourceFactory.createMediaSource(Uri.parse(deviceVideo.uri))
         player.prepare(mediaSource)
         player.playWhenReady = true
+        mediaSession = createMediaSession(context, player).apply {
+            isActive = true
+        }
     }
 
     override fun onCleared() {

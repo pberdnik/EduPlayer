@@ -1,16 +1,20 @@
 package io.github.pberdnik.eduplayer.features.videoplayer
 
 import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navArgs
+import com.google.android.exoplayer2.util.Util
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.databinding.VideoPlayerActivityBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
+import timber.log.Timber
 
 class VideoPlayerActivity : AppCompatActivity() {
 
@@ -22,10 +26,14 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     lateinit var binding: VideoPlayerActivityBinding
 
+    lateinit var mediaPlaybackService: MediaPlaybackService
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MediaPlaybackService.LocalBinder
-            binder.service.init(viewModel.deviceVideo, viewModel.player)
+            mediaPlaybackService = binder.service.apply {
+                init(viewModel.deviceVideo, viewModel.player, viewModel.mediaSession)
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -42,19 +50,30 @@ class VideoPlayerActivity : AppCompatActivity() {
             it.lifecycleOwner = this
             it.playerView.player = viewModel.player
         }
+
+        bindService(
+            Intent(this, MediaPlaybackService::class.java),
+            connection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     override fun onStart() {
         super.onStart()
-//        bindService(
-//            Intent(this, MediaPlaybackService::class.java),
-//            connection,
-//            Context.BIND_AUTO_CREATE
-//        )
+        if (::mediaPlaybackService.isInitialized)
+            mediaPlaybackService.stopForeground(true)
     }
 
     override fun onStop() {
+        if (!isChangingConfigurations && !isFinishing) {
+            Timber.d("STARTING NOTIFICATION")
+            Util.startForegroundService(this, Intent(this, MediaPlaybackService::class.java))
+        }
         super.onStop()
-//        unbindService(connection)
+    }
+
+    override fun onDestroy() {
+        unbindService(connection)
+        super.onDestroy()
     }
 }
