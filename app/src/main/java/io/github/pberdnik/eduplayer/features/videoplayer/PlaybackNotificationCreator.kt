@@ -12,14 +12,14 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
-import timber.log.Timber
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
 
 fun MediaPlaybackService.createNotification(
     context: MediaPlaybackService,
-    deviceVideo: DeviceVideo
+    deviceVideo: DeviceVideo,
+    notificationInfo: NotificationInfo
 ): PlayerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
     this,
     PLAYBACK_CHANNEL_ID,
@@ -27,7 +27,7 @@ fun MediaPlaybackService.createNotification(
     R.string.playback_channel_description,
     PLAYBACK_NOTIFICATION_ID,
     createMediaDescriptionAdapter(deviceVideo, context),
-    createNotificationListener()
+    createNotificationListener(notificationInfo)
 ).apply {
     setUseNavigationActions(false)
     setUseStopAction(true)
@@ -36,12 +36,16 @@ fun MediaPlaybackService.createNotification(
     setSmallIcon(R.drawable.ic_edu_logo_notification)
 }
 
+data class NotificationInfo(
+    var notificationId: Int = 0,
+    var notification: Notification? = null
+)
 
-private fun MediaPlaybackService.createNotificationListener() =
+private fun MediaPlaybackService.createNotificationListener(notificationInfo: NotificationInfo) =
     object : PlayerNotificationManager.NotificationListener {
         override fun onNotificationStarted(notificationId: Int, notification: Notification?) {
-            Timber.d("CALLED onNotificationStarted")
-            startForeground(notificationId, notification)
+            notificationInfo.notificationId = notificationId
+            notificationInfo.notification = notification
         }
 
         override fun onNotificationCancelled(notificationId: Int) = stopSelf()

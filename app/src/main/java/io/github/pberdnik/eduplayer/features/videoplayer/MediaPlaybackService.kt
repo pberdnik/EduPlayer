@@ -37,12 +37,18 @@ class MediaPlaybackService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = binder
 
+    private val notificationInfo = NotificationInfo()
+
     fun init(deviceVideo: DeviceVideo, player: SimpleExoPlayer, mediaSession: MediaSessionCompat) {
         this.deviceVideo = deviceVideo
         this.player = player
         this.mediaSession = mediaSession
 
         bitmap = getDrawable(R.drawable.ic_school_black_24dp)?.toBitmap()
+
+        playerNotificationManager = createNotification(this, deviceVideo, notificationInfo).apply {
+            setMediaSessionToken(mediaSession.sessionToken)
+        }
 
         val mediaSessionConnector =
             createMediaSessionConnector(mediaSession, deviceVideo, bitmap!!).apply {
@@ -51,13 +57,14 @@ class MediaPlaybackService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        if (intent == null) throw RuntimeException("Can't start service due to null intent")
         Timber.d("CALLED ON_START_COMMAND")
-        playerNotificationManager = createNotification(this, deviceVideo).apply {
-            setPlayer(player)
-            setMediaSessionToken(mediaSession.sessionToken)
-        }
+        playerNotificationManager.setPlayer(player)
+        startForeground(notificationInfo.notificationId, notificationInfo.notification)
         return START_STICKY
+    }
+
+    fun clearNotification() {
+        playerNotificationManager.setPlayer(null)
     }
 
     private fun updatePlaybackState() {
@@ -73,11 +80,5 @@ class MediaPlaybackService : Service() {
                 1.0f
             ) // Playback speed
         mediaSession.setPlaybackState(playbackStateBuilder.build())
-    }
-
-    override fun onDestroy() {
-        player.playWhenReady = false
-        player.release()
-        super.onDestroy()
     }
 }
