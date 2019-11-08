@@ -1,6 +1,13 @@
 package io.github.pberdnik.eduplayer.customview.playbackspeedcontrol
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.Typeface
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withTranslation
 import androidx.core.math.MathUtils
@@ -14,6 +21,8 @@ private data class Line(val x: Float, val height: Float, val strokeWidth: Float)
 
 class Bar {
     var mainColor = Color.BLUE
+    var digitsColor = Color.BLUE
+    var onColor = Color.BLUE
     var density = 1f
         set(value) {
             field = max(1f, value - fakePaddingLeft)
@@ -47,11 +56,11 @@ class Bar {
 
     private val activePaint by lazy {
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = mainColor
+            color = onColor
             strokeWidth = lineStrokeWidth
             strokeCap = Paint.Cap.ROUND
             style = Paint.Style.STROKE
-            setShadowLayer(5f, 0f, 0f, mainColor)
+            setShadowLayer(lineStrokeWidth, 0f, 0f, mainColor)
         }
     }
 
@@ -66,10 +75,12 @@ class Bar {
 
     private val digitPaint by lazy {
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = mainColor
+            style = Paint.Style.FILL
+            strokeWidth = lineStrokeWidth / 2
+            color = digitsColor
             isAntiAlias = true
             typeface = digitTypeface
-            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, mainColor)
+//            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, digitsColor)
         }
     }
 
@@ -166,37 +177,58 @@ class Bar {
         digitPaint.apply {
             textSize = h / 2
             textAlign = Paint.Align.CENTER
-            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, mainColor)
+            color = onColor
+//            setShadowLayer(lineStrokeWidth / 2, 0f, 0f, digitsColor)
         }
         val digits = "0.25x"
         digitPaint.getTextBounds(digits, 0, digits.length, textBounds)
         val textX = lines[0].x
         val textY = h - textBounds.bottom
-        drawText(digits, textX, textY, digitPaint)
+        drawTextWithStroke(digits, textX, textY, digitPaint)
     }
 
     private fun Canvas.draw1xWithLine() {
         digitPaint.apply {
             textSize = h * 0.7f
             textAlign = Paint.Align.CENTER
-            if (activeX < w * 0.49) clearShadowLayer()
+            if (activeX < w * 0.49) {
+                color = digitsColor
+                clearShadowLayer()
+            } else {
+                color = onColor
+            }
         }
         val digits = "1x"
         val textX = w / 2
         val textY = h * 0.66f
-        drawText(digits, textX, textY, digitPaint)
+        drawTextWithStroke(digits, textX, textY, digitPaint)
     }
 
     private fun Canvas.draw4x() {
         digitPaint.apply {
             textSize = h
             textAlign = Paint.Align.LEFT
-            if (activeX < w) clearShadowLayer()
+            if (activeX < w) {
+                color = digitsColor
+                clearShadowLayer()
+            } else {
+                color = onColor
+            }
         }
         val digits = "4x"
         digitPaint.getTextBounds(digits, 0, digits.length, textBounds)
         val textX = lines[lines.size - 1].x + textBounds.exactCenterX() / 2
         val textY = h * 0.8f + textBounds.bottom
+        drawTextWithStroke(digits, textX, textY, digitPaint)
+    }
+
+    private fun Canvas.drawTextWithStroke(digits: String, textX: Float, textY: Float, digitPaint: Paint) {
         drawText(digits, textX, textY, digitPaint)
+        digitPaint.apply {
+            style = Paint.Style.STROKE
+            color = mainColor
+        }
+        drawText(digits, textX, textY, digitPaint)
+        digitPaint.style = Paint.Style.FILL
     }
 }

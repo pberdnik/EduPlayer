@@ -40,8 +40,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/player_control_top_margin"
-            android:background="@drawable/white_to_transparent"
-            psc:color="@color/colorAccent"/>
+            android:background="@drawable/black_to_transparent"
+            psc:color="?attr/colorOnSecondary"
+            psc:digits_color="?attr/colorOnSecondary"
+            psc:on_color="@color/colorAccent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -42,6 +42,20 @@ class PlaybackSpeedControl : View {
             invalidate()
         }
 
+    var digitsColor = ContextCompat.getColor(context, R.color.colorPrimary)
+        set(value) {
+            field = value
+            bar.digitsColor = digitsColor
+            invalidate()
+        }
+
+    var onColor = ContextCompat.getColor(context, R.color.colorPrimary)
+        set(value) {
+            field = value
+            bar.onColor = onColor
+            invalidate()
+        }
+
     // values dependencies: currentX => speedValue => bar.speedValue
 
     var speedValue = 1f
@@ -74,6 +88,8 @@ class PlaybackSpeedControl : View {
         )
         try {
             color = a.getColor(R.styleable.PlaybackSpeedControl_color, color)
+            digitsColor = a.getColor(R.styleable.PlaybackSpeedControl_digits_color, color)
+            onColor = a.getColor(R.styleable.PlaybackSpeedControl_on_color, color)
             speedValue = a.getFloat(R.styleable.PlaybackSpeedControl_value, speedValue)
         } finally {
             a.recycle()
