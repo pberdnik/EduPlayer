@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="player_control_bottom_margin">8dp</dimen>
+    <dimen name="player_control_top_margin">0dp</dimen>
+</resources>

@@ -6,4 +6,6 @@
     <color name="purple_700">#7b1fa2</color>
     <color name="purple_700_dark">#4a0072</color>
     <color name="dark_gray">#444444</color>
+    <color name="light_gray">#bbbbbb</color>
+    <color name="x_light_gray">#dddddd</color>
 </resources>

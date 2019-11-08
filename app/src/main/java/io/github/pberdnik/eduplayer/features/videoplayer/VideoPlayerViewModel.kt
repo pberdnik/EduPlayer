@@ -7,6 +7,8 @@ import android.content.ServiceConnection
 import android.net.Uri
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -16,6 +18,8 @@ import com.google.android.exoplayer2.util.Util
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+
+private const val  REWIND_SCALE = 60_000
 
 class VideoPlayerViewModel @AssistedInject constructor(
     private val context: Context,
@@ -62,6 +66,17 @@ class VideoPlayerViewModel @AssistedInject constructor(
         )
     }
 
+    private val _isFullscreen = MutableLiveData<Boolean>(true)
+    val isFullscreen: LiveData<Boolean> = _isFullscreen
+
+    fun turnOnFullscreen() {
+        _isFullscreen.value = true
+    }
+
+    fun turnOffFullscreen() {
+        _isFullscreen.value = false
+    }
+
     fun showPlayerNotification() {
         Util.startForegroundService(context, Intent(context, MediaPlaybackService::class.java))
     }
@@ -73,6 +88,10 @@ class VideoPlayerViewModel @AssistedInject constructor(
         }
     }
 
+    fun playOrPause() {
+        player.playWhenReady = !player.playWhenReady
+    }
+
     override fun onCleared() {
         mediaPlaybackService?.stopForeground(true)
         mediaPlaybackService?.stopSelf()
@@ -80,6 +99,24 @@ class VideoPlayerViewModel @AssistedInject constructor(
         player.playWhenReady = false
         player.release()
         super.onCleared()
+    }
+
+    private var isRewinding = false
+    private var posBeforeRewind = 0L
+
+    fun rewind(rewindFactor: Float, lastChange: Boolean) {
+        if (lastChange) {
+            player.playWhenReady = true
+            isRewinding = false
+            return
+        }
+        if (!isRewinding) {
+            isRewinding = true
+            posBeforeRewind = player.currentPosition
+        }
+        val seekTo = (posBeforeRewind + REWIND_SCALE * rewindFactor).toLong()
+        player.seekTo(seekTo.coerceIn(0, player.duration))
+        player.playWhenReady = false
     }
 
     @AssistedInject.Factory
