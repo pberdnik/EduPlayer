@@ -5,12 +5,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.util.Log
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
 import androidx.core.math.MathUtils
+import androidx.core.view.isVisible
 import io.github.pberdnik.eduplayer.R
 import kotlin.math.min
 
@@ -79,6 +81,27 @@ class PlaybackSpeedControl : View {
     private val optimalW = (200 * resources.displayMetrics.density).toInt()
     private val optimalH = (optimalW * optimalRatio).toInt()
 
+    private val gestureListener = object : GestureDetector.SimpleOnGestureListener() {
+        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+            currentX = e2.x
+            invalidate()
+            return true
+        }
+
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            if (isVisible) {
+                currentX = e.x
+            }
+            invalidate()
+            return true
+        }
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+    }
+    private val gestureDetector = GestureDetector(context, gestureListener)
+
     private fun initView(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(
             attrs,
@@ -145,22 +168,7 @@ class PlaybackSpeedControl : View {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null) {
-            return false
-        }
-        val x = event.x
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                currentX = x
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> {
-                currentX = x
-                invalidate()
-            }
-
-        }
-        return true
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
     private val bar by lazy {
