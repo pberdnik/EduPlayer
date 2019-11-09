@@ -19,7 +19,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
 
-private const val  REWIND_SCALE = 60_000
+private const val REWIND_SCALE = 60_000
 
 class VideoPlayerViewModel @AssistedInject constructor(
     private val context: Context,

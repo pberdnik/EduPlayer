@@ -9,6 +9,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.navArgs
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.customview.GesturePlayerControlView
+import io.github.pberdnik.eduplayer.customview.playbackspeedcontrol.PlaybackSpeedControl
 import io.github.pberdnik.eduplayer.databinding.VideoPlayerActivityBinding
 import io.github.pberdnik.eduplayer.di.injector
 import io.github.pberdnik.eduplayer.di.viewModel
@@ -17,15 +18,15 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private val args by navArgs<VideoPlayerActivityArgs>()
 
-    val viewModel by viewModel {
+    private val viewModel by viewModel {
         injector.videoPlayerViewModelFactory.create(args.deviceVideo)
     }
 
-    lateinit var binding: VideoPlayerActivityBinding
+    private lateinit var binding: VideoPlayerActivityBinding
 
-    lateinit var videoContainer: FrameLayout
+    private lateinit var videoContainer: FrameLayout
 
-    val onControlsListener = object : GesturePlayerControlView.OnChangeListener {
+    private val onControlsListener = object : GesturePlayerControlView.OnChangeListener {
         override fun onLocationChanged(
             playerControlsView: GesturePlayerControlView,
             scaleFactor: Float,
@@ -64,9 +65,16 @@ class VideoPlayerActivity : AppCompatActivity() {
             it.playerView.player = viewModel.player
             it.gesturePlayerControlView.onChangeListener = onControlsListener
             videoContainer = it.playerView.findViewById(R.id.exo_content_frame)
+            it.playbackSpeedControl.onChangeListener = object : PlaybackSpeedControl.OnChangeListener {
+                override fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float) {
+
+                }
+            }
         }
 
-        viewModel.isFullscreen.observe(this) {isFullscreen ->
+        viewModel.turnOnFullscreen()
+
+        viewModel.isFullscreen.observe(this) { isFullscreen ->
             if (isFullscreen) hideSystemUI()
             else showSystemUI()
         }

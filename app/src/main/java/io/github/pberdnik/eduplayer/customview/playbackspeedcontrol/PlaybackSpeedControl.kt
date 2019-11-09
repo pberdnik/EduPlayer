@@ -3,6 +3,8 @@ package io.github.pberdnik.eduplayer.customview.playbackspeedcontrol
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
@@ -12,15 +14,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
 import androidx.core.math.MathUtils
-import androidx.core.view.isVisible
 import io.github.pberdnik.eduplayer.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.min
 
+
+private const val HIDE_TIMEOUT = 3_000L
 
 class PlaybackSpeedControl : View {
 
     interface OnChangeListener {
-        fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float)
+        fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float) {}
     }
 
     constructor(context: Context) : super(context) {
@@ -31,9 +40,16 @@ class PlaybackSpeedControl : View {
         initView(attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
         initView(attrs, defStyle)
     }
+
+    private var viewCoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var hidePscJob: Job? = null
 
     var onChangeListener: OnChangeListener? = null
 
@@ -55,6 +71,12 @@ class PlaybackSpeedControl : View {
         set(value) {
             field = value
             bar.onColor = onColor
+            invalidate()
+        }
+
+    private var isTransparent = true
+        set(value) {
+            field = value
             invalidate()
         }
 
@@ -82,16 +104,19 @@ class PlaybackSpeedControl : View {
     private val optimalH = (optimalW * optimalRatio).toInt()
 
     private val gestureListener = object : GestureDetector.SimpleOnGestureListener() {
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
             currentX = e2.x
             invalidate()
             return true
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            if (isVisible) {
-                currentX = e.x
-            }
+            currentX = e.x
             invalidate()
             return true
         }
@@ -147,14 +172,23 @@ class PlaybackSpeedControl : View {
                         else -> desW to desH.toInt()
                     }
                 }
-                MeasureSpec.UNSPECIFIED -> (min(specW, optimalW)) to (min(specW, optimalW) * optimalRatio).toInt()
+                MeasureSpec.UNSPECIFIED -> (min(specW, optimalW)) to (min(
+                    specW,
+                    optimalW
+                ) * optimalRatio).toInt()
                 else -> 0 to 0
             }
             MeasureSpec.UNSPECIFIED -> when (specModeH) {
                 MeasureSpec.EXACTLY -> (specH / optimalRatio).toInt() to specH
-                MeasureSpec.AT_MOST -> (min(specH, optimalH) * optimalRatio).toInt() to (min(specH, optimalH))
+                MeasureSpec.AT_MOST -> (min(specH, optimalH) * optimalRatio).toInt() to (min(
+                    specH,
+                    optimalH
+                ))
                 MeasureSpec.UNSPECIFIED ->
-                    min(specW, (specH / optimalRatio).toInt()) to min(specH, (specW * optimalRatio).toInt())
+                    min(specW, (specH / optimalRatio).toInt()) to min(
+                        specH,
+                        (specW * optimalRatio).toInt()
+                    )
                 else -> 0 to 0
             }
             else -> 0 to 0
@@ -168,7 +202,29 @@ class PlaybackSpeedControl : View {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> show()
+            MotionEvent.ACTION_UP -> hideOnTimeout()
+        }
+
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    fun show() {
+        hidePscJob?.cancel()
+        isTransparent = false
+    }
+
+    fun hide() {
+        hideOnTimeout(0L)
+    }
+
+    fun hideOnTimeout(timeout: Long = HIDE_TIMEOUT) {
+        hidePscJob?.cancel()
+        hidePscJob = viewCoroutineScope.launch {
+            delay(timeout)
+            isTransparent = true
+        }
     }
 
     private val bar by lazy {
@@ -198,6 +254,10 @@ class PlaybackSpeedControl : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (isTransparent) {
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+            return
+        }
         bar.speedValue = speedValue
         canvas.withTranslation(paddingLeft.toFloat(), paddingTop.toFloat()) {
             bar.draw(canvas)
