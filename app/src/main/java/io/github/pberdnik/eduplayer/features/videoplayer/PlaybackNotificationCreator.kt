@@ -59,10 +59,11 @@ private fun createMediaDescriptionAdapter(deviceVideo: DeviceVideo, context: Med
         }
 
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
+            val openVideoPlayerIntent = Intent(context, VideoPlayerActivity::class.java)
             return PendingIntent.getActivity(
                 context,
                 0,
-                Intent(context, VideoPlayerActivity::class.java),
+                openVideoPlayerIntent,
                 0
             )
         }

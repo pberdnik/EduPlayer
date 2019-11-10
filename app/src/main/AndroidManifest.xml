@@ -31,7 +31,9 @@
             android:name=".features.account.AccountActivity"
             android:label="@string/account" />
 
-        <activity android:name=".features.videoplayer.VideoPlayerActivity" />
+        <activity
+            android:launchMode="singleTop"
+            android:name=".features.videoplayer.VideoPlayerActivity" />
 
         <service
             android:name=".features.videoplayer.MediaPlaybackService"
