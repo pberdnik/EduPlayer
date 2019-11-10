@@ -33,12 +33,8 @@ class VideoPlayerActivity : AppCompatActivity() {
             translateX: Float,
             translateY: Float
         ) {
-            videoContainer.run {
-                translationX = translateX
-                translationY = translateY
-                scaleX = scaleFactor
-                scaleY = scaleFactor
-            }
+            viewModel.changeLocation(translateX, translateY, scaleFactor)
+            positionVideoContainer()
         }
 
         override fun onRewindFactorChanged(
@@ -51,6 +47,16 @@ class VideoPlayerActivity : AppCompatActivity() {
 
         override fun onSingleTap(playerControlsView: GesturePlayerControlView) {
             viewModel.playOrPause()
+        }
+    }
+
+    private fun positionVideoContainer() {
+        val pl = viewModel.playerLocation
+        videoContainer.run {
+            translationX = pl.translateX
+            translationY = pl.translateY
+            scaleX = pl.scaleFactor
+            scaleY = pl.scaleFactor
         }
     }
 
@@ -67,10 +73,11 @@ class VideoPlayerActivity : AppCompatActivity() {
             videoContainer = it.playerView.findViewById(R.id.exo_content_frame)
             it.playbackSpeedControl.onChangeListener = object : PlaybackSpeedControl.OnChangeListener {
                 override fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float) {
-
                 }
             }
         }
+
+        positionVideoContainer()
 
         viewModel.turnOnFullscreen()
 

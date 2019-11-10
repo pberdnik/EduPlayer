@@ -21,6 +21,12 @@ import io.github.pberdnik.eduplayer.domain.DeviceVideo
 
 private const val REWIND_SCALE = 60_000
 
+data class PlayerLocation(
+    var translateX: Float = 0f,
+    var translateY: Float = 0f,
+    var scaleFactor: Float = 1f
+)
+
 class VideoPlayerViewModel @AssistedInject constructor(
     private val context: Context,
     mediaSourceFactory: ProgressiveMediaSource.Factory,
@@ -68,6 +74,8 @@ class VideoPlayerViewModel @AssistedInject constructor(
 
     private val _isFullscreen = MutableLiveData<Boolean>(true)
     val isFullscreen: LiveData<Boolean> = _isFullscreen
+
+    val playerLocation = PlayerLocation()
 
     fun turnOnFullscreen() {
         _isFullscreen.value = true
@@ -117,6 +125,14 @@ class VideoPlayerViewModel @AssistedInject constructor(
         val seekTo = (posBeforeRewind + REWIND_SCALE * rewindFactor).toLong()
         player.seekTo(seekTo.coerceIn(0, player.duration))
         player.playWhenReady = false
+    }
+
+    fun changeLocation(translateX: Float, translateY: Float, scaleFactor: Float) {
+        playerLocation.let {
+            it.translateX = translateX
+            it.translateY = translateY
+            it.scaleFactor = scaleFactor
+        }
     }
 
     @AssistedInject.Factory
