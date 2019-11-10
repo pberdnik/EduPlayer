@@ -1,14 +1,12 @@
 package io.github.pberdnik.eduplayer.customview
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.ImageView
-import java.lang.Math.abs
+import kotlin.math.abs
 
 
 class GesturePlayerControlView : ImageView {
@@ -39,27 +37,43 @@ class GesturePlayerControlView : ImageView {
             super(context, attrs, defStyle)
 
 
-    var onChangeListener: GesturePlayerControlView.OnChangeListener? = null
+    var onChangeListener: OnChangeListener? = null
 
     private var scaleFactor = 1f
+        set(value) {
+            field = value.coerceIn(0.1f, 5f)
+        }
     private var translateX = 0f
+        set(value) {
+            val max = width / 2f
+            field = value.coerceIn(-max, max)
+        }
     private var translateY = 0f
+        set(value) {
+            val max = height / 2f
+            field = value.coerceIn(-max, max)
+        }
     private var rewindFactor = 0f
 
     private val scaleListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         private var lastFocusX = 0f
         private var lastFocusY = 0f
+        private var lastScaleFactor = 1f
 
         override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
             lastFocusX = detector.focusX
             lastFocusY = detector.focusY
+            lastScaleFactor = scaleFactor
             return true
         }
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             scaleFactor *= detector.scaleFactor
             // Don't let the object get too small or too large.
-            scaleFactor = Math.max(0.1f, Math.min(scaleFactor, 5.0f))
+            when {
+                lastScaleFactor > 1f -> scaleFactor = scaleFactor.coerceIn(1f, 5f)
+                lastScaleFactor < 1f -> scaleFactor = scaleFactor.coerceIn(0.1f, 1f)
+            }
 
             translateX += detector.focusX - lastFocusX
             translateY += detector.focusY - lastFocusY
@@ -68,8 +82,8 @@ class GesturePlayerControlView : ImageView {
             onChangeListener?.onLocationChanged(
                 this@GesturePlayerControlView,
                 scaleFactor,
-                translateX,
-                translateY
+                applyMagnetEffect(translateX),
+                applyMagnetEffect(translateY)
             )
 
             invalidate()
@@ -107,8 +121,8 @@ class GesturePlayerControlView : ImageView {
                     onChangeListener?.onLocationChanged(
                         this@GesturePlayerControlView,
                         scaleFactor,
-                        translateX,
-                        translateY
+                        applyMagnetEffect(translateX),
+                        applyMagnetEffect(translateY)
                     )
                 }
             }
@@ -123,18 +137,14 @@ class GesturePlayerControlView : ImageView {
         }
     }
 
+    private val tooSmallTranslation = resources.displayMetrics.density * 16
+
+    private fun applyMagnetEffect(translateCoord: Float)=
+        if (scaleFactor == 1f && abs(translateCoord) < tooSmallTranslation) 0f else translateCoord
+
+
     private val scaleDetector = ScaleGestureDetector(context, scaleListener)
     private val gestureDetector = GestureDetector(context, gestureListener)
-
-    private val mainPaint by lazy {
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.BLUE
-            strokeWidth = 2f
-            strokeCap = Paint.Cap.ROUND
-            style = Paint.Style.STROKE
-            setShadowLayer(5f, 0f, 0f, Color.BLUE)
-        }
-    }
 
     private var lastPointerCount = 0
     private var canDetectOneFingerScroll = false
