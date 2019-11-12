@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -18,6 +19,7 @@ import com.google.android.exoplayer2.util.Util
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import java.util.TreeMap
 
 private const val REWIND_SCALE = 60_000
 
@@ -70,6 +72,15 @@ class VideoPlayerViewModel @AssistedInject constructor(
             connection,
             Context.BIND_AUTO_CREATE
         )
+    }
+
+    private val playbackParametersHolder = TreeMap<Float, PlaybackParameters>()
+    init {
+        // speeds from 0.25 to 4
+        for (speedX16 in 4..64) {
+            val speed = speedX16 / 16f
+            playbackParametersHolder[speed] = PlaybackParameters(speed)
+        }
     }
 
     private val _isFullscreen = MutableLiveData<Boolean>(true)
@@ -133,6 +144,10 @@ class VideoPlayerViewModel @AssistedInject constructor(
             it.translateY = translateY
             it.scaleFactor = scaleFactor
         }
+    }
+
+    fun changePlaybackSpeed(speedValue: Float) {
+        player.playbackParameters = playbackParametersHolder.ceilingEntry(speedValue)?.value
     }
 
     @AssistedInject.Factory

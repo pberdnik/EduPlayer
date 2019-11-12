@@ -60,6 +60,15 @@ class VideoPlayerActivity : AppCompatActivity() {
         }
     }
 
+    private val onPlaybackSpeedChangeListener = object : PlaybackSpeedControl.OnChangeListener {
+        override fun onSpeedValueChanged(
+            playbackSpeedControl: PlaybackSpeedControl,
+            speedValue: Float
+        ) {
+            viewModel.changePlaybackSpeed(speedValue)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,10 +80,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             it.playerView.player = viewModel.player
             it.gesturePlayerControlView.onChangeListener = onControlsListener
             videoContainer = it.playerView.findViewById(R.id.exo_content_frame)
-            it.playbackSpeedControl.onChangeListener = object : PlaybackSpeedControl.OnChangeListener {
-                override fun onSpeedValueChanged(playbackSpeedControl: PlaybackSpeedControl, speedValue: Float) {
-                }
-            }
+            it.playbackSpeedControl.onChangeListener = onPlaybackSpeedChangeListener
         }
 
         positionVideoContainer()
