@@ -6,12 +6,6 @@ import android.graphics.Bitmap
 import android.os.Binder
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_STOP
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
@@ -24,7 +18,6 @@ class MediaPlaybackService : Service() {
     private lateinit var player: SimpleExoPlayer
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var playerNotificationManager: PlayerNotificationManager
-    private val playbackStateBuilder = PlaybackStateCompat.Builder()
     private var bitmap: Bitmap? = null
     private lateinit var deviceVideo: DeviceVideo
 
@@ -49,11 +42,6 @@ class MediaPlaybackService : Service() {
         playerNotificationManager = createNotification(this, deviceVideo, notificationInfo).apply {
             setMediaSessionToken(mediaSession.sessionToken)
         }
-
-        val mediaSessionConnector =
-            createMediaSessionConnector(mediaSession, deviceVideo, bitmap!!).apply {
-                setPlayer(player)
-            }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -65,20 +53,5 @@ class MediaPlaybackService : Service() {
 
     fun clearNotification() {
         playerNotificationManager.setPlayer(null)
-    }
-
-    private fun updatePlaybackState() {
-        playbackStateBuilder
-            // Available actions
-            .setActions(
-                ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION_PAUSE or ACTION_STOP or ACTION_SEEK_TO
-            )
-            // Current playback state
-            .setState(
-                if (player.isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_STOPPED,
-                0, // Track position in ms
-                1.0f
-            ) // Playback speed
-        mediaSession.setPlaybackState(playbackStateBuilder.build())
     }
 }

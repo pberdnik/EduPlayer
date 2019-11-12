@@ -75,6 +75,7 @@ class VideoPlayerViewModel @AssistedInject constructor(
     }
 
     private val playbackParametersHolder = TreeMap<Float, PlaybackParameters>()
+
     init {
         // speeds from 0.25 to 4
         for (speedX16 in 4..64) {
