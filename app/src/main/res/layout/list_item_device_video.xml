@@ -10,6 +10,8 @@
             type="io.github.pberdnik.eduplayer.domain.DeviceVideo" />
 
         <import type="io.github.pberdnik.eduplayer.features.UtilsKt" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,5 +61,20 @@
             app:layout_constraintStart_toEndOf="@+id/device_video_thumbnail"
             app:layout_constraintTop_toTopOf="@+id/device_video_thumbnail"
             tools:text="@sample/videos.json/videos/title" />
+
+        <ProgressBar
+            android:id="@+id/video_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:max="100"
+            android:progress="@{deviceVideo.percentProgress}"
+            android:visibility="@{deviceVideo.percentProgress > 0 ? View.VISIBLE : View.GONE}"
+            android:progressBackgroundTint="#fff"
+            app:layout_constraintBottom_toBottomOf="@id/device_video_thumbnail"
+            app:layout_constraintEnd_toEndOf="@id/device_video_thumbnail"
+            app:layout_constraintStart_toStartOf="@id/device_video_thumbnail"
+            tools:progress="75" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

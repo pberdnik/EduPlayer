@@ -11,4 +11,7 @@ data class DeviceVideo(
     val title: String,
     val duration: Long,
     val currentPosition: Long
-): Parcelable
+) : Parcelable {
+    val percentProgress
+        get() = (currentPosition.toDouble() / duration * 100).toInt().coerceIn(0, 100)
+}
