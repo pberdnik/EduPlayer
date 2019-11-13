@@ -14,5 +14,6 @@ data class DatabaseDeviceVideo(
     val id: Long = 0,
     val uri: Uri,
     val title: String? = null,
-    val duration: String? = null
+    val duration: Long = 0,
+    val currentPosition: Long = 0
 )

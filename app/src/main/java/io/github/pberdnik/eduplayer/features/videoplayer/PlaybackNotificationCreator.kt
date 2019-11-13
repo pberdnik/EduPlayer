@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import io.github.pberdnik.eduplayer.R
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import io.github.pberdnik.eduplayer.features.timeToHumanFormat
 
 private const val PLAYBACK_CHANNEL_ID = "playback_channel"
 private const val PLAYBACK_NOTIFICATION_ID = 1
@@ -69,7 +70,7 @@ private fun createMediaDescriptionAdapter(deviceVideo: DeviceVideo, context: Med
         }
 
         override fun getCurrentContentText(player: Player): String? {
-            return deviceVideo.duration
+            return deviceVideo.duration.timeToHumanFormat()
         }
 
         override fun getCurrentLargeIcon(

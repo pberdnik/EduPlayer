@@ -8,6 +8,8 @@
         <variable
             name="deviceVideo"
             type="io.github.pberdnik.eduplayer.domain.DeviceVideo" />
+
+        <import type="io.github.pberdnik.eduplayer.features.UtilsKt" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,13 +18,13 @@
 
         <ImageView
             android:id="@+id/device_video_thumbnail"
+            videoUri="@{deviceVideo.uri}"
             android:layout_width="160dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
-            videoUri="@{deviceVideo.uri}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +40,7 @@
             android:background="@drawable/rounded_corner"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:text="@{deviceVideo.duration}"
+            android:text="@{UtilsKt.timeToHumanFormat(deviceVideo.duration)}"
             android:textColor="#fff"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/device_video_thumbnail"

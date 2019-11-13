@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import io.github.pberdnik.eduplayer.features.timeToHumanFormat
 
 fun createMediaSessionConnector(
     mediaSession: MediaSessionCompat,
@@ -35,7 +36,7 @@ private fun getMediaDescription(deviceVideo: DeviceVideo, bitmap: Bitmap): Media
         .setMediaId(deviceVideo.title)
         .setIconBitmap(bitmap)
         .setTitle(deviceVideo.title)
-        .setDescription(deviceVideo.duration)
+        .setDescription(deviceVideo.duration.timeToHumanFormat())
         .setExtras(extras)
         .build()
 }

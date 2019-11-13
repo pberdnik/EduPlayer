@@ -19,9 +19,15 @@ import com.google.android.exoplayer2.util.Util
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.pberdnik.eduplayer.domain.DeviceVideo
+import io.github.pberdnik.eduplayer.repository.LocalRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.TreeMap
 
+// Maximum rewind or fast-forward for horizontal scroll gesture (in milliseconds)
 private const val REWIND_SCALE = 60_000
+// Percent of played video which is considered as fully played
+private const val VIDEO_ENDED_PERCENT = 0.99f
 
 data class PlayerLocation(
     var translateX: Float = 0f,
@@ -31,6 +37,7 @@ data class PlayerLocation(
 
 class VideoPlayerViewModel @AssistedInject constructor(
     private val context: Context,
+    private val localRepository: LocalRepository,
     mediaSourceFactory: ProgressiveMediaSource.Factory,
     @Assisted val deviceVideo: DeviceVideo
 ) : ViewModel() {
@@ -44,11 +51,16 @@ class VideoPlayerViewModel @AssistedInject constructor(
     init {
         val mediaSource = mediaSourceFactory.createMediaSource(Uri.parse(deviceVideo.uri))
         player.prepare(mediaSource)
+        player.seekTo(previousPositionOrStart())
         player.playWhenReady = true
         mediaSession = createMediaSession(context, player).apply {
             isActive = true
         }
     }
+
+    private fun previousPositionOrStart(): Long =
+        if (deviceVideo.currentPosition.toDouble() / deviceVideo.duration > VIDEO_ENDED_PERCENT)
+            0L else deviceVideo.currentPosition
 
     private var isBound = false
 
@@ -112,11 +124,16 @@ class VideoPlayerViewModel @AssistedInject constructor(
         player.playWhenReady = !player.playWhenReady
     }
 
+    private fun saveCurrentPlayerPosition(currentPosition: Long) = GlobalScope.launch {
+        localRepository.savePlayerPosition(deviceVideo.id, currentPosition)
+    }
+
     override fun onCleared() {
         mediaPlaybackService?.stopForeground(true)
         mediaPlaybackService?.stopSelf()
         context.unbindService(connection)
         player.playWhenReady = false
+        saveCurrentPlayerPosition(player.currentPosition)
         player.release()
         super.onCleared()
     }

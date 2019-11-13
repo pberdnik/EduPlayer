@@ -16,4 +16,7 @@ interface LocalDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertVideos(vararg video: DatabaseDeviceVideo)
+
+    @Query("UPDATE device_video SET currentPosition = :currentPosition WHERE id = :id")
+    suspend fun savePlayerPosition(id: Long, currentPosition: Long)
 }

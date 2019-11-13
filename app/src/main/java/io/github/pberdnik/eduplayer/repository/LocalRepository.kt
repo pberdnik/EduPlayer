@@ -32,9 +32,7 @@ class LocalRepository @Inject constructor(
         val takeFlags = intentFlags and (Intent.FLAG_GRANT_READ_URI_PERMISSION
                 or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         contentResolver.takePersistableUriPermission(uri, takeFlags)
-        val duration = convertToHumanDuration(
-            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
-        )
+        val duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
         retriever.release()
 
         var displayName: String? = null
@@ -48,15 +46,7 @@ class LocalRepository @Inject constructor(
         return DatabaseDeviceVideo(uri = uri, title = displayName, duration = duration)
     }
 
-    private fun convertToHumanDuration(durationMillis: Long): String {
-        val durationSeconds = durationMillis / 1000
-        val h = durationSeconds / 60 / 60
-        val m = durationSeconds % (60 * 60) / 60
-        val s = durationSeconds % 60
-        return if (h == 0L) {
-            String.format("%d:%02d", m, s)
-        } else {
-            String.format("%d:%02d:%02d", h, m, s)
-        }
+    suspend fun savePlayerPosition(id: Long, currentPosition: Long) {
+        localDao.savePlayerPosition(id, currentPosition)
     }
 }

@@ -145,9 +145,6 @@ class PlaybackSpeedControl : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        Log.v("onMeasure w", MeasureSpec.toString(widthMeasureSpec))
-        Log.v("onMeasure h", MeasureSpec.toString(heightMeasureSpec))
-
         val specModeW = MeasureSpec.getMode(widthMeasureSpec)
         val specW = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
         val specModeH = MeasureSpec.getMode(heightMeasureSpec)

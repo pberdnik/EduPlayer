@@ -22,7 +22,7 @@ import io.github.pberdnik.eduplayer.database.localentities.DatabaseDeviceVideo
         DatabasePlaylistItem::class, DatabasePlaylistItemThumbnail::class, DatabaseVideo::class,
         DatabaseVideoThumbnail::class, DatabasePlaylistSaveInfo::class, DatabaseDeviceVideo::class,
         DatabaseUserInfo::class],
-    version = 18,
+    version = 21,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class, UriConverter::class)
